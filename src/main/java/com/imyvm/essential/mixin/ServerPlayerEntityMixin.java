@@ -33,6 +33,7 @@ public class ServerPlayerEntityMixin implements ServerPlayerEntityMixinAccessor 
 
         PlayerListS2CPacket packet = new PlayerListS2CPacket(PlayerListS2CPacket.Action.UPDATE_DISPLAY_NAME, this.asServerPlayerEntity());
         this.asServerPlayerEntity().getServer().getPlayerManager().sendToAll(packet);
+        this.asServerPlayerEntity().getWorld().updateSleepingPlayers();
     }
 
     public ServerPlayerEntity asServerPlayerEntity() {
