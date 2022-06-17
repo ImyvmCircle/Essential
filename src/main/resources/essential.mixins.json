@@ -4,8 +4,10 @@
   "package": "com.imyvm.essential.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "LanguageMixin",
     "ServerPlayerEntityMixin",
-    "SleepManagerMixin"
+    "SleepManagerMixin",
+    "TranslatableTextContentAccessorInvoker"
   ],
   "injectors": {
     "defaultRequire": 1

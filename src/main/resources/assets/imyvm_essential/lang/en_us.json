@@ -1,0 +1,8 @@
+{
+  "commands.afk.away": "You are now AFK",
+  "commands.afk.away.broadcast": "%s is AFK",
+  "commands.afk.back": "You are no longer AFK",
+  "commands.afk.back.broadcast": "%s is no longer AFK",
+  "commands.afk.failed.not_player": "You must be a player to execute this command",
+  "gui.tab_list.player_away": "%s §7| AFK"
+}
