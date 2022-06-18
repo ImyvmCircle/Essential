@@ -15,11 +15,14 @@ public class ModConfig {
 
     private boolean isConfigOutdated = false;
 
+    private long afkAfterNoAction;
+
     public ModConfig() throws IOException {
         File file = FabricLoader.getInstance().getConfigDir().resolve(CONFIG_FILENAME).toFile();
         Config config = ConfigFactory.parseFile(file);
 
         ConfigWrapper wrapper = new ConfigWrapper(config);
+        wrapper.slope("afk", this::loadAfkConfig);
 
         if (isConfigOutdated) {
             ConfigRenderOptions options = ConfigRenderOptions
@@ -31,6 +34,18 @@ public class ModConfig {
                 writer.write(wrapper.config.root().render(options));
             }
         }
+    }
+
+    private void loadAfkConfig(ConfigWrapper node) {
+        this.afkAfterNoAction = (Long) node.get(
+            "afk_after_no_action",
+            "how long (in milliseconds) after the player has no actions, he will be set to AFK status.",
+            600 * 1000,
+            Config::getLong);
+    }
+
+    public long getAfkAfterNoAction() {
+        return this.afkAfterNoAction;
     }
 
     private class ConfigWrapper {

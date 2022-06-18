@@ -4,4 +4,6 @@ public interface PlayerEntityMixinAccessor {
     void updateAwayFromKeyboard(boolean awayFromKeyboard);
 
     boolean isAwayFromKeyboard();
+
+    void updateActivity();
 }
