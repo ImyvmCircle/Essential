@@ -13,12 +13,24 @@ import org.slf4j.LoggerFactory;
 
 public class EssentialMod implements ModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger("essential");
+	public static ModConfig config;
 
 	@Override
 	public void onInitialize() {
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> registerCommands(dispatcher));
 
+		initializeConfig();
+
 		LOGGER.info("Imyvm Essential initialized");
+	}
+
+	public void initializeConfig() {
+		try {
+			config = new ModConfig();
+		} catch (Exception e) {
+			LOGGER.error("Failed to initialized config: " + e);
+			throw new RuntimeException("Failed to initialized config", e);
+		}
 	}
 
 	public static void registerCommands(CommandDispatcher<ServerCommandSource> dispatcher) {
