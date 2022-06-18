@@ -1,6 +1,6 @@
 package com.imyvm.essential.interfaces;
 
-public interface PlayerEntityMixinAccessor {
+public interface PlayerEntityMixinInterface {
     void updateAwayFromKeyboard(boolean awayFromKeyboard);
 
     boolean isAwayFromKeyboard();

@@ -1,7 +1,7 @@
 package com.imyvm.essential;
 
 import com.imyvm.essential.interfaces.LazyTickable;
-import com.imyvm.essential.interfaces.PlayerEntityMixinAccessor;
+import com.imyvm.essential.interfaces.PlayerEntityMixinInterface;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -47,7 +47,7 @@ public class EssentialMod implements ModInitializer {
 
 	public void registerEvents() {
 		Function<PlayerEntity, ActionResult> onActivity = (player) -> {
-			((PlayerEntityMixinAccessor) player).updateActivity();
+			((PlayerEntityMixinInterface) player).updateActivity();
 			return ActionResult.PASS;
 		};
 
@@ -71,7 +71,7 @@ public class EssentialMod implements ModInitializer {
 						return 0;
 					}
 
-					PlayerEntityMixinAccessor playerMixin = (PlayerEntityMixinAccessor) player;
+					PlayerEntityMixinInterface playerMixin = (PlayerEntityMixinInterface) player;
 					playerMixin.updateAwayFromKeyboard(!playerMixin.isAwayFromKeyboard());
 
 					return Command.SINGLE_SUCCESS;

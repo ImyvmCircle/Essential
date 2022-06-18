@@ -1,6 +1,6 @@
 package com.imyvm.essential.mixin;
 
-import com.imyvm.essential.interfaces.PlayerEntityMixinAccessor;
+import com.imyvm.essential.interfaces.PlayerEntityMixinInterface;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.SleepManager;
@@ -15,11 +15,11 @@ import java.util.function.Predicate;
 public class SleepManagerMixin {
     @Redirect(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;isSpectator()Z"))
     private boolean hookPlayerIsSpectator(ServerPlayerEntity player) {
-        return player.isSpectator() || ((PlayerEntityMixinAccessor) player).isAwayFromKeyboard();
+        return player.isSpectator() || ((PlayerEntityMixinInterface) player).isAwayFromKeyboard();
     }
 
     @ModifyArg(method = "canResetTime", at = @At(value = "INVOKE", target = "Ljava/util/stream/Stream;filter(Ljava/util/function/Predicate;)Ljava/util/stream/Stream;"), index = 0)
     private Predicate<PlayerEntity> hookCanResetTimeBySleeping(Predicate<PlayerEntity> predicate) {
-        return player -> player.canResetTimeBySleeping() && !((PlayerEntityMixinAccessor) player).isAwayFromKeyboard();
+        return player -> player.canResetTimeBySleeping() && !((PlayerEntityMixinInterface) player).isAwayFromKeyboard();
     }
 }

@@ -1,7 +1,7 @@
 package com.imyvm.essential.mixin;
 
 import com.imyvm.essential.ImmediatelyTranslator;
-import com.imyvm.essential.interfaces.PlayerEntityMixinAccessor;
+import com.imyvm.essential.interfaces.PlayerEntityMixinInterface;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -15,7 +15,7 @@ public class ServerPlayerEntityMixin {
     @Inject(method = "getPlayerListName", at = @At("HEAD"), cancellable = true)
     private void getAfkDisplayName(CallbackInfoReturnable<Text> ci) {
         PlayerEntity player = (PlayerEntity) (Object) this;
-        PlayerEntityMixinAccessor accessor = (PlayerEntityMixinAccessor) player;
+        PlayerEntityMixinInterface accessor = (PlayerEntityMixinInterface) player;
         Text name = player.getName();
         Text displayName = accessor.isAwayFromKeyboard() ? ImmediatelyTranslator.translatable("gui.tab_list.player_away", name) : name;
         ci.setReturnValue(displayName);
