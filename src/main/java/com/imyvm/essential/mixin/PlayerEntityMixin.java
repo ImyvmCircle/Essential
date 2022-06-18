@@ -44,11 +44,17 @@ public class PlayerEntityMixin implements LazyTickable, PlayerEntityMixinInterfa
 
     @Override
     public void lazyTick() {
-        if (this.asServerPlayerEntity().getPos().squaredDistanceTo(this.lastActiveCoordinate) > 9)
+        if (!this.isAwayFromKeyboard() && this.movedSquaredDistance() > 0.04)
+            updateActivity();
+        if (this.isAwayFromKeyboard() && this.movedSquaredDistance() > 9)
             updateActivity();
 
-        if (!isAwayFromKeyboard() && System.currentTimeMillis() > this.lastActivity + EssentialMod.config.getAfkAfterNoAction())
+        if (!this.isAwayFromKeyboard() && System.currentTimeMillis() > this.lastActivity + EssentialMod.config.getAfkAfterNoAction())
             updateAwayFromKeyboard(true);
+    }
+
+    private double movedSquaredDistance() {
+        return this.asServerPlayerEntity().getPos().squaredDistanceTo(this.lastActiveCoordinate);
     }
 
     public ServerPlayerEntity asServerPlayerEntity() {
