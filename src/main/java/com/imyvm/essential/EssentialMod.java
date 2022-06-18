@@ -6,6 +6,7 @@ import com.imyvm.essential.interfaces.PlayerEntityMixinInterface;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.*;
+import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.TypedActionResult;
@@ -46,6 +47,7 @@ public class EssentialMod implements ModInitializer {
 			return ActionResult.PASS;
 		};
 
+		ServerMessageEvents.CHAT_MESSAGE.register((message, sender, typeKey) -> onActivity.apply(sender));
 		AttackBlockCallback.EVENT.register((player, world, hand, pos, direction) -> onActivity.apply(player));
 		AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> onActivity.apply(player));
 		UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> onActivity.apply(player));
