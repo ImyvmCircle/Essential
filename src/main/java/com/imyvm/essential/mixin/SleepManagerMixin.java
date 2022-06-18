@@ -1,6 +1,6 @@
 package com.imyvm.essential.mixin;
 
-import com.imyvm.essential.interfaces.ServerPlayerEntityMixinAccessor;
+import com.imyvm.essential.interfaces.PlayerEntityMixinAccessor;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.SleepManager;
 import org.spongepowered.asm.mixin.Mixin;
@@ -11,6 +11,6 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public class SleepManagerMixin {
     @Redirect(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;isSpectator()Z"))
     private boolean hookPlayerIsSpectator(ServerPlayerEntity player) {
-        return player.isSpectator() || ((ServerPlayerEntityMixinAccessor) player).isAwayFromKeyboard();
+        return player.isSpectator() || ((PlayerEntityMixinAccessor) player).isAwayFromKeyboard();
     }
 }

@@ -1,6 +1,6 @@
 package com.imyvm.essential;
 
-import com.imyvm.essential.interfaces.ServerPlayerEntityMixinAccessor;
+import com.imyvm.essential.interfaces.PlayerEntityMixinAccessor;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -31,7 +31,7 @@ public class EssentialMod implements ModInitializer {
 						return 0;
 					}
 
-					ServerPlayerEntityMixinAccessor playerMixin = (ServerPlayerEntityMixinAccessor) player;
+					PlayerEntityMixinAccessor playerMixin = (PlayerEntityMixinAccessor) player;
 					playerMixin.updateAwayFromKeyboard(!playerMixin.isAwayFromKeyboard());
 
 					return Command.SINGLE_SUCCESS;
