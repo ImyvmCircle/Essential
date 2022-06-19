@@ -60,6 +60,7 @@ public class EssentialMod implements ModInitializer {
 
 	public void registerCommands() {
 		new AfkCommand();
+		new ItemShowCommand();
 	}
 
 	public void registerLazyTick() {
