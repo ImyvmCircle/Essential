@@ -21,7 +21,7 @@ import java.util.function.Function;
 import java.util.function.IntUnaryOperator;
 
 public class EssentialMod implements ModInitializer {
-	public static final Logger LOGGER = LoggerFactory.getLogger("essential");
+	public static final Logger LOGGER = LoggerFactory.getLogger("Essential");
 	public static ModConfig config;
 
 	public static final Set<TeleportRequest> teleportRequests = new HashSet<>();
