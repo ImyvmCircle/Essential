@@ -16,6 +16,8 @@ public class ModConfig {
     private boolean isConfigOutdated = false;
 
     private long afkAfterNoAction;
+    private long teleportTimeout;
+    private long teleportWait;
 
     public ModConfig() throws IOException {
         File file = FabricLoader.getInstance().getConfigDir().resolve(CONFIG_FILENAME).toFile();
@@ -23,6 +25,7 @@ public class ModConfig {
 
         ConfigWrapper wrapper = new ConfigWrapper(config);
         wrapper.slope("afk", this::loadAfkConfig);
+        wrapper.slope("teleport", this::loadTeleportConfig);
 
         if (isConfigOutdated) {
             ConfigRenderOptions options = ConfigRenderOptions
@@ -44,8 +47,30 @@ public class ModConfig {
             Config::getLong);
     }
 
+    private void loadTeleportConfig(ConfigWrapper node) {
+        this.teleportTimeout = (Long) node.get(
+            "timeout",
+            "the timeout (in milliseconds) of the teleport request",
+            30 * 1000,
+            Config::getLong);
+
+        this.teleportWait = (Long) node.get(
+            "wait",
+            "how long (in milliseconds) the player needs to wait before teleportation.",
+            2500,
+            Config::getLong);
+    }
+
     public long getAfkAfterNoAction() {
         return this.afkAfterNoAction;
+    }
+
+    public long getTeleportTimeout() {
+        return teleportTimeout;
+    }
+
+    public long getTeleportWait() {
+        return teleportWait;
     }
 
     private class ConfigWrapper {

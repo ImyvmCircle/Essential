@@ -1,6 +1,7 @@
 package com.imyvm.essential;
 
 import com.imyvm.essential.commands.*;
+import com.imyvm.essential.control.TeleportRequest;
 import com.imyvm.essential.interfaces.LazyTickable;
 import com.imyvm.essential.interfaces.PlayerEntityMixinInterface;
 import net.fabricmc.api.ModInitializer;
@@ -13,6 +14,8 @@ import net.minecraft.util.TypedActionResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.function.IntUnaryOperator;
@@ -20,6 +23,8 @@ import java.util.function.IntUnaryOperator;
 public class EssentialMod implements ModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger("essential");
 	public static ModConfig config;
+
+	public static final Set<TeleportRequest> teleportRequests = new HashSet<>();
 
 	@Override
 	public void onInitialize() {
@@ -61,6 +66,7 @@ public class EssentialMod implements ModInitializer {
 	public void registerCommands() {
 		new AfkCommand();
 		new ItemShowCommand();
+		new TeleportCommand();
 	}
 
 	public void registerLazyTick() {
@@ -69,10 +75,13 @@ public class EssentialMod implements ModInitializer {
 
 		AtomicInteger i = new AtomicInteger();
 		ServerTickEvents.START_SERVER_TICK.register(server -> {
-			if (i.getAndUpdate(periodIncrease) != 0)
-				return;
+			int value = i.getAndUpdate(periodIncrease);
 
-			server.getPlayerManager().getPlayerList().forEach(player -> ((LazyTickable) player).lazyTick());
+			switch (value) {
+				case 0 -> server.getPlayerManager().getPlayerList().forEach(player -> ((LazyTickable) player).lazyTick());
+				case 1 -> teleportRequests.forEach(TeleportRequest::lazyTick);
+				default -> {}
+			}
 		});
 	}
 }

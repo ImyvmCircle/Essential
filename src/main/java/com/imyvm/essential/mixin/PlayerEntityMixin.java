@@ -2,6 +2,7 @@ package com.imyvm.essential.mixin;
 
 import com.imyvm.essential.EssentialMod;
 import com.imyvm.essential.ImmediatelyTranslator;
+import com.imyvm.essential.control.TeleportRequest;
 import com.imyvm.essential.interfaces.LazyTickable;
 import com.imyvm.essential.interfaces.PlayerEntityMixinInterface;
 import net.minecraft.entity.player.PlayerEntity;
@@ -16,6 +17,9 @@ public class PlayerEntityMixin implements LazyTickable, PlayerEntityMixinInterfa
     private boolean isAwayFromKeyboard = false;
     private long lastActivity = System.currentTimeMillis();
     private Vec3d lastActiveCoordinate = Vec3d.ZERO;
+
+    private TeleportRequest requestAsSender;
+    private TeleportRequest requestAsReceiver;
 
     public void updateAwayFromKeyboard(boolean awayFromKeyboard) {
         if (awayFromKeyboard == this.isAwayFromKeyboard())
@@ -67,5 +71,21 @@ public class PlayerEntityMixin implements LazyTickable, PlayerEntityMixinInterfa
 
     public void setAwayFromKeyboard(boolean awayFromKeyboard) {
         this.isAwayFromKeyboard = awayFromKeyboard;
+    }
+
+    public TeleportRequest getRequestAsSender() {
+        return this.requestAsSender;
+    }
+
+    public void setRequestAsSender(TeleportRequest requestAsSender) {
+        this.requestAsSender = requestAsSender;
+    }
+
+    public TeleportRequest getRequestAsReceiver() {
+        return this.requestAsReceiver;
+    }
+
+    public void setRequestAsReceiver(TeleportRequest requestAsReceiver) {
+        this.requestAsReceiver = requestAsReceiver;
     }
 }
