@@ -16,8 +16,11 @@ public class ModConfig {
     private boolean isConfigOutdated = false;
 
     private long afkAfterNoAction;
+
     private long teleportTimeout;
     private long teleportWait;
+
+    private int userGroupRequiredPTT;
 
     public ModConfig() throws IOException {
         File file = FabricLoader.getInstance().getConfigDir().resolve(CONFIG_FILENAME).toFile();
@@ -26,6 +29,7 @@ public class ModConfig {
         ConfigWrapper wrapper = new ConfigWrapper(config);
         wrapper.slope("afk", this::loadAfkConfig);
         wrapper.slope("teleport", this::loadTeleportConfig);
+        wrapper.slope("ptt", this::loadPlayTimeTrackConfig);
 
         if (isConfigOutdated) {
             ConfigRenderOptions options = ConfigRenderOptions
@@ -61,6 +65,14 @@ public class ModConfig {
             Config::getLong);
     }
 
+    private void loadPlayTimeTrackConfig(ConfigWrapper node) {
+        this.userGroupRequiredPTT = (Integer) node.get(
+            "user_group_required_ptt",
+            "How long (in seconds) players will be set to the \"user\" group after playing",
+            (42 * 60 + 16) * 60,  // default: 42 hours 16 minutes
+            Config::getInt);
+    }
+
     public long getAfkAfterNoAction() {
         return this.afkAfterNoAction;
     }
@@ -71,6 +83,10 @@ public class ModConfig {
 
     public long getTeleportWait() {
         return teleportWait;
+    }
+
+    public int getUserGroupRequiredPTT() {
+        return userGroupRequiredPTT;
     }
 
     private class ConfigWrapper {
