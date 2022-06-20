@@ -16,8 +16,8 @@ import net.minecraft.util.TypedActionResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
@@ -28,7 +28,7 @@ public class EssentialMod implements ModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger("Essential");
 	public static ModConfig config;
 
-	public static final Set<TeleportRequest> teleportRequests = new HashSet<>();
+	public static final Set<TeleportRequest> teleportRequests = ConcurrentHashMap.newKeySet();
 
 	@Override
 	public void onInitialize() {
