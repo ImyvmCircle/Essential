@@ -21,6 +21,7 @@ import java.util.function.Function;
 import java.util.function.IntUnaryOperator;
 
 public class EssentialMod implements ModInitializer {
+	public static final String MOD_ID = "imyvm_essential";
 	public static final Logger LOGGER = LoggerFactory.getLogger("Essential");
 	public static ModConfig config;
 
