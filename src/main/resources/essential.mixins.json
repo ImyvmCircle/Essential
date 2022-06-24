@@ -4,7 +4,7 @@
   "package": "com.imyvm.essential.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "CreeperMixin",
+    "CreeperEntityMixin",
     "LanguageMixin",
     "PlayerEntityMixin",
     "ServerPlayerEntityMixin",
