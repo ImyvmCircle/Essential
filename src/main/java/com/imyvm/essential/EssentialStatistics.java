@@ -1,6 +1,5 @@
 package com.imyvm.essential;
 
-
 import net.minecraft.stat.StatFormatter;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.Identifier;
