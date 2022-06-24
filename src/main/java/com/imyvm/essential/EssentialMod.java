@@ -1,7 +1,6 @@
 package com.imyvm.essential;
 
 import com.imyvm.essential.commands.*;
-import com.imyvm.essential.control.TeleportRequest;
 import com.imyvm.essential.interfaces.LazyTickable;
 import com.imyvm.essential.interfaces.PlayerEntityMixinInterface;
 import com.imyvm.essential.util.CommandUtil;
@@ -16,8 +15,6 @@ import net.minecraft.util.TypedActionResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
@@ -27,8 +24,6 @@ public class EssentialMod implements ModInitializer {
 	public static final String MOD_ID = "imyvm_essential";
 	public static final Logger LOGGER = LoggerFactory.getLogger("Essential");
 	public static ModConfig config;
-
-	public static final Set<TeleportRequest> teleportRequests = ConcurrentHashMap.newKeySet();
 
 	@Override
 	public void onInitialize() {
@@ -72,7 +67,6 @@ public class EssentialMod implements ModInitializer {
 	public void registerCommands() {
 		new AfkCommand();
 		new ItemShowCommand();
-		new TeleportCommand();
 	}
 
 	public void registerLazyTick() {
@@ -86,8 +80,7 @@ public class EssentialMod implements ModInitializer {
 
 			switch (value) {
 				case 0 -> server.getPlayerManager().getPlayerList().forEach(player -> ((LazyTickable) player).imyvm$lazyTick());
-				case 1 -> teleportRequests.forEach(TeleportRequest::imyvm$lazyTick);
-				case 2 -> {
+				case 1 -> {
 					long currentTime = System.currentTimeMillis() / 1000;
 					long lastLazyTickTime = lastLazyTickTimeAtomic.getAndSet(currentTime);
 					int duration = (int) (currentTime - lastLazyTickTime);
