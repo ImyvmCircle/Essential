@@ -38,6 +38,7 @@ public class EssentialMod implements ModInitializer {
 
 		initializeConfig();
 		EssentialStatistics.initialize();
+		EssentialGameRules.initialize();
 
 		LOGGER.info("Imyvm Essential initialized");
 	}
