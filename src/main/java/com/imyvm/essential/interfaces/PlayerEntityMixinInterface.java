@@ -3,17 +3,17 @@ package com.imyvm.essential.interfaces;
 import com.imyvm.essential.control.TeleportRequest;
 
 public interface PlayerEntityMixinInterface {
-    void updateAwayFromKeyboard(boolean awayFromKeyboard);
+    void imyvm$updateAwayFromKeyboard(boolean awayFromKeyboard);
 
-    boolean isAwayFromKeyboard();
+    boolean imyvm$isAwayFromKeyboard();
 
-    void updateActivity();
+    void imyvm$updateActivity();
 
-    TeleportRequest getRequestAsSender();
+    TeleportRequest imyvm$getRequestAsSender();
 
-    void setRequestAsSender(TeleportRequest requestAsSender);
+    void imyvm$setRequestAsSender(TeleportRequest requestAsSender);
 
-    TeleportRequest getRequestAsReceiver();
+    TeleportRequest imyvm$getRequestAsReceiver();
 
-    void setRequestAsReceiver(TeleportRequest requestAsReceiver);
+    void imyvm$setRequestAsReceiver(TeleportRequest requestAsReceiver);
 }

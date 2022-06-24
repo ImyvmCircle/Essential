@@ -29,7 +29,7 @@ public class TeleportCommand extends BaseCommand {
                 .executes(ctx -> {
                     ServerPlayerEntity player = this.castCommandContext(ctx).getSource().getPlayer();
 
-                    TeleportRequest request = ((PlayerEntityMixinInterface) player).getRequestAsSender();
+                    TeleportRequest request = ((PlayerEntityMixinInterface) player).imyvm$getRequestAsSender();
                     if (request == null) {
                         player.sendMessage(ImmediatelyTranslator.translatable("commands.tpcancel.failed.no_request"));
                         return -1;
@@ -64,7 +64,7 @@ public class TeleportCommand extends BaseCommand {
                 .executes(ctx -> {
                     ServerPlayerEntity player = this.castCommandContext(ctx).getSource().getPlayer();
 
-                    TeleportRequest request = ((PlayerEntityMixinInterface) player).getRequestAsReceiver();
+                    TeleportRequest request = ((PlayerEntityMixinInterface) player).imyvm$getRequestAsReceiver();
                     if (request == null) {
                         player.sendMessage(ImmediatelyTranslator.translatable("commands." + command + ".failed.no_request"));
                         return -1;

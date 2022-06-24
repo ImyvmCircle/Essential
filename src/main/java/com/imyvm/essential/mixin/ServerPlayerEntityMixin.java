@@ -17,7 +17,7 @@ public class ServerPlayerEntityMixin {
         PlayerEntity player = (PlayerEntity) (Object) this;
         PlayerEntityMixinInterface accessor = (PlayerEntityMixinInterface) player;
         Text name = player.getName();
-        Text displayName = accessor.isAwayFromKeyboard() ? ImmediatelyTranslator.translatable("gui.tab_list.player_away", name) : name;
+        Text displayName = accessor.imyvm$isAwayFromKeyboard() ? ImmediatelyTranslator.translatable("gui.tab_list.player_away", name) : name;
         ci.setReturnValue(displayName);
     }
 }

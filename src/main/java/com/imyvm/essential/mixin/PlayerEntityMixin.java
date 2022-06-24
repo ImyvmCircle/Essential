@@ -21,8 +21,8 @@ public class PlayerEntityMixin implements LazyTickable, PlayerEntityMixinInterfa
     private TeleportRequest requestAsSender;
     private TeleportRequest requestAsReceiver;
 
-    public void updateAwayFromKeyboard(boolean awayFromKeyboard) {
-        if (awayFromKeyboard == this.isAwayFromKeyboard())
+    public void imyvm$updateAwayFromKeyboard(boolean awayFromKeyboard) {
+        if (awayFromKeyboard == this.imyvm$isAwayFromKeyboard())
             return;
         setAwayFromKeyboard(awayFromKeyboard);
 
@@ -30,7 +30,7 @@ public class PlayerEntityMixin implements LazyTickable, PlayerEntityMixinInterfa
         PlayerListS2CPacket packet = new PlayerListS2CPacket(PlayerListS2CPacket.Action.UPDATE_DISPLAY_NAME, player);
         player.getServer().getPlayerManager().sendToAll(packet);
 
-        String baseKey = this.isAwayFromKeyboard() ? "commands.afk.away" : "commands.afk.back";
+        String baseKey = this.imyvm$isAwayFromKeyboard() ? "commands.afk.away" : "commands.afk.back";
         player.sendMessage(ImmediatelyTranslator.translatable(baseKey));
         Text broadcastMessage = ImmediatelyTranslator.translatable(baseKey + ".broadcast", player.getName());
         player.getServer().getPlayerManager().getPlayerList().stream()
@@ -40,52 +40,52 @@ public class PlayerEntityMixin implements LazyTickable, PlayerEntityMixinInterfa
         player.getWorld().updateSleepingPlayers();
     }
 
-    public void updateActivity() {
-        updateAwayFromKeyboard(false);
+    public void imyvm$updateActivity() {
+        imyvm$updateAwayFromKeyboard(false);
         this.lastActivity = System.currentTimeMillis();
         this.lastActiveCoordinate = this.asServerPlayerEntity().getPos();
     }
 
     @Override
-    public void lazyTick() {
-        if (!this.isAwayFromKeyboard() && this.movedSquaredDistance() > 0.04)
-            updateActivity();
-        if (this.isAwayFromKeyboard() && this.movedSquaredDistance() > 9)
-            updateActivity();
+    public void imyvm$lazyTick() {
+        if (!this.imyvm$isAwayFromKeyboard() && this.movedSquaredDistance() > 0.04)
+            imyvm$updateActivity();
+        if (this.imyvm$isAwayFromKeyboard() && this.movedSquaredDistance() > 9)
+            imyvm$updateActivity();
 
-        if (!this.isAwayFromKeyboard() && System.currentTimeMillis() > this.lastActivity + EssentialMod.config.getAfkAfterNoAction())
-            updateAwayFromKeyboard(true);
+        if (!this.imyvm$isAwayFromKeyboard() && System.currentTimeMillis() > this.lastActivity + EssentialMod.config.getAfkAfterNoAction())
+            imyvm$updateAwayFromKeyboard(true);
     }
 
     private double movedSquaredDistance() {
         return this.asServerPlayerEntity().getPos().squaredDistanceTo(this.lastActiveCoordinate);
     }
 
-    public ServerPlayerEntity asServerPlayerEntity() {
+    private ServerPlayerEntity asServerPlayerEntity() {
         return (ServerPlayerEntity) (Object) this;
     }
 
-    public boolean isAwayFromKeyboard() {
+    public boolean imyvm$isAwayFromKeyboard() {
         return this.isAwayFromKeyboard;
     }
 
-    public void setAwayFromKeyboard(boolean awayFromKeyboard) {
+    private void setAwayFromKeyboard(boolean awayFromKeyboard) {
         this.isAwayFromKeyboard = awayFromKeyboard;
     }
 
-    public TeleportRequest getRequestAsSender() {
+    public TeleportRequest imyvm$getRequestAsSender() {
         return this.requestAsSender;
     }
 
-    public void setRequestAsSender(TeleportRequest requestAsSender) {
+    public void imyvm$setRequestAsSender(TeleportRequest requestAsSender) {
         this.requestAsSender = requestAsSender;
     }
 
-    public TeleportRequest getRequestAsReceiver() {
+    public TeleportRequest imyvm$getRequestAsReceiver() {
         return this.requestAsReceiver;
     }
 
-    public void setRequestAsReceiver(TeleportRequest requestAsReceiver) {
+    public void imyvm$setRequestAsReceiver(TeleportRequest requestAsReceiver) {
         this.requestAsReceiver = requestAsReceiver;
     }
 }

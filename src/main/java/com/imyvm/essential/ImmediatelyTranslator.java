@@ -21,8 +21,8 @@ public class ImmediatelyTranslator {
         MutableText mutableText = Text.empty().copy();
         TranslatableTextContentAccessorInvoker accessorInvoker = (TranslatableTextContentAccessorInvoker) context;
 
-        accessorInvoker.updateTranslations();
-        for (StringVisitable translation : accessorInvoker.getTranslations()) {
+        accessorInvoker.imyvm$updateTranslations();
+        for (StringVisitable translation : accessorInvoker.imyvm$getTranslations()) {
 			Text text = translation instanceof Text ? ((Text) translation) : Text.of(translation.getString());
 			mutableText.append(text);
 		}

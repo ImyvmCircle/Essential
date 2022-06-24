@@ -37,17 +37,17 @@ public class TeleportRequest implements LazyTickable {
     }
 
     public boolean issue() {
-        if (((PlayerEntityMixinInterface) this.sender).getRequestAsSender() != null) {
+        if (((PlayerEntityMixinInterface) this.sender).imyvm$getRequestAsSender() != null) {
             this.sender.sendMessage(ImmediatelyTranslator.translatable("commands.tpa.failed.has_pending.self"));
             return false;
         }
-        if (((PlayerEntityMixinInterface) this.receiver).getRequestAsReceiver() != null) {
+        if (((PlayerEntityMixinInterface) this.receiver).imyvm$getRequestAsReceiver() != null) {
             this.receiver.sendMessage(ImmediatelyTranslator.translatable("commands.tpa.failed.has_pending.others", this.receiver.getName()));
             return false;
         }
 
-        ((PlayerEntityMixinInterface) this.sender).setRequestAsSender(this);
-        ((PlayerEntityMixinInterface) this.receiver).setRequestAsReceiver(this);
+        ((PlayerEntityMixinInterface) this.sender).imyvm$setRequestAsSender(this);
+        ((PlayerEntityMixinInterface) this.receiver).imyvm$setRequestAsReceiver(this);
 
         this.sender.sendMessage(ImmediatelyTranslator.translatable(this.type.issueMessageKey + ".sender", this.receiver.getName()));
 
@@ -104,7 +104,7 @@ public class TeleportRequest implements LazyTickable {
     }
 
     @Override
-    public void lazyTick() {
+    public void imyvm$lazyTick() {
         if (this.isBeingTeleported() && this.isBeingTeleportedPlayerMoved()) {
             this.beingTeleported.sendMessage(ImmediatelyTranslator.translatable("commands.tpa.failed.move_when_wait"));
             this.finish();
@@ -122,8 +122,8 @@ public class TeleportRequest implements LazyTickable {
     }
 
     private void finish() {
-        ((PlayerEntityMixinInterface) this.sender).setRequestAsSender(null);
-        ((PlayerEntityMixinInterface) this.receiver).setRequestAsReceiver(null);
+        ((PlayerEntityMixinInterface) this.sender).imyvm$setRequestAsSender(null);
+        ((PlayerEntityMixinInterface) this.receiver).imyvm$setRequestAsReceiver(null);
         EssentialMod.teleportRequests.remove(this);
     }
 

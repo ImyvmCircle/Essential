@@ -54,7 +54,7 @@ public class EssentialMod implements ModInitializer {
 
 	public void registerEvents() {
 		Function<PlayerEntity, ActionResult> onActivity = (player) -> {
-			((PlayerEntityMixinInterface) player).updateActivity();
+			((PlayerEntityMixinInterface) player).imyvm$updateActivity();
 			return ActionResult.PASS;
 		};
 
@@ -85,8 +85,8 @@ public class EssentialMod implements ModInitializer {
 			int value = i.getAndUpdate(periodIncrease);
 
 			switch (value) {
-				case 0 -> server.getPlayerManager().getPlayerList().forEach(player -> ((LazyTickable) player).lazyTick());
-				case 1 -> teleportRequests.forEach(TeleportRequest::lazyTick);
+				case 0 -> server.getPlayerManager().getPlayerList().forEach(player -> ((LazyTickable) player).imyvm$lazyTick());
+				case 1 -> teleportRequests.forEach(TeleportRequest::imyvm$lazyTick);
 				case 2 -> {
 					long currentTime = System.currentTimeMillis() / 1000;
 					long lastLazyTickTime = lastLazyTickTimeAtomic.getAndSet(currentTime);

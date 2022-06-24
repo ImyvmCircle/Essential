@@ -11,8 +11,8 @@ import java.util.List;
 @Mixin(TranslatableTextContent.class)
 public interface TranslatableTextContentAccessorInvoker {
     @Accessor
-    List<StringVisitable> getTranslations();
+    List<StringVisitable> imyvm$getTranslations();
 
     @Invoker("updateTranslations")
-    void updateTranslations();
+    void imyvm$updateTranslations();
 }

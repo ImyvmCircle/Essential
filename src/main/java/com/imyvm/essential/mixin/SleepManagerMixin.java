@@ -15,11 +15,11 @@ import java.util.function.Predicate;
 public class SleepManagerMixin {
     @Redirect(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;isSpectator()Z"))
     private boolean hookPlayerIsSpectator(ServerPlayerEntity player) {
-        return player.isSpectator() || ((PlayerEntityMixinInterface) player).isAwayFromKeyboard();
+        return player.isSpectator() || ((PlayerEntityMixinInterface) player).imyvm$isAwayFromKeyboard();
     }
 
     @ModifyArg(method = "canResetTime", at = @At(value = "INVOKE", target = "Ljava/util/stream/Stream;filter(Ljava/util/function/Predicate;)Ljava/util/stream/Stream;"), index = 0)
     private Predicate<PlayerEntity> hookCanResetTimeBySleeping(Predicate<PlayerEntity> predicate) {
-        return player -> player.canResetTimeBySleeping() && !((PlayerEntityMixinInterface) player).isAwayFromKeyboard();
+        return player -> player.canResetTimeBySleeping() && !((PlayerEntityMixinInterface) player).imyvm$isAwayFromKeyboard();
     }
 }
