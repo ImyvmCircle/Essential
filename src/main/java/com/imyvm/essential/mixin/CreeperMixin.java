@@ -24,7 +24,6 @@ public class CreeperMixin {
                 y,
                 z,
                 power,
-                gameRules.getBoolean(GameRules.DO_MOB_GRIEFING) && gameRules.getBoolean(EssentialStatistics.creeperFire),
                 gameRules.getBoolean(EssentialStatistics.creeperGriefing) ? destructionType : Explosion.DestructionType.NONE);
     }
 }

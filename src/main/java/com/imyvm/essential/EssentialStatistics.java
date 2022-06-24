@@ -15,7 +15,6 @@ public class EssentialStatistics {
 
     // creeper rules
     public static GameRules.Key<GameRules.BooleanRule> creeperGriefing;
-    public static GameRules.Key<GameRules.BooleanRule> creeperFire;
 
     // Force JVM to initialize the static fields
     public static void initialize() {}
@@ -30,6 +29,5 @@ public class EssentialStatistics {
     static {
         PLAY_TIME_TRACK = register("play_time_track", StatFormatter.DEFAULT);
         creeperGriefing = GameRuleRegistry.register("creeperGriefing", GameRules.Category.MOBS, GameRuleFactory.createBooleanRule(true));
-        creeperFire = GameRuleRegistry.register("creeperFire", GameRules.Category.MOBS, GameRuleFactory.createBooleanRule(false));
     }
 }
