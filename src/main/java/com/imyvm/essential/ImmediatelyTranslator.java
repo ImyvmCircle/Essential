@@ -22,7 +22,7 @@ public class ImmediatelyTranslator {
         TranslatableTextContentAccessorInvoker accessorInvoker = (TranslatableTextContentAccessorInvoker) context;
 
         accessorInvoker.imyvm$updateTranslations();
-        for (StringVisitable translation : accessorInvoker.imyvm$getTranslations()) {
+        for (StringVisitable translation : accessorInvoker.getTranslations()) {
 			Text text = translation instanceof Text ? ((Text) translation) : Text.of(translation.getString());
 			mutableText.append(text);
 		}
