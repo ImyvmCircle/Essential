@@ -3,20 +3,18 @@ package com.imyvm.essential.commands;
 import com.imyvm.essential.interfaces.PlayerEntityMixinInterface;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 import static com.imyvm.essential.i18n.Translator.tr;
+import static net.minecraft.server.command.CommandManager.literal;
 
 public class AfkCommand extends BaseCommand {
     @Override
-    protected void registerCommand(CommandDispatcher<Object> dispatcher) {
+    protected void registerCommand(CommandDispatcher<ServerCommandSource> dispatcher) {
         dispatcher.register(
-			LiteralArgumentBuilder.literal("afk")
-				.executes(ctx -> {
-					CommandContext<ServerCommandSource> context = this.castCommandContext(ctx);
+			literal("afk")
+				.executes(context -> {
 					ServerPlayerEntity player = context.getSource().getPlayer();
 					if (player == null) {
 						context.getSource().sendError(tr("commands.afk.failed.not_player"));
