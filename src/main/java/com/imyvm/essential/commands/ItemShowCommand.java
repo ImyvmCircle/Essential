@@ -1,6 +1,5 @@
 package com.imyvm.essential.commands;
 
-import com.imyvm.essential.ImmediatelyTranslator;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -9,6 +8,8 @@ import net.minecraft.network.message.MessageType;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+
+import static com.imyvm.essential.i18n.Translator.tr;
 
 public class ItemShowCommand extends BaseCommand {
     @Override
@@ -29,11 +30,11 @@ public class ItemShowCommand extends BaseCommand {
     private Text getItemShowMessage(ServerPlayerEntity player) {
         ItemStack item = player.getMainHandStack();
         if (item.isEmpty()) {
-            return ImmediatelyTranslator.translatable("commands.ss.empty", player.getName());
+            return tr("commands.ss.empty", player.getName());
         } else if (item.getCount() == 1) {
-            return ImmediatelyTranslator.translatable("commands.ss.show.single", player.getName(), item.toHoverableText());
+            return tr("commands.ss.show.single", player.getName(), item.toHoverableText());
         } else {
-            return ImmediatelyTranslator.translatable("commands.ss.show.multiple", player.getName(), item.toHoverableText(), item.getCount());
+            return tr("commands.ss.show.multiple", player.getName(), item.toHoverableText(), item.getCount());
         }
     }
 }

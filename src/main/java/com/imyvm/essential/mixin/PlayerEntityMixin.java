@@ -1,7 +1,6 @@
 package com.imyvm.essential.mixin;
 
 import com.imyvm.essential.EssentialMod;
-import com.imyvm.essential.ImmediatelyTranslator;
 import com.imyvm.essential.interfaces.LazyTickable;
 import com.imyvm.essential.interfaces.PlayerEntityMixinInterface;
 import net.minecraft.entity.player.PlayerEntity;
@@ -10,6 +9,8 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
+
+import static com.imyvm.essential.i18n.Translator.tr;
 
 @Mixin(PlayerEntity.class)
 public class PlayerEntityMixin implements LazyTickable, PlayerEntityMixinInterface {
@@ -27,8 +28,8 @@ public class PlayerEntityMixin implements LazyTickable, PlayerEntityMixinInterfa
         player.getServer().getPlayerManager().sendToAll(packet);
 
         String baseKey = this.imyvm$isAwayFromKeyboard() ? "commands.afk.away" : "commands.afk.back";
-        player.sendMessage(ImmediatelyTranslator.translatable(baseKey));
-        Text broadcastMessage = ImmediatelyTranslator.translatable(baseKey + ".broadcast", player.getName());
+        player.sendMessage(tr(baseKey));
+        Text broadcastMessage = tr(baseKey + ".broadcast", player.getName());
         player.getServer().getPlayerManager().getPlayerList().stream()
             .filter(u -> u != player)
             .forEach(u -> u.sendMessage(broadcastMessage));

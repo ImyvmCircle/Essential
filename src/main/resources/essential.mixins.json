@@ -5,12 +5,10 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "CreeperEntityMixin",
-    "LanguageMixin",
     "PlayerEntityMixin",
     "ServerPlayerEntityMixin",
     "SleepManagerMixin",
-    "StatisticsS2CPacketMixin",
-    "TranslatableTextContentAccessorInvoker"
+    "StatisticsS2CPacketMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -1,11 +1,11 @@
 {
   "commands.afk.away": "You are now AFK",
-  "commands.afk.away.broadcast": "%s is AFK",
+  "commands.afk.away.broadcast": "{0} is AFK",
   "commands.afk.back": "You are no longer AFK",
-  "commands.afk.back.broadcast": "%s is no longer AFK",
+  "commands.afk.back.broadcast": "{0} is no longer AFK",
   "commands.afk.failed.not_player": "You must be a player to execute this command",
-  "commands.ss.empty": "%s is showing his empty hand",
-  "commands.ss.show.single": "%s is showing %s",
-  "commands.ss.show.multiple": "%s is showing %s * %s",
-  "gui.tab_list.player_away": "%s §7| AFK"
+  "commands.ss.empty": "{0} is showing his empty hand",
+  "commands.ss.show.single": "{0} is showing {1}",
+  "commands.ss.show.multiple": "{0} is showing {1} * {2}",
+  "gui.tab_list.player_away": "{0} §7| AFK"
 }
