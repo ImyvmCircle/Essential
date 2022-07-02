@@ -1,5 +1,7 @@
 package com.imyvm.essential;
 
+import com.imyvm.essential.mixin.StatTypeAccessor;
+import net.minecraft.stat.Stat;
 import net.minecraft.stat.StatFormatter;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.Identifier;
@@ -17,6 +19,11 @@ public class EssentialStatistics {
         Registry.register(Registry.CUSTOM_STAT, id, identifier);
         Stats.CUSTOM.getOrCreateStat(identifier, formatter);
         return identifier;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static Stat<Identifier> getStatOf(Identifier identifier) {
+        return ((StatTypeAccessor<Identifier>) Stats.CUSTOM).getStats().get(identifier);
     }
 
     static {
