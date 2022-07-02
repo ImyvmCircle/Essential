@@ -17,9 +17,6 @@ public class ModConfig {
 
     private long afkAfterNoAction;
 
-    private long teleportTimeout;
-    private long teleportWait;
-
     private int userGroupRequiredPTT;
 
     public ModConfig() throws IOException {
@@ -28,7 +25,6 @@ public class ModConfig {
 
         ConfigWrapper wrapper = new ConfigWrapper(config);
         wrapper.slope("afk", this::loadAfkConfig);
-        wrapper.slope("teleport", this::loadTeleportConfig);
         wrapper.slope("ptt", this::loadPlayTimeTrackConfig);
 
         if (isConfigOutdated) {
@@ -51,20 +47,6 @@ public class ModConfig {
             Config::getLong);
     }
 
-    private void loadTeleportConfig(ConfigWrapper node) {
-        this.teleportTimeout = (Long) node.get(
-            "timeout",
-            "the timeout (in milliseconds) of the teleport request",
-            30 * 1000,
-            Config::getLong);
-
-        this.teleportWait = (Long) node.get(
-            "wait",
-            "how long (in milliseconds) the player needs to wait before teleportation.",
-            2500,
-            Config::getLong);
-    }
-
     private void loadPlayTimeTrackConfig(ConfigWrapper node) {
         this.userGroupRequiredPTT = (Integer) node.get(
             "user_group_required_ptt",
@@ -75,14 +57,6 @@ public class ModConfig {
 
     public long getAfkAfterNoAction() {
         return this.afkAfterNoAction;
-    }
-
-    public long getTeleportTimeout() {
-        return teleportTimeout;
-    }
-
-    public long getTeleportWait() {
-        return teleportWait;
     }
 
     public int getUserGroupRequiredPTT() {
