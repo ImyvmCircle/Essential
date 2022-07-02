@@ -10,5 +10,5 @@ import java.util.Map;
 @Mixin(StatType.class)
 public interface StatTypeAccessor<T> {
     @Accessor("stats")
-    Map<T, Stat<T>> getStats();
+    Map<T, Stat<T>> imyvm$getStats();
 }

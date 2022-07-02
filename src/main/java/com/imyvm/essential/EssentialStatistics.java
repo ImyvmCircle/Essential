@@ -23,7 +23,7 @@ public class EssentialStatistics {
 
     @SuppressWarnings("unchecked")
     public static Stat<Identifier> getStatOf(Identifier identifier) {
-        return ((StatTypeAccessor<Identifier>) Stats.CUSTOM).getStats().get(identifier);
+        return ((StatTypeAccessor<Identifier>) Stats.CUSTOM).imyvm$getStats().get(identifier);
     }
 
     static {
