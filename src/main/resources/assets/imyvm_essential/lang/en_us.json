@@ -1,4 +1,5 @@
 {
+  "common.duration": "{0}h {1}m {2}s",
   "commands.afk.away": "You are now AFK",
   "commands.afk.away.broadcast": "{0} is AFK",
   "commands.afk.back": "You are no longer AFK",
@@ -7,5 +8,6 @@
   "commands.ss.empty": "{0} is showing his empty hand",
   "commands.ss.show.single": "{0} is showing {1}",
   "commands.ss.show.multiple": "{0} is showing {1} * {2}",
+  "commands.ptt.message": "Your play time is {0}",
   "gui.tab_list.player_away": "{0} §7| AFK"
 }

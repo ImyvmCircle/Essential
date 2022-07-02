@@ -1,4 +1,5 @@
 {
+    "common.duration": "{0} 小时 {1} 分 {2} 秒",
     "commands.afk.away": "§7你暂时离开了",
     "commands.afk.away.broadcast": "{0} §7暂时离开了",
     "commands.afk.back": "§7你回来了",
@@ -7,6 +8,7 @@
     "commands.ss.empty": "{0} §3正在展示他空空如也的小手",
     "commands.ss.show.single": "{0} §3正在展示§r {1}",
     "commands.ss.show.multiple": "{0} §3正在展示§r {1} * §b{2}",
+    "commands.ptt.message": "你的游玩时间是 {0}",
     "gui.tab_list.player_away": "{0} §7| 离开"
   }
   
