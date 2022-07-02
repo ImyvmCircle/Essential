@@ -6,8 +6,16 @@ import net.minecraft.text.Text;
 
 import java.io.InputStream;
 
+import static com.imyvm.essential.EssentialMod.CONFIG;
+
 public class Translator extends HokiTranslator {
-    private static HokiLanguage instance = createLanguage("en_us");
+    private static HokiLanguage instance = createLanguage(CONFIG.LANGUAGE.getValue());
+
+    static {
+        CONFIG.LANGUAGE.changeEvents.register((option, oldValue, newValue) -> {
+            instance = createLanguage(option.getValue());
+        });
+    }
 
     public static Text tr(String key, Object... args) {
         return HokiTranslator.translate(getLanguageInstance(), key, args);

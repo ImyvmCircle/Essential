@@ -13,6 +13,14 @@ public class ModConfig extends HokiConfig {
     }
 
     @ConfigOption
+    public final Option<String> LANGUAGE = new Option<>(
+        "core.language",
+        "en_us",
+        "the display language of Essential mod",
+        Config::getString
+    );
+
+    @ConfigOption
     public final Option<Long> AFK_AFTER_NO_ACTION = new Option<>(
         "afk.afk_after_no_action",
         600L * 1000,
