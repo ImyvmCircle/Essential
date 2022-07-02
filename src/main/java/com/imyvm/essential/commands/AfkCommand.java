@@ -22,8 +22,9 @@ public class AfkCommand extends BaseCommand {
 					}
 
 					PlayerEntityMixinInterface playerMixin = (PlayerEntityMixinInterface) player;
+					boolean status = playerMixin.imyvm$isAwayFromKeyboard();
 					playerMixin.imyvm$updateActivity();
-					playerMixin.imyvm$updateAwayFromKeyboard(!playerMixin.imyvm$isAwayFromKeyboard());
+					playerMixin.imyvm$updateAwayFromKeyboard(!status);
 
 					return Command.SINGLE_SUCCESS;
 				})
