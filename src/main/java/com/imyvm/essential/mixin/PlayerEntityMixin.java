@@ -1,7 +1,6 @@
 package com.imyvm.essential.mixin;
 
 import com.imyvm.essential.EssentialMod;
-import com.imyvm.essential.interfaces.LazyTickable;
 import com.imyvm.essential.interfaces.PlayerEntityMixinInterface;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket;
@@ -13,7 +12,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import static com.imyvm.essential.Translator.tr;
 
 @Mixin(PlayerEntity.class)
-public class PlayerEntityMixin implements LazyTickable, PlayerEntityMixinInterface {
+public class PlayerEntityMixin implements PlayerEntityMixinInterface {
     private boolean isAwayFromKeyboard = false;
     private long lastActivity = System.currentTimeMillis();
     private Vec3d lastActiveCoordinate = Vec3d.ZERO;
