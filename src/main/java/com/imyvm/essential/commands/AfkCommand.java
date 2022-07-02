@@ -13,21 +13,21 @@ public class AfkCommand extends BaseCommand {
     @Override
     protected void registerCommand(CommandDispatcher<ServerCommandSource> dispatcher) {
         dispatcher.register(
-			literal("afk")
-				.executes(context -> {
-					ServerPlayerEntity player = context.getSource().getPlayer();
-					if (player == null) {
-						context.getSource().sendError(tr("commands.afk.failed.not_player"));
-						return 0;
-					}
+            literal("afk")
+                .executes(context -> {
+                    ServerPlayerEntity player = context.getSource().getPlayer();
+                    if (player == null) {
+                        context.getSource().sendError(tr("commands.afk.failed.not_player"));
+                        return 0;
+                    }
 
-					PlayerEntityMixinInterface playerMixin = (PlayerEntityMixinInterface) player;
-					boolean status = playerMixin.imyvm$isAwayFromKeyboard();
-					playerMixin.imyvm$updateActivity();
-					playerMixin.imyvm$updateAwayFromKeyboard(!status);
+                    PlayerEntityMixinInterface playerMixin = (PlayerEntityMixinInterface) player;
+                    boolean status = playerMixin.imyvm$isAwayFromKeyboard();
+                    playerMixin.imyvm$updateActivity();
+                    playerMixin.imyvm$updateAwayFromKeyboard(!status);
 
-					return Command.SINGLE_SUCCESS;
-				})
-		);
+                    return Command.SINGLE_SUCCESS;
+                })
+        );
     }
 }
