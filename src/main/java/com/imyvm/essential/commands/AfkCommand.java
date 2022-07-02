@@ -6,7 +6,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 
-import static com.imyvm.essential.i18n.Translator.tr;
+import static com.imyvm.essential.Translator.tr;
 import static net.minecraft.server.command.CommandManager.literal;
 
 public class AfkCommand extends BaseCommand {

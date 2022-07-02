@@ -1,0 +1,25 @@
+package com.imyvm.essential;
+
+import com.imyvm.hoki.i18n.HokiLanguage;
+import com.imyvm.hoki.i18n.HokiTranslator;
+import net.minecraft.text.Text;
+
+import java.io.InputStream;
+
+public class Translator extends HokiTranslator {
+    private static HokiLanguage instance = createLanguage("en_us");
+
+    public static Text tr(String key, Object... args) {
+        return HokiTranslator.translate(getLanguageInstance(), key, args);
+    }
+
+    public static HokiLanguage getLanguageInstance() {
+        return instance;
+    }
+
+    private static HokiLanguage createLanguage(String languageId) {
+        String path = HokiLanguage.getResourcePath(EssentialMod.MOD_ID, languageId);
+        InputStream inputStream = Translator.class.getResourceAsStream(path);
+        return HokiLanguage.create(inputStream);
+    }
+}

@@ -9,9 +9,18 @@ on: [pull_request, push]
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: read
+
     steps:
       - name: checkout
         uses: actions/checkout@v2
+
+      - name: Set environmental variables
+        run: |
+          echo "GH_USERNAME=$GITHUB_ACTOR" >> $GITHUB_ENV
 
       - name: validate gradle wrapper
         uses: gradle/wrapper-validation-action@v1
@@ -29,6 +38,8 @@ jobs:
 
       - name: build
         run: ./gradlew build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: capture build artifacts
         uses: actions/upload-artifact@v2

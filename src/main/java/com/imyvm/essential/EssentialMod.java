@@ -23,7 +23,7 @@ import java.util.function.IntUnaryOperator;
 public class EssentialMod implements ModInitializer {
 	public static final String MOD_ID = "imyvm_essential";
 	public static final Logger LOGGER = LoggerFactory.getLogger("Essential");
-	public static ModConfig config;
+	public static final ModConfig CONFIG = new ModConfig();
 
 	@Override
 	public void onInitialize() {
@@ -31,20 +31,11 @@ public class EssentialMod implements ModInitializer {
 		registerEvents();
 		registerLazyTick();
 
-		initializeConfig();
+		CONFIG.loadAndSave();
 		EssentialStatistics.initialize();
 		EssentialGameRules.initialize();
 
 		LOGGER.info("Imyvm Essential initialized");
-	}
-
-	public void initializeConfig() {
-		try {
-			config = new ModConfig();
-		} catch (Exception e) {
-			LOGGER.error("Failed to initialized config: " + e);
-			throw new RuntimeException("Failed to initialized config", e);
-		}
 	}
 
 	public void registerEvents() {
@@ -84,7 +75,7 @@ public class EssentialMod implements ModInitializer {
 					long currentTime = System.currentTimeMillis() / 1000;
 					long lastLazyTickTime = lastLazyTickTimeAtomic.getAndSet(currentTime);
 					int duration = (int) (currentTime - lastLazyTickTime);
-					int requiredTime = EssentialMod.config.getUserGroupRequiredPTT();
+					int requiredTime = EssentialMod.CONFIG.USER_GROUP_REQUIRED_PTT.getValue();
 
 					server.getPlayerManager().getPlayerList()
 						.forEach(player -> {

@@ -10,7 +10,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
 
-import static com.imyvm.essential.i18n.Translator.tr;
+import static com.imyvm.essential.Translator.tr;
 
 @Mixin(PlayerEntity.class)
 public class PlayerEntityMixin implements LazyTickable, PlayerEntityMixinInterface {
@@ -50,7 +50,7 @@ public class PlayerEntityMixin implements LazyTickable, PlayerEntityMixinInterfa
         if (this.imyvm$isAwayFromKeyboard() && this.movedSquaredDistance() > 9)
             imyvm$updateActivity();
 
-        if (!this.imyvm$isAwayFromKeyboard() && System.currentTimeMillis() > this.lastActivity + EssentialMod.config.getAfkAfterNoAction())
+        if (!this.imyvm$isAwayFromKeyboard() && System.currentTimeMillis() > this.lastActivity + EssentialMod.CONFIG.AFK_AFTER_NO_ACTION.getValue())
             imyvm$updateAwayFromKeyboard(true);
     }
 

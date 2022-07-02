@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import static com.imyvm.essential.i18n.Translator.tr;
+import static com.imyvm.essential.Translator.tr;
 
 @Mixin(ServerPlayerEntity.class)
 public class ServerPlayerEntityMixin {

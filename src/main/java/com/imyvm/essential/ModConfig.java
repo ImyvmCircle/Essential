@@ -1,98 +1,28 @@
 package com.imyvm.essential;
 
-import com.typesafe.config.*;
-import net.fabricmc.loader.api.FabricLoader;
+import com.imyvm.hoki.config.ConfigOption;
+import com.imyvm.hoki.config.HokiConfig;
+import com.imyvm.hoki.config.Option;
+import com.typesafe.config.Config;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Arrays;
-import java.util.function.BiFunction;
-import java.util.function.Consumer;
+public class ModConfig extends HokiConfig {
+    public static final String CONFIG_FILENAME = "imyvm_essential.conf";
 
-public class ModConfig {
-    public final String CONFIG_FILENAME = "imyvm_essential.conf";
-
-    private boolean isConfigOutdated = false;
-
-    private long afkAfterNoAction;
-
-    private int userGroupRequiredPTT;
-
-    public ModConfig() throws IOException {
-        File file = FabricLoader.getInstance().getConfigDir().resolve(CONFIG_FILENAME).toFile();
-        Config config = ConfigFactory.parseFile(file);
-
-        ConfigWrapper wrapper = new ConfigWrapper(config);
-        wrapper.slope("afk", this::loadAfkConfig);
-        wrapper.slope("ptt", this::loadPlayTimeTrackConfig);
-
-        if (isConfigOutdated) {
-            ConfigRenderOptions options = ConfigRenderOptions
-                .defaults()
-                .setJson(false)
-                .setOriginComments(false);
-
-            try (PrintWriter writer = new PrintWriter(file)) {
-                writer.write(wrapper.config.root().render(options));
-            }
-        }
+    public ModConfig() {
+        super(CONFIG_FILENAME);
     }
 
-    private void loadAfkConfig(ConfigWrapper node) {
-        this.afkAfterNoAction = (Long) node.get(
-            "afk_after_no_action",
-            "how long (in milliseconds) after the player has no actions, he will be set to AFK status.",
-            600 * 1000,
-            Config::getLong);
-    }
+    @ConfigOption
+    public final Option<Long> AFK_AFTER_NO_ACTION = new Option<>(
+        "afk.afk_after_no_action",
+        600L * 1000,
+        "how long (in milliseconds) after the player has no actions, he will be set to AFK status.",
+        Config::getLong);
 
-    private void loadPlayTimeTrackConfig(ConfigWrapper node) {
-        this.userGroupRequiredPTT = (Integer) node.get(
-            "user_group_required_ptt",
-            "How long (in seconds) players will be set to the \"user\" group after playing",
-            (42 * 60 + 16) * 60,  // default: 42 hours 16 minutes
-            Config::getInt);
-    }
-
-    public long getAfkAfterNoAction() {
-        return this.afkAfterNoAction;
-    }
-
-    public int getUserGroupRequiredPTT() {
-        return userGroupRequiredPTT;
-    }
-
-    private class ConfigWrapper {
-        Config config;
-        String slope;
-
-        ConfigWrapper(Config config, String slope) {
-            this.config = config;
-            this.slope = slope;
-        }
-
-        ConfigWrapper(Config config) {
-            this(config, "");
-        }
-
-        <T> T get(String key, String comments, T def, BiFunction<Config, String, T> getter) {
-            key = slope + key;
-            try {
-                config.getValue(key);
-            } catch (ConfigException.Missing e) {
-                isConfigOutdated = true;
-                ConfigOrigin origin = ConfigOriginFactory.newSimple().withComments(Arrays.asList(comments.split("\n")));
-                ConfigValue value = ConfigValueFactory.fromAnyRef(def).withOrigin(origin);
-                config = config.withValue(key, value);
-            }
-            return getter.apply(config, key);
-        }
-
-        void slope(String key, Consumer<ConfigWrapper> consumer) {
-            ConfigWrapper wrapper = new ConfigWrapper(config, slope + key + ".");
-            consumer.accept(wrapper);
-            config = wrapper.config;
-        }
-    }
+    @ConfigOption
+    public final Option<Integer> USER_GROUP_REQUIRED_PTT = new Option<>(
+        "ptt.user_group_required_ptt",
+        (42 * 60 + 16) * 60,  // default: 42 hours 16 minutes
+        "How long (in seconds) players will be set to the \"user\" group after playing",
+        Config::getInt);
 }
