@@ -20,7 +20,7 @@ jobs:
 
       - name: Set environmental variables
         run: |
-          echo "GH_USERNAME=$GITHUB_ACTOR" >> $GITHUB_ENV
+          echo "GITHUB_USERNAME=$GITHUB_ACTOR" >> $GITHUB_ENV
 
       - name: validate gradle wrapper
         uses: gradle/wrapper-validation-action@v1
