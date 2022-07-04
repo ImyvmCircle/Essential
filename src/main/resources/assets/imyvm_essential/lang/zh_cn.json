@@ -4,7 +4,6 @@
     "commands.afk.away.broadcast": "{0} §7暂时离开了",
     "commands.afk.back": "§7你回来了",
     "commands.afk.back.broadcast": "{0} §7回来了",
-    "commands.afk.failed.not_player": "§4这个命令只有玩家才能执行哦",
     "commands.ss.empty": "{0} §3正在展示他空空如也的小手",
     "commands.ss.show.single": "{0} §3正在展示§r {1}",
     "commands.ss.show.multiple": "{0} §3正在展示§r {1} * §b{2}",
