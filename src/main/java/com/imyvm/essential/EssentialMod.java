@@ -4,6 +4,7 @@ import com.imyvm.essential.commands.*;
 import com.imyvm.essential.interfaces.PlayerEntityMixinInterface;
 import com.imyvm.essential.tasks.PlayTimeTrackTask;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.player.*;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.minecraft.entity.player.PlayerEntity;
@@ -22,7 +23,7 @@ public class EssentialMod implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        registerCommands();
+        CommandRegistrationCallback.EVENT.register(CommandRegistry::register);
         registerEvents();
         registerLazyTick();
 
@@ -48,12 +49,6 @@ public class EssentialMod implements ModInitializer {
             onActivity.apply(player);
             return TypedActionResult.pass(null);
         });
-    }
-
-    public void registerCommands() {
-        new AfkCommand();
-        new ItemShowCommand();
-        new PlayTimeTrackCommand();
     }
 
     public void registerLazyTick() {
