@@ -12,7 +12,7 @@
     "ServerPlayerEntityMixin",
     "SleepManagerMixin",
     "StatisticsS2CPacketMixin",
-    "TranslatableTextContentAccessorInvoker"
+    "StatTypeAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

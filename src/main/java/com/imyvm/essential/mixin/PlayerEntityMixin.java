@@ -1,8 +1,6 @@
 package com.imyvm.essential.mixin;
 
 import com.imyvm.essential.EssentialMod;
-import com.imyvm.essential.ImmediatelyTranslator;
-import com.imyvm.essential.interfaces.LazyTickable;
 import com.imyvm.essential.interfaces.PlayerEntityMixinInterface;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket;
@@ -11,8 +9,10 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
 
+import static com.imyvm.essential.Translator.tr;
+
 @Mixin(PlayerEntity.class)
-public class PlayerEntityMixin implements LazyTickable, PlayerEntityMixinInterface {
+public class PlayerEntityMixin implements PlayerEntityMixinInterface {
     private boolean isAwayFromKeyboard = false;
     private long lastActivity = System.currentTimeMillis();
     private Vec3d lastActiveCoordinate = Vec3d.ZERO;
@@ -27,8 +27,8 @@ public class PlayerEntityMixin implements LazyTickable, PlayerEntityMixinInterfa
         player.getServer().getPlayerManager().sendToAll(packet);
 
         String baseKey = this.imyvm$isAwayFromKeyboard() ? "commands.afk.away" : "commands.afk.back";
-        player.sendMessage(ImmediatelyTranslator.translatable(baseKey));
-        Text broadcastMessage = ImmediatelyTranslator.translatable(baseKey + ".broadcast", player.getName());
+        player.sendMessage(tr(baseKey));
+        Text broadcastMessage = tr(baseKey + ".broadcast", player.getName());
         player.getServer().getPlayerManager().getPlayerList().stream()
             .filter(u -> u != player)
             .forEach(u -> u.sendMessage(broadcastMessage));
@@ -49,7 +49,7 @@ public class PlayerEntityMixin implements LazyTickable, PlayerEntityMixinInterfa
         if (this.imyvm$isAwayFromKeyboard() && this.movedSquaredDistance() > 9)
             imyvm$updateActivity();
 
-        if (!this.imyvm$isAwayFromKeyboard() && System.currentTimeMillis() > this.lastActivity + EssentialMod.config.getAfkAfterNoAction())
+        if (!this.imyvm$isAwayFromKeyboard() && System.currentTimeMillis() > this.lastActivity + EssentialMod.CONFIG.AFK_AFTER_NO_ACTION.getValue())
             imyvm$updateAwayFromKeyboard(true);
     }
 

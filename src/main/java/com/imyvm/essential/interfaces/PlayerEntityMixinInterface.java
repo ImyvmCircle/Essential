@@ -6,4 +6,6 @@ public interface PlayerEntityMixinInterface {
     boolean imyvm$isAwayFromKeyboard();
 
     void imyvm$updateActivity();
+
+    void imyvm$lazyTick();
 }

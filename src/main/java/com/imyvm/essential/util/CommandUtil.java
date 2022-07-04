@@ -11,17 +11,17 @@ import net.minecraft.util.math.Vec3d;
 
 public class CommandUtil {
     public static ServerCommandSource getServerCommandSource(MinecraftServer server) {
-		ServerWorld world = server.getOverworld();
+        ServerWorld world = server.getOverworld();
 
-		return new ServerCommandSource(
-			CommandOutput.DUMMY,
-			world == null ? Vec3d.ZERO : Vec3d.of(world.getSpawnPos()),
-			Vec2f.ZERO,
-			world,
-			2,
-			EssentialMod.MOD_ID,
-			Text.literal("Essential"),
-			server,
-			null);
-	}
+        return new ServerCommandSource(
+            CommandOutput.DUMMY,
+            world == null ? Vec3d.ZERO : Vec3d.of(world.getSpawnPos()),
+            Vec2f.ZERO,
+            world,
+            2,
+            EssentialMod.MOD_ID,
+            Text.literal("Essential"),
+            server,
+            null);
+    }
 }
