@@ -5,6 +5,8 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "CreeperEntityMixin",
+    "LightningEntityInvoker",
+    "LightningEntityMixin",
     "PlayerEntityMixin",
     "ServerPlayerEntityMixin",
     "SleepManagerMixin",
