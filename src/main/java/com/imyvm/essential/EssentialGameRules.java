@@ -2,7 +2,6 @@ package com.imyvm.essential;
 
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleFactory;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleRegistry;
-import net.minecraft.network.packet.s2c.play.StatisticsS2CPacket;
 import net.minecraft.world.GameRules;
 
 public class EssentialGameRules {

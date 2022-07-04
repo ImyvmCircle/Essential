@@ -2,14 +2,7 @@ package com.imyvm.essential.mixin;
 
 import com.imyvm.essential.EssentialGameRules;
 import net.minecraft.entity.LightningEntity;
-import net.minecraft.network.message.MessageType;
-import net.minecraft.text.Text;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.gen.Invoker;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 

@@ -32,19 +32,6 @@ public class EssentialMod implements ModInitializer {
         EssentialGameRules.initialize();
 
 		LOGGER.info("Imyvm Essential initialized");
-/*		LOGGER.info("_____  __  __ __     ____      __ __  __                                ");
-		LOGGER.info("|_   _||  \/  |\ \   / /\ \    / /|  \/  |                              ");
-		LOGGER.info("| |  | \  / | \ \_/ /  \ \  / / | \  / |								 ");
-		LOGGER.info("| |  | |\/| |  \   /    \ \/ /  | |\/| |								 ");
-		LOGGER.info("_| |_ | |  | |   | |      \  /   | |  | |                               ");
-		LOGGER.info("|_____||_|  |_|   |_|       \/    |_|  |_| 							 ");
-		LOGGER.info("______   _____  _____  ______  _   _  _______  _____            _       ");
-		LOGGER.info("|  ____| / ____|/ ____||  ____|| \ | ||__   __||_   _|    /\    | |     ");
-		LOGGER.info("| |__   | (___ | (___  | |__   |  \| |   | |     | |     /  \   | |     ");
-		LOGGER.info("|  __|   \___ \ \___ \ |  __|  | . ` |   | |     | |    / /\ \  | |     ");
-		LOGGER.info("| |____  ____) |____) || |____ | |\  |   | |    _| |_  / ____ \ | |____ ");
-		LOGGER.info("|______||_____/|_____/ |______||_| \_|   |_|   |_____|/_/    \_\|______|");
-*/
 	}
 
     public void registerEvents() {
