@@ -23,12 +23,11 @@ public class ItemShowCommand extends BaseCommand {
 
     private Text getItemShowMessage(ServerPlayerEntity player) {
         ItemStack item = player.getMainHandStack();
-        if (item.isEmpty()) {
-            return tr("commands.ss.empty", player.getName());
-        } else if (item.getCount() == 1) {
-            return tr("commands.ss.show.single", player.getName(), item.toHoverableText());
-        } else {
-            return tr("commands.ss.show.multiple", player.getName(), item.toHoverableText(), item.getCount());
-        }
+
+        return switch (item.getCount()) {
+            case 0 -> tr("commands.ss.empty", player.getName());
+            case 1 -> tr("commands.ss.show.single", player.getName(), item.toHoverableText());
+            default -> tr("commands.ss.show.multiple", player.getName(), item.toHoverableText(), item.getCount());
+        };
     }
 }
