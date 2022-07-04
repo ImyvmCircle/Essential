@@ -6,6 +6,8 @@
   "mixins": [
     "CreeperEntityMixin",
     "LanguageMixin",
+    "LightningEntityInvoker",
+    "LightningEntityMixin",
     "PlayerEntityMixin",
     "ServerPlayerEntityMixin",
     "SleepManagerMixin",
