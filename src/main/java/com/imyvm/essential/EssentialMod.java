@@ -31,8 +31,8 @@ public class EssentialMod implements ModInitializer {
         EssentialStatistics.initialize();
         EssentialGameRules.initialize();
 
-		LOGGER.info("Imyvm Essential initialized");
-	}
+        LOGGER.info("Imyvm Essential initialized");
+    }
 
     public void registerEvents() {
         Function<PlayerEntity, ActionResult> onActivity = (player) -> {

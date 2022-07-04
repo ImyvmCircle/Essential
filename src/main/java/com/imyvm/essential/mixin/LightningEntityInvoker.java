@@ -7,5 +7,5 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 @Mixin(LightningEntity.class)
 public interface LightningEntityInvoker {
     @Invoker("spawnFire")
-    public void invokespawnFire(int spreadAttempts);
+    void imyvm$spawnFire(int spreadAttempts);
 }

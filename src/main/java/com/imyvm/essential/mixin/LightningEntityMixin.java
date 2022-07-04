@@ -9,12 +9,9 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(LightningEntity.class)
 public class LightningEntityMixin {
     @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LightningEntity;spawnFire(I)V"))
-    private void redirectSpawnFire (LightningEntity Entity, int spreadAttempts) {
-        if (Entity.world.getGameRules().getBoolean(EssentialGameRules.DO_LIGHTNING_SPAWNFIRE)) {
-            ((LightningEntityInvoker) Entity).invokespawnFire(spreadAttempts);
-        } else {
-            return;
+    private void redirectSpawnFire(LightningEntity entity, int spreadAttempts) {
+        if (entity.world.getGameRules().getBoolean(EssentialGameRules.DO_LIGHTNING_SPAWN_FIRE)) {
+            ((LightningEntityInvoker) entity).imyvm$spawnFire(spreadAttempts);
         }
     }
 }
-
