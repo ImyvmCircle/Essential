@@ -23,13 +23,13 @@ public class EssentialMod implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        CommandRegistrationCallback.EVENT.register(CommandRegistry::register);
-        registerEvents();
-        registerLazyTick();
-
         CONFIG.loadAndSave();
         EssentialStatistics.initialize();
         EssentialGameRules.initialize();
+
+        CommandRegistrationCallback.EVENT.register(CommandRegistry::register);
+        registerEvents();
+        registerLazyTick();
 
         LOGGER.info("Imyvm Essential initialized");
     }
