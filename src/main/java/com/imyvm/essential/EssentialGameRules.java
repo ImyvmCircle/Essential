@@ -13,7 +13,7 @@ public class EssentialGameRules {
     public static void initialize() {}
 
     static {
-        EssentialGameRules.DO_CREEPER_GRIEFING = GameRuleRegistry.register("doCreeperGriefing", GameRules.Category.MOBS, GameRuleFactory.createBooleanRule(true));
-        EssentialGameRules.DO_LIGHTNING_SPAWN_FIRE = GameRuleRegistry.register("doLightningSpawnFire", GameRules.Category.UPDATES, GameRuleFactory.createBooleanRule(true));
+        DO_CREEPER_GRIEFING = GameRuleRegistry.register("doCreeperGriefing", GameRules.Category.MOBS, GameRuleFactory.createBooleanRule(true));
+        DO_LIGHTNING_SPAWN_FIRE = GameRuleRegistry.register("doLightningSpawnFire", GameRules.Category.UPDATES, GameRuleFactory.createBooleanRule(true));
     }
 }
