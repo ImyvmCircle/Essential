@@ -24,6 +24,39 @@ repositories {
 			password = System.getenv("GITHUB_TOKEN")
 		}
 	}
+
+	maven {
+		url = uri("https://maven.pkg.github.com/John-Paul-R/Essential-Commands")
+		credentials {
+			username = System.getenv("GITHUB_USERNAME")
+			password = System.getenv("GITHUB_TOKEN")
+		}
+	}
+
+	maven {
+		name = "JP Mods"
+		url = 'https://maven.jpcode.dev'
+	}
+
+	// Fabric Permissions Api
+	maven {
+		url = 'https://oss.sonatype.org/content/repositories/snapshots'
+	}
+
+	// io.github.ladysnake:PlayerAbilityLib
+    maven {
+        name = 'Ladysnake Mods'
+        url = 'https://ladysnake.jfrog.io/artifactory/mods'
+        content {
+            includeGroup 'io.github.ladysnake'
+            includeGroupByRegex 'io\\.github\\.onyxstudios.*'
+        }
+    }
+
+	// eu.pb4:placeholder-api
+	maven {
+		url = "https://maven.nucleoid.xyz/"
+	}
 }
 
 dependencies {
@@ -36,8 +69,10 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	modImplementation "com.mojang:brigadier:${project.brigadier_version}"
+	modImplementation "com.fibermc:essential_commands:${project.essential_commands_version}"
 
-	modImplementation "com.imyvm:imyvm-hoki:1.0.0"
+	modImplementation "com.imyvm:imyvm-hoki:${project.imyvm_hoki_version}"
+	modImplementation "com.imyvm:imyvm-economy:${project.imyvm_economy_version}"
 
 	// Uncomment the following line to enable the deprecated Fabric API modules. 
 	// These are included in the Fabric API production distribution and allow you to update your mod to the latest modules at a later more convenient time.
