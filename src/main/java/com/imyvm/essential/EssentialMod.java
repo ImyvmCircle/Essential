@@ -1,6 +1,7 @@
 package com.imyvm.essential;
 
 import com.imyvm.essential.commands.CommandRegistry;
+import com.imyvm.essential.data.PlayerDataStorage;
 import com.imyvm.essential.systems.afk.AfkSystem;
 import com.imyvm.essential.systems.ptt.PlayTimeTrackSystem;
 import net.fabricmc.api.ModInitializer;
@@ -17,6 +18,7 @@ public class EssentialMod implements ModInitializer {
     @Override
     public void onInitialize() {
         CONFIG.loadAndSave();
+        PlayerDataStorage.initialize();
         EssentialStatistics.initialize();
         EssentialGameRules.initialize();
 
