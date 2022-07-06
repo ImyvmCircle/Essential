@@ -2,17 +2,29 @@ package com.imyvm.essential.mixin;
 
 import com.imyvm.essential.EssentialMod;
 import com.imyvm.essential.interfaces.PlayerEntityMixinInterface;
+import com.imyvm.essential.systems.fly.FlySystem;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static com.imyvm.essential.Translator.tr;
 
 @Mixin(PlayerEntity.class)
 public class PlayerEntityMixin implements PlayerEntityMixinInterface {
+    @Inject(method = "handleFallDamage", at = @At("HEAD"), cancellable = true)
+    private void fallDamageProtect(float fallDistance, float damageMultiplier, DamageSource damageSource, CallbackInfoReturnable<Boolean> ci) {
+        PlayerEntity player = (PlayerEntity) (Object) this;
+        if (FlySystem.getInstance().checkAndClearFallProtect(player))
+            ci.setReturnValue(false);
+    }
+
     private boolean isAwayFromKeyboard = false;
     private long lastActivity = System.currentTimeMillis();
     private Vec3d lastActiveCoordinate = Vec3d.ZERO;

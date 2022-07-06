@@ -3,6 +3,7 @@ package com.imyvm.essential;
 import com.imyvm.essential.commands.CommandRegistry;
 import com.imyvm.essential.data.PlayerDataStorage;
 import com.imyvm.essential.systems.afk.AfkSystem;
+import com.imyvm.essential.systems.fly.FlySystem;
 import com.imyvm.essential.systems.ptt.PlayTimeTrackSystem;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -31,5 +32,6 @@ public class EssentialMod implements ModInitializer {
     public void registerSystems() {
         new AfkSystem().register();
         new PlayTimeTrackSystem().register();
+        FlySystem.getInstance().register();
     }
 }
