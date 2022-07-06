@@ -39,7 +39,7 @@ public class AfkSystem extends BaseSystem implements LazyTicker.LazyTickable {
     }
 
     @Override
-    public void lazyTick(MinecraftServer server, long tick) {
+    public void lazyTick(MinecraftServer server, long tickCounts, long msSinceLastTick) {
         server.getPlayerManager().getPlayerList().forEach(player -> ((PlayerEntityMixinInterface) player).imyvm$lazyTick());
     }
 }

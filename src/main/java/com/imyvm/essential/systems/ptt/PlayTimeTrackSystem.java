@@ -10,7 +10,7 @@ import static com.imyvm.essential.EssentialMod.CONFIG;
 import static com.imyvm.essential.EssentialMod.LAZY_TICKER;
 
 public class PlayTimeTrackSystem extends BaseSystem implements LazyTicker.LazyTickable {
-    private long lastTickTimestamp;
+    private long reminder;
 
     @Override
     public void register() {
@@ -18,10 +18,10 @@ public class PlayTimeTrackSystem extends BaseSystem implements LazyTicker.LazyTi
     }
 
     @Override
-    public void lazyTick(MinecraftServer server, long tick) {
-        long currentTime = System.currentTimeMillis() / 1000;
-        int duration = (int) (currentTime - this.lastTickTimestamp);
-        this.lastTickTimestamp = currentTime;
+    public void lazyTick(MinecraftServer server, long tickCounts, long msSinceLastTick) {
+        this.reminder += msSinceLastTick;
+        int duration = (int) (this.reminder / 1000);
+        this.reminder -= duration * 1000L;
         int requiredTime = CONFIG.USER_GROUP_REQUIRED_PTT.getValue();
 
         server.getPlayerManager().getPlayerList().stream()
