@@ -74,7 +74,7 @@ public class PaidFlyCommand extends BaseCommand {
                 text.append("\n");
             isFirst = false;
 
-            text.append(tr("commands.buyfly.list_price.item",
+            text.append(tr("commands.buyfly.list.item",
                 tr("goods.paid_fly." + type.getId(), 1), MoneyUtil.format(type.getPrice())));
         }
 
@@ -95,13 +95,13 @@ public class PaidFlyCommand extends BaseCommand {
         if (currentSession != null && !currentSession.isEnded() && currentSession.getType() == PurchaseType.HOURLY) {
             currentSession.addTime(duration);
             Text nowTimeLeft = TimeUtil.formatDuration((int) (currentSession.getTimeLeft() / 1000));
-            player.sendMessage(tr("commands.buyfly.success.hourly.extend", hours, nowTimeLeft));
+            player.sendMessage(tr("commands.buyfly.buy.success.hourly.extend", hours, nowTimeLeft));
         }
         else {
             FlySession session = new FlySession(player, PurchaseType.HOURLY);
             session.start(duration);
             FlySystem.getInstance().addSession(player, session);
-            player.sendMessage(tr("commands.buyfly.success.hourly", hours));
+            player.sendMessage(tr("commands.buyfly.buy.success.hourly", hours));
         }
 
         return Command.SINGLE_SUCCESS;
@@ -117,7 +117,7 @@ public class PaidFlyCommand extends BaseCommand {
         session.start(Long.MAX_VALUE);
         FlySystem.getInstance().addSession(player, session);
 
-        player.sendMessage(tr("commands.buyfly.success." + type.getId()));
+        player.sendMessage(tr("commands.buyfly.buy.success." + type.getId()));
         return Command.SINGLE_SUCCESS;
     }
 
