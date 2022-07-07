@@ -22,7 +22,7 @@ import static com.imyvm.essential.EssentialMod.CONFIG;
 import static com.imyvm.essential.Translator.tr;
 
 public class PaidFlyCommand extends BaseCommand {
-    private static final Dynamic2CommandExceptionType INCOMPATIBLE_PLAN_EXCEPTION = new Dynamic2CommandExceptionType((current, wanted) -> tr("commands.buyfly.success.hourly.extend", current, wanted));
+    private static final Dynamic2CommandExceptionType INCOMPATIBLE_PLAN_EXCEPTION = new Dynamic2CommandExceptionType((current, wanted) -> tr("commands.buyfly.failed.incompatible_plan", current, wanted));
     private static final SimpleCommandExceptionType NOT_ENABLED_FLYING_EXCEPTION = new SimpleCommandExceptionType(tr("commands.buyfly.cancel.failed.not_flying"));
 
     private static final long MILLISECONDS_OF_HOUR = 1000 * 3600;
