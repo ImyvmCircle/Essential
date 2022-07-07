@@ -43,28 +43,28 @@ public class ModConfig extends HokiConfig {
 
     @ConfigOption
     public final Option<Integer> FLY_HOURLY_PRICE = new Option<>(
-        "fly.hourly",
+        "fly.price.hourly",
         40 * 100,
         "The price (in cents) of flying which changes hourly",
         Config::getInt);
 
     @ConfigOption
     public final Option<Integer> FLY_INTRA_WORLD_PRICE = new Option<>(
-        "fly.intra_world",
+        "fly.price.intra_world",
         80 * 100,
         "The price (in cents) of one-time flying in the same world",
         Config::getInt);
 
     @ConfigOption
     public final Option<Integer> FLY_INTER_WORLD_PRICE = new Option<>(
-        "fly.inter_world",
+        "fly.price.inter_world",
         160 * 100,
         "The price (in cents) of one-time flying, available until leave the game",
         Config::getInt);
 
     @ConfigOption
     public final Option<Integer> FLY_LIFETIME_PRICE = new Option<>(
-        "fly.lifetime",
+        "fly.price.lifetime",
         100000 * 100,
         "The price (in cents) of lifetime flying",
         Config::getInt);
