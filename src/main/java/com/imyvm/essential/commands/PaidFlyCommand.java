@@ -10,6 +10,9 @@ import com.imyvm.essential.util.TimeUtil;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
@@ -19,6 +22,9 @@ import static com.imyvm.essential.EssentialMod.CONFIG;
 import static com.imyvm.essential.Translator.tr;
 
 public class PaidFlyCommand extends BaseCommand {
+    private static final Dynamic2CommandExceptionType INCOMPATIBLE_PLAN_EXCEPTION = new Dynamic2CommandExceptionType((current, wanted) -> tr("commands.buyfly.success.hourly.extend", current, wanted));
+    private static final SimpleCommandExceptionType NOT_ENABLED_FLYING_EXCEPTION = new SimpleCommandExceptionType(tr("commands.buyfly.cancel.failed.not_flying"));
+
     private static final long MILLISECONDS_OF_HOUR = 1000 * 3600;
 
     @Override
@@ -26,38 +32,36 @@ public class PaidFlyCommand extends BaseCommand {
         return 0;
     }
 
-    public int runBuyOneHour(CommandContext<ServerCommandSource> context) {
+    public int runBuyOneHour(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         return this.executeBuyHourly(context.getSource().getPlayer(), 1);
     }
 
-    public int runBuyHours(CommandContext<ServerCommandSource> context) {
+    public int runBuyHours(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         int hours = IntegerArgumentType.getInteger(context, "hours");
         return this.executeBuyHourly(context.getSource().getPlayer(), hours);
     }
 
-    public int runBuyIntraWorld(CommandContext<ServerCommandSource> context) {
+    public int runBuyIntraWorld(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         return this.universalBuy(context.getSource().getPlayer(), PurchaseType.INTRA_WORLD);
     }
 
-    public int runBuyInterWorld(CommandContext<ServerCommandSource> context) {
+    public int runBuyInterWorld(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         return this.universalBuy(context.getSource().getPlayer(), PurchaseType.INTER_WORLD);
     }
 
-    public int runBuyLifetime(CommandContext<ServerCommandSource> context) {
+    public int runBuyLifetime(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         return this.universalBuy(context.getSource().getPlayer(), PurchaseType.LIFETIME);
     }
 
-    public int runCancel(CommandContext<ServerCommandSource> context) {
+    public int runCancel(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         ServerPlayerEntity player = context.getSource().getPlayer();
         FlySession session = FlySystem.getInstance().getSession(player);
 
-        if (session != null) {
-            player.sendMessage(tr("commands.buyfly.cancel.success"));
-            session.endSession();
-        }
-        else {
-            player.sendMessage(tr("commands.buyfly.cancel.failed.not_flying"));
-        }
+        if (session == null)
+            throw NOT_ENABLED_FLYING_EXCEPTION.create();
+
+        player.sendMessage(tr("commands.buyfly.cancel.success"));
+        session.endSession();
 
         return Command.SINGLE_SUCCESS;
     }
@@ -79,13 +83,12 @@ public class PaidFlyCommand extends BaseCommand {
         return Command.SINGLE_SUCCESS;
     }
 
-    public int executeBuyHourly(ServerPlayerEntity player, int hours) {
+    public int executeBuyHourly(ServerPlayerEntity player, int hours) throws CommandSyntaxException {
         long price = (long) CONFIG.FLY_HOURLY_PRICE.getValue() * hours;
         PlayerWallet wallet = DatabaseApi.getInstance().getPlayer(player);
 
-        if (!this.checkPurchasable(player, PurchaseType.HOURLY) || !wallet.buyGoodsWithNotification(price, tr("goods.paid_fly.hourly", hours))) {
-            return 0;
-        }
+        this.checkPurchasable(player, PurchaseType.HOURLY);
+        wallet.buyGoodsWithNotificationInCommand(price, tr("goods.paid_fly.hourly", hours));
 
         long duration = MILLISECONDS_OF_HOUR * hours;
         FlySession currentSession = FlySystem.getInstance().getSession(player);
@@ -104,11 +107,11 @@ public class PaidFlyCommand extends BaseCommand {
         return Command.SINGLE_SUCCESS;
     }
 
-    public int universalBuy(ServerPlayerEntity player, PurchaseType type) {
+    public int universalBuy(ServerPlayerEntity player, PurchaseType type) throws CommandSyntaxException {
         PlayerWallet wallet = DatabaseApi.getInstance().getPlayer(player);
-        if (!this.checkPurchasable(player, type) || !wallet.buyGoodsWithNotification(type.getPrice(), tr("goods.paid_fly." + type.getId()))) {
-            return 0;
-        }
+
+        this.checkPurchasable(player, type);
+        wallet.buyGoodsWithNotificationInCommand(type.getPrice(), tr("goods.paid_fly." + type.getId()));
 
         FlySession session = new FlySession(player, type);
         session.start(Long.MAX_VALUE);
@@ -118,16 +121,13 @@ public class PaidFlyCommand extends BaseCommand {
         return Command.SINGLE_SUCCESS;
     }
 
-    public boolean checkPurchasable(ServerPlayerEntity player, PurchaseType type) {
+    public void checkPurchasable(ServerPlayerEntity player, PurchaseType type) throws CommandSyntaxException {
         FlySession currentSession = FlySystem.getInstance().getSession(player);
         if (currentSession == null)
-            return true;
+            return;
 
         PurchaseType currentType = currentSession.getType();
-        if (type == PurchaseType.HOURLY && currentType == PurchaseType.HOURLY)
-            return true;
-
-        player.sendMessage(tr("commands.buyfly.failed.incompatible_plan", currentType, type));
-        return false;
+        if (!(type == PurchaseType.HOURLY && currentType == PurchaseType.HOURLY))
+            throw INCOMPATIBLE_PLAN_EXCEPTION.create(currentType, type);
     }
 }

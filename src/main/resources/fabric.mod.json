@@ -31,6 +31,6 @@
     "java": ">=17",
     "essential_commands": "0.24.2-mc1.19",
     "hoki": ">=1.0.0",
-    "imyvm_economy": "~1.2.1"
+    "imyvm_economy": "~1.2.2"
   }
 }
