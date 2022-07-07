@@ -141,6 +141,6 @@ public class PaidFlyCommand extends BaseCommand {
 
         PurchaseType currentType = currentSession.getType();
         if (!(type == PurchaseType.HOURLY && currentType == PurchaseType.HOURLY))
-            throw INCOMPATIBLE_PLAN_EXCEPTION.create(currentType, type);
+            throw INCOMPATIBLE_PLAN_EXCEPTION.create(currentType.getName(), type.getName());
     }
 }
