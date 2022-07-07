@@ -28,11 +28,11 @@ public class FlySystem extends BaseSystem implements LazyTicker.LazyTickable {
     private static final FlySystem instance = new FlySystem();
 
     private FlySystem() {
-        LAZY_TICKER.register(this);
     }
 
     @Override
     public void register() {
+        LAZY_TICKER.register(this);
         this.registerEvents();
     }
 
@@ -43,29 +43,29 @@ public class FlySystem extends BaseSystem implements LazyTicker.LazyTickable {
                 session.onWorldChange();
         });
 
-        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
-            ServerPlayerEntity player = handler.getPlayer();
+        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> this.onPlayerDisconnect(handler.getPlayer()));
+        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> this.onPlayerJoin(handler.getPlayer()));
+    }
 
-            FlySession session = this.playerToSession.get(player.getUuid());
-            PlayerData data = PlayerDataStorage.getOrCreate(player);
-            data.setSavedFlySession(session.toSaved());
+    public void onPlayerDisconnect(ServerPlayerEntity player) {
+        FlySession session = this.playerToSession.get(player.getUuid());
+        PlayerData data = PlayerDataStorage.getOrCreate(player);
+        data.setSavedFlySession(session.toSaved());
 
-            Pal.revokeAbility(player, VanillaAbilities.ALLOW_FLYING, AbilitySources.PAID_FLY);
-            this.playerToSession.remove(player.getUuid());
-        });
+        Pal.revokeAbility(player, VanillaAbilities.ALLOW_FLYING, AbilitySources.PAID_FLY);
+        this.playerToSession.remove(player.getUuid());
+    }
 
-        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
-            ServerPlayerEntity player = handler.getPlayer();
-            PlayerData data = PlayerDataStorage.getOrCreate(player);
+    public void onPlayerJoin(ServerPlayerEntity player) {
+        PlayerData data = PlayerDataStorage.getOrCreate(player);
 
-            SavedFlySession savedSession = data.resumeFlySession();
-            if (savedSession != null) {
-                FlySession session = FlySession.fromSaved(player, savedSession);
-                this.addSession(player, session);
-                player.sendMessage(tr("message.paid_fly.reminder.resumed." + session.getType().getId(),
-                    TimeUtil.formatDuration((int) (session.getTimeLeft() / 1000))));
-            }
-        });
+        SavedFlySession savedSession = data.resumeFlySession();
+        if (savedSession != null) {
+            FlySession session = FlySession.fromSaved(player, savedSession);
+            this.addSession(player, session);
+            player.sendMessage(tr("message.paid_fly.reminder.resumed." + session.getType().getId(),
+                TimeUtil.formatDuration((int) (session.getTimeLeft() / 1000))));
+        }
     }
 
     public void addSession(ServerPlayerEntity player, FlySession session) {

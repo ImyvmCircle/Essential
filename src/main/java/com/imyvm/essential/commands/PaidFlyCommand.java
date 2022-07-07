@@ -36,15 +36,15 @@ public class PaidFlyCommand extends BaseCommand {
     }
 
     public int runBuyIntraWorld(CommandContext<ServerCommandSource> context) {
-        return universalBuy(context.getSource().getPlayer(), PurchaseType.INTRA_WORLD);
+        return this.universalBuy(context.getSource().getPlayer(), PurchaseType.INTRA_WORLD);
     }
 
     public int runBuyInterWorld(CommandContext<ServerCommandSource> context) {
-        return universalBuy(context.getSource().getPlayer(), PurchaseType.INTER_WORLD);
+        return this.universalBuy(context.getSource().getPlayer(), PurchaseType.INTER_WORLD);
     }
 
     public int runBuyLifetime(CommandContext<ServerCommandSource> context) {
-        return universalBuy(context.getSource().getPlayer(), PurchaseType.LIFETIME);
+        return this.universalBuy(context.getSource().getPlayer(), PurchaseType.LIFETIME);
     }
 
     public int runCancel(CommandContext<ServerCommandSource> context) {
@@ -83,7 +83,7 @@ public class PaidFlyCommand extends BaseCommand {
         long price = (long) CONFIG.FLY_HOURLY_PRICE.getValue() * hours;
         PlayerWallet wallet = DatabaseApi.getInstance().getPlayer(player);
 
-        if (!checkPurchasable(player, PurchaseType.HOURLY) || !wallet.buyGoodsWithNotification(price, tr("goods.paid_fly.hourly", hours))) {
+        if (!this.checkPurchasable(player, PurchaseType.HOURLY) || !wallet.buyGoodsWithNotification(price, tr("goods.paid_fly.hourly", hours))) {
             return 0;
         }
 
@@ -106,7 +106,7 @@ public class PaidFlyCommand extends BaseCommand {
 
     public int universalBuy(ServerPlayerEntity player, PurchaseType type) {
         PlayerWallet wallet = DatabaseApi.getInstance().getPlayer(player);
-        if (!checkPurchasable(player, type) || !wallet.buyGoodsWithNotification(type.getPrice(), tr("goods.paid_fly." + type.getId()))) {
+        if (!this.checkPurchasable(player, type) || !wallet.buyGoodsWithNotification(type.getPrice(), tr("goods.paid_fly." + type.getId()))) {
             return 0;
         }
 

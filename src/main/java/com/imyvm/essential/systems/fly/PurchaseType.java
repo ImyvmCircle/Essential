@@ -19,10 +19,10 @@ public enum PurchaseType {
     }
 
     public int getPrice() {
-        return priceSupplier.get();
+        return this.priceSupplier.get();
     }
 
     public String getId() {
-        return id;
+        return this.id;
     }
 }
