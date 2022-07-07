@@ -1,8 +1,11 @@
 package com.imyvm.essential.systems.fly;
 
+import net.minecraft.text.Text;
+
 import java.util.function.Supplier;
 
 import static com.imyvm.essential.EssentialMod.CONFIG;
+import static com.imyvm.essential.Translator.tr;
 
 public enum PurchaseType {
     HOURLY("hourly", CONFIG.FLY_HOURLY_PRICE::getValue),
@@ -16,6 +19,10 @@ public enum PurchaseType {
     PurchaseType(String id, Supplier<Integer> priceSupplier) {
         this.id = id;
         this.priceSupplier = priceSupplier;
+    }
+
+    public Text getName() {
+        return tr("goods.paid_fly." + this.getId(), 1);
     }
 
     public int getPrice() {

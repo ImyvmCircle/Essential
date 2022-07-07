@@ -74,8 +74,7 @@ public class PaidFlyCommand extends BaseCommand {
                 text.append("\n");
             isFirst = false;
 
-            text.append(tr("commands.buyfly.list.item",
-                tr("goods.paid_fly." + type.getId(), 1), MoneyUtil.format(type.getPrice())));
+            text.append(tr("commands.buyfly.list.item", type.getName(), MoneyUtil.format(type.getPrice())));
         }
 
         context.getSource().sendFeedback(text, false);
@@ -92,7 +91,7 @@ public class PaidFlyCommand extends BaseCommand {
         else if (session.getType() == PurchaseType.HOURLY)
             player.sendMessage(tr("commands.buyfly.status.hourly", TimeUtil.formatDuration((int) (session.getTimeLeft() / 1000))));
         else
-            player.sendMessage(tr("commands.buyfly.status.one_time", tr("goods.paid_fly." + session.getType().getId())));
+            player.sendMessage(tr("commands.buyfly.status.one_time", session.getType().getName()));
 
         return Command.SINGLE_SUCCESS;
     }
@@ -125,7 +124,7 @@ public class PaidFlyCommand extends BaseCommand {
         PlayerWallet wallet = DatabaseApi.getInstance().getPlayer(player);
 
         this.checkPurchasable(player, type);
-        wallet.buyGoodsWithNotificationInCommand(type.getPrice(), tr("goods.paid_fly." + type.getId()));
+        wallet.buyGoodsWithNotificationInCommand(type.getPrice(), type.getName());
 
         FlySession session = new FlySession(player, type);
         session.start(Long.MAX_VALUE);
