@@ -48,6 +48,8 @@ public class CommandRegistry {
                         .executes(command::runBuyInterWorld))
                     .then(literal("lifetime")
                         .executes(command::runBuyLifetime)))
+                .then(literal("status")
+                    .executes(command::runStatus))
                 .then(literal("cancel")
                     .executes(command::runCancel))
         );

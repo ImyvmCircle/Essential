@@ -83,6 +83,20 @@ public class PaidFlyCommand extends BaseCommand {
         return Command.SINGLE_SUCCESS;
     }
 
+    public int runStatus(CommandContext<ServerCommandSource> context) {
+        ServerPlayerEntity player = context.getSource().getPlayer();
+        FlySession session = FlySystem.getInstance().getSession(player);
+
+        if (session == null)
+            player.sendMessage(tr("commands.buyfly.status.not_flying"));
+        else if (session.getType() == PurchaseType.HOURLY)
+            player.sendMessage(tr("commands.buyfly.status.hourly", TimeUtil.formatDuration((int) (session.getTimeLeft() / 1000))));
+        else
+            player.sendMessage(tr("commands.buyfly.status.one_time", tr("goods.paid_fly." + session.getType().getId())));
+
+        return Command.SINGLE_SUCCESS;
+    }
+
     public int executeBuyHourly(ServerPlayerEntity player, int hours) throws CommandSyntaxException {
         long price = (long) CONFIG.FLY_HOURLY_PRICE.getValue() * hours;
         PlayerWallet wallet = DatabaseApi.getInstance().getPlayer(player);
