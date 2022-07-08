@@ -15,6 +15,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -25,6 +26,7 @@ import static com.imyvm.essential.Translator.tr;
 public class FlySystem extends BaseSystem implements LazyTicker.LazyTickable {
     private final Map<UUID, FlySession> playerToSession = new ConcurrentHashMap<>();
     private final Map<UUID, Long> fallProtectionEnd = new ConcurrentHashMap<>();
+    private final Set<PaidFlyGui> guiSet = ConcurrentHashMap.newKeySet();
     private static final FlySystem instance = new FlySystem();
 
     private FlySystem() {
@@ -86,6 +88,14 @@ public class FlySystem extends BaseSystem implements LazyTicker.LazyTickable {
         return result;
     }
 
+    public void addGui(PaidFlyGui gui) {
+        this.guiSet.add(gui);
+    }
+
+    public void removeGui(PaidFlyGui gui) {
+        this.guiSet.remove(gui);
+    }
+
     @Override
     public void lazyTick(MinecraftServer server, long tickCounts, long msSinceLastTick) {
         this.playerToSession.forEach((uuid, session) -> {
@@ -93,6 +103,8 @@ public class FlySystem extends BaseSystem implements LazyTicker.LazyTickable {
             if (session.isEnded())
                 this.playerToSession.remove(uuid);
         });
+
+        this.guiSet.forEach((gui) -> gui.lazyTick(server, tickCounts, msSinceLastTick));
     }
 
     public static FlySystem getInstance() {

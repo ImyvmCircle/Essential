@@ -29,5 +29,10 @@
   "message.paid_fly.reminder.expired": "You only have {0} left to fly, please be advised",
   "message.paid_fly.reminder.resumed.hourly": "Your flying session has been resumed, time left: {0}",
   "message.paid_fly.reminder.resumed.lifetime": "Your flying session has been resumed",
+  "gui.paid_fly.title": "Fly Shop",
+  "gui.paid_fly.cancel.name": "Cancel flying",
+  "gui.paid_fly.goods.price": "Price: {0}$",
+  "gui.paid_fly.goods.purchased": "Purchased",
+  "gui.paid_fly.goods.purchased.hourly": "Purchased, time left: {0}",
   "gui.tab_list.player_away": "{0} §7| AFK"
 }

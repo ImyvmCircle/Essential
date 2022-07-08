@@ -75,4 +75,39 @@ public class ModConfig extends HokiConfig {
         30 * 1000L,
         "The duration (in milliseconds) of falling damage protection after the flying ended",
         Config::getLong);
+
+    @ConfigOption
+    public final Option<String> FLY_HOURLY_ICON = new Option<>(
+        "fly.icon.hourly",
+        "minecraft:emerald",
+        "The icon of hourly flying, represented by Minecraft item identifier",
+        Config::getString);
+
+    @ConfigOption
+    public final Option<String> FLY_INTRA_WORLD_ICON = new Option<>(
+        "fly.icon.intra_world",
+        "minecraft:iron_ingot",
+        "The icon of intra-world flying, represented by Minecraft item identifier",
+        Config::getString);
+
+    @ConfigOption
+    public final Option<String> FLY_INTER_WORLD_ICON = new Option<>(
+        "fly.icon.inter_world",
+        "minecraft:gold_ingot",
+        "The icon of inter-world flying, represented by Minecraft item identifier",
+        Config::getString);
+
+    @ConfigOption
+    public final Option<String> FLY_LIFETIME_ICON = new Option<>(
+        "fly.icon.lifetime",
+        "minecraft:diamond",
+        "The icon of lifetime flying, represented by Minecraft item identifier",
+        Config::getString);
+
+    @ConfigOption
+    public final Option<String> FLY_CANCEL_ICON = new Option<>(
+        "fly.icon.cancel",
+        "minecraft:barrier",
+        "The icon of cancelling, represented by Minecraft item identifier",
+        Config::getString);
 }

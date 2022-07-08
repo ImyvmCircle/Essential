@@ -5,6 +5,7 @@ import com.imyvm.economy.api.PlayerWallet;
 import com.imyvm.economy.util.MoneyUtil;
 import com.imyvm.essential.systems.fly.FlySession;
 import com.imyvm.essential.systems.fly.FlySystem;
+import com.imyvm.essential.systems.fly.PaidFlyGui;
 import com.imyvm.essential.systems.fly.PurchaseType;
 import com.imyvm.essential.util.TimeUtil;
 import com.mojang.brigadier.Command;
@@ -32,6 +33,11 @@ public class PaidFlyCommand extends BaseCommand {
         return 0;
     }
 
+    public int runOpenGui(CommandContext<ServerCommandSource> context) {
+        new PaidFlyGui(context.getSource().getPlayer()).open();
+        return Command.SINGLE_SUCCESS;
+    }
+
     public int runBuyOneHour(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         return this.executeBuyHourly(context.getSource().getPlayer(), 1);
     }
@@ -55,15 +61,7 @@ public class PaidFlyCommand extends BaseCommand {
 
     public int runCancel(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         ServerPlayerEntity player = context.getSource().getPlayer();
-        FlySession session = FlySystem.getInstance().getSession(player);
-
-        if (session == null)
-            throw NOT_ENABLED_FLYING_EXCEPTION.create();
-
-        player.sendMessage(tr("commands.buyfly.cancel.success"));
-        session.endSession();
-
-        return Command.SINGLE_SUCCESS;
+        return this.executeCancel(player);
     }
 
     public int runList(CommandContext<ServerCommandSource> context) {
@@ -116,6 +114,18 @@ public class PaidFlyCommand extends BaseCommand {
             FlySystem.getInstance().addSession(player, session);
             player.sendMessage(tr("commands.buyfly.buy.success.hourly", hours));
         }
+
+        return Command.SINGLE_SUCCESS;
+    }
+
+    public int executeCancel(ServerPlayerEntity player) throws CommandSyntaxException {
+        FlySession session = FlySystem.getInstance().getSession(player);
+
+        if (session == null)
+            throw NOT_ENABLED_FLYING_EXCEPTION.create();
+
+        player.sendMessage(tr("commands.buyfly.cancel.success"));
+        session.endSession();
 
         return Command.SINGLE_SUCCESS;
     }

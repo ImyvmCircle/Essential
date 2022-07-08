@@ -35,6 +35,8 @@ public class CommandRegistry {
         dispatcher.register(
             literal("buyfly")
                 .requires(ServerCommandSource::isExecutedByPlayer)
+                .then(literal("gui")
+                    .executes(command::runOpenGui))
                 .then(literal("list")
                     .executes(command::runList))
                 .then(literal("buy")
