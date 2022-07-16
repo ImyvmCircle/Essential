@@ -69,8 +69,9 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	modImplementation "com.mojang:brigadier:${project.brigadier_version}"
-	modImplementation "com.fibermc:essential_commands:${project.essential_commands_version}"
+//	modImplementation "com.fibermc:essential_commands:${project.essential_commands_version}"
 	modImplementation "eu.pb4:sgui:${project.sgui_version}"
+	modImplementation "io.github.ladysnake:PlayerAbilityLib:${project.pal_version}"
 
 	modImplementation "com.imyvm:imyvm-hoki:${project.imyvm_hoki_version}"
 	modImplementation "com.imyvm:imyvm-economy:${project.imyvm_economy_version}"
