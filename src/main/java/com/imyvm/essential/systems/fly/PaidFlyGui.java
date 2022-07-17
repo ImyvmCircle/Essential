@@ -2,7 +2,6 @@ package com.imyvm.essential.systems.fly;
 
 import com.imyvm.economy.util.MoneyUtil;
 import com.imyvm.essential.LazyTicker;
-import com.imyvm.essential.commands.PaidFlyCommand;
 import com.imyvm.essential.util.TimeUtil;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import eu.pb4.sgui.api.gui.SimpleGui;
@@ -18,12 +17,11 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
+import static com.imyvm.essential.commands.CommandRegistry.PAID_FLY_COMMAND;
 import static com.imyvm.essential.EssentialMod.CONFIG;
 import static com.imyvm.essential.Translator.tr;
 
 public class PaidFlyGui implements LazyTicker.LazyTickable {
-    private static final PaidFlyCommand executor = new PaidFlyCommand();
-
     private final ServerPlayerEntity player;
     private final SimpleGui gui;
     private FlySession session;
@@ -56,7 +54,7 @@ public class PaidFlyGui implements LazyTicker.LazyTickable {
         this.setGoodsIconByPurchaseType(2, PurchaseType.INTER_WORLD);
         this.setGoodsIconByPurchaseType(3, PurchaseType.LIFETIME);
 
-        this.setIcon(8, parseItem(CONFIG.FLY_CANCEL_ICON.getValue()), tr("gui.paid_fly.cancel.name"), false, null, this.wrapExecute(() -> executor.executeCancel(this.player)));
+        this.setIcon(8, parseItem(CONFIG.FLY_CANCEL_ICON.getValue()), tr("gui.paid_fly.cancel.name"), false, null, this.wrapExecute(() -> PAID_FLY_COMMAND.executeCancel(this.player)));
     }
 
     private void setGoodsIconByPurchaseType(int slot, PurchaseType type) {
@@ -64,7 +62,7 @@ public class PaidFlyGui implements LazyTicker.LazyTickable {
         Text lore = purchased ? tr("gui.paid_fly.goods.purchased") : null;
         Item item = Registry.ITEM.get(Identifier.tryParse(type.getGuiIconName()));
 
-        this.setGoodsIcon(slot, item, type.getName(), purchased, type.getPrice(), lore, this.wrapExecute(() -> executor.universalBuy(this.player, type)));
+        this.setGoodsIcon(slot, item, type.getName(), purchased, type.getPrice(), lore, this.wrapExecute(() -> PAID_FLY_COMMAND.universalBuy(this.player, type)));
     }
 
     private void setHourlyIcon() {
@@ -75,7 +73,7 @@ public class PaidFlyGui implements LazyTicker.LazyTickable {
             lore = tr("gui.paid_fly.goods.purchased.hourly", TimeUtil.formatDuration((int) (this.session.getTimeLeft() / 1000)));
         Item item = parseItem(PurchaseType.HOURLY.getGuiIconName());
 
-        this.setGoodsIcon(0, item, PurchaseType.HOURLY.getName(), purchased, PurchaseType.HOURLY.getPrice(), lore, this.wrapExecute(() -> executor.executeBuyHourly(this.player, 1)));
+        this.setGoodsIcon(0, item, PurchaseType.HOURLY.getName(), purchased, PurchaseType.HOURLY.getPrice(), lore, this.wrapExecute(() -> PAID_FLY_COMMAND.executeBuyHourly(this.player, 1)));
     }
 
     private void setGoodsIcon(int slot, Item item, Text name, boolean enchanted, int price, Text lore, Runnable callback) {

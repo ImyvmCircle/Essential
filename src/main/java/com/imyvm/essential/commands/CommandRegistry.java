@@ -10,50 +10,53 @@ import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
 
 public class CommandRegistry {
+    public static final AfkCommand AFK_COMMAND = new AfkCommand();
+    public static final ItemShowCommand ITEM_SHOW_COMMAND = new ItemShowCommand();
+    public static final PlayTimeTrackCommand PLAY_TIME_TRACK_COMMAND = new PlayTimeTrackCommand();
+    public static final PaidFlyCommand PAID_FLY_COMMAND = new PaidFlyCommand();
+
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment environment) {
         dispatcher.register(
             literal("afk")
                 .requires(ServerCommandSource::isExecutedByPlayer)
-                .executes(new AfkCommand()));
+                .executes(AFK_COMMAND));
 
         dispatcher.register(
             literal("ss")
                 .requires(ServerCommandSource::isExecutedByPlayer)
-                .executes(new ItemShowCommand()));
+                .executes(ITEM_SHOW_COMMAND));
 
         dispatcher.register(
             literal("ptt")
                 .requires(ServerCommandSource::isExecutedByPlayer)
-                .executes(new PlayTimeTrackCommand()));
+                .executes(PLAY_TIME_TRACK_COMMAND));
 
         registerPaidFly(dispatcher);
     }
 
     private static void registerPaidFly(CommandDispatcher<ServerCommandSource> dispatcher) {
-        PaidFlyCommand command = new PaidFlyCommand();
-
         dispatcher.register(
             literal("buyfly")
                 .requires(ServerCommandSource::isExecutedByPlayer)
                 .then(literal("gui")
-                    .executes(command::runOpenGui))
+                    .executes(PAID_FLY_COMMAND::runOpenGui))
                 .then(literal("list")
-                    .executes(command::runList))
+                    .executes(PAID_FLY_COMMAND::runList))
                 .then(literal("buy")
                     .then(literal("hourly")
-                        .executes(command::runBuyOneHour)
+                        .executes(PAID_FLY_COMMAND::runBuyOneHour)
                         .then(argument("hours", IntegerArgumentType.integer(1))
-                            .executes(command::runBuyHours)))
+                            .executes(PAID_FLY_COMMAND::runBuyHours)))
                     .then(literal("intra_world")
-                        .executes(command::runBuyIntraWorld))
+                        .executes(PAID_FLY_COMMAND::runBuyIntraWorld))
                     .then(literal("inter_world")
-                        .executes(command::runBuyInterWorld))
+                        .executes(PAID_FLY_COMMAND::runBuyInterWorld))
                     .then(literal("lifetime")
-                        .executes(command::runBuyLifetime)))
+                        .executes(PAID_FLY_COMMAND::runBuyLifetime)))
                 .then(literal("status")
-                    .executes(command::runStatus))
+                    .executes(PAID_FLY_COMMAND::runStatus))
                 .then(literal("cancel")
-                    .executes(command::runCancel))
+                    .executes(PAID_FLY_COMMAND::runCancel))
         );
     }
 }
