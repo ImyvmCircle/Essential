@@ -33,11 +33,11 @@ public class FlySession implements LazyTicker.LazyTickable {
     }
 
     public static FlySession fromSaved(ServerPlayerEntity player, SavedFlySession savedSession) {
-        FlySession session = new FlySession(player, savedSession.type());
+        FlySession session = new FlySession(player, savedSession.getType());
 
         if (savedSession.isFlying())
             player.getAbilities().flying = true;
-        session.start(savedSession.timeLeft());
+        session.start(savedSession.getTimeLeft());
 
         return session;
     }
