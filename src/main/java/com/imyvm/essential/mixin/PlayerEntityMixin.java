@@ -32,7 +32,7 @@ public class PlayerEntityMixin implements PlayerEntityMixinInterface {
     public void imyvm$updateAwayFromKeyboard(boolean awayFromKeyboard) {
         if (awayFromKeyboard == this.imyvm$isAwayFromKeyboard())
             return;
-        setAwayFromKeyboard(awayFromKeyboard);
+        this.setAwayFromKeyboard(awayFromKeyboard);
 
         ServerPlayerEntity player = this.asServerPlayerEntity();
         PlayerListS2CPacket packet = new PlayerListS2CPacket(PlayerListS2CPacket.Action.UPDATE_DISPLAY_NAME, player);
@@ -49,7 +49,7 @@ public class PlayerEntityMixin implements PlayerEntityMixinInterface {
     }
 
     public void imyvm$updateActivity() {
-        imyvm$updateAwayFromKeyboard(false);
+        this.imyvm$updateAwayFromKeyboard(false);
         this.lastActivity = System.currentTimeMillis();
         this.lastActiveCoordinate = this.asServerPlayerEntity().getPos();
     }
@@ -57,12 +57,12 @@ public class PlayerEntityMixin implements PlayerEntityMixinInterface {
     @Override
     public void imyvm$lazyTick() {
         if (!this.imyvm$isAwayFromKeyboard() && this.movedSquaredDistance() > 0.04)
-            imyvm$updateActivity();
+            this.imyvm$updateActivity();
         if (this.imyvm$isAwayFromKeyboard() && this.movedSquaredDistance() > 9)
-            imyvm$updateActivity();
+            this.imyvm$updateActivity();
 
         if (!this.imyvm$isAwayFromKeyboard() && System.currentTimeMillis() > this.lastActivity + EssentialMod.CONFIG.AFK_AFTER_NO_ACTION.getValue())
-            imyvm$updateAwayFromKeyboard(true);
+            this.imyvm$updateAwayFromKeyboard(true);
     }
 
     private double movedSquaredDistance() {

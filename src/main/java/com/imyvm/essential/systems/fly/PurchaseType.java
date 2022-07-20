@@ -15,16 +15,16 @@ public enum PurchaseType {
 
     private final String id;
     private final Supplier<Integer> priceSupplier;
-    private final Supplier<String> guiIconName;
+    private final Supplier<String> guiIconNameSupplier;
 
-    PurchaseType(String id, Supplier<Integer> priceSupplier, Supplier<String> guiIconName) {
+    PurchaseType(String id, Supplier<Integer> priceSupplier, Supplier<String> guiIconNameSupplier) {
         this.id = id;
         this.priceSupplier = priceSupplier;
-        this.guiIconName = guiIconName;
+        this.guiIconNameSupplier = guiIconNameSupplier;
     }
 
     public Text getName() {
-        return tr("goods.paid_fly." + this.getId(), 1);
+        return tr("goods.paid_fly." + this.id, 1);
     }
 
     public int getPrice() {
@@ -32,7 +32,7 @@ public enum PurchaseType {
     }
 
     public String getGuiIconName() {
-        return this.guiIconName.get();
+        return this.guiIconNameSupplier.get();
     }
 
     public String getId() {

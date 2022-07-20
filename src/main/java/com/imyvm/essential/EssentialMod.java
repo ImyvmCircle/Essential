@@ -25,7 +25,7 @@ public class EssentialMod implements ModInitializer {
         EssentialGameRules.initialize();
 
         CommandRegistrationCallback.EVENT.register(CommandRegistry::register);
-        registerSystems();
+        this.registerSystems();
 
         LOGGER.info("Imyvm Essential initialized");
     }

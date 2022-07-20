@@ -18,7 +18,7 @@ public class AfkSystem extends BaseSystem implements LazyTicker.LazyTickable {
     @Override
     public void register() {
         LAZY_TICKER.register(this);
-        registerEvents();
+        this.registerEvents();
     }
 
     private void registerEvents() {

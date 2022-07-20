@@ -101,7 +101,7 @@ public class PaidFlyGui implements LazyTicker.LazyTickable {
 
     @Override
     public void lazyTick(MinecraftServer server, long tickCounts, long msSinceLastTick) {
-        FlySession session = FlySystem.getInstance().getSession(player);
+        FlySession session = FlySystem.getInstance().getSession(this.player);
         if (session != this.session) {
             this.session = session;
             this.setIcons();
