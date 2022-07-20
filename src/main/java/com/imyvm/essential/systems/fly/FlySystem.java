@@ -3,7 +3,6 @@ package com.imyvm.essential.systems.fly;
 import com.imyvm.essential.AbilitySources;
 import com.imyvm.essential.LazyTicker;
 import com.imyvm.essential.data.PlayerData;
-import com.imyvm.essential.data.PlayerDataStorage;
 import com.imyvm.essential.systems.BaseSystem;
 import com.imyvm.essential.util.TimeUtil;
 import io.github.ladysnake.pal.Pal;
@@ -21,6 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static com.imyvm.essential.EssentialMod.CONFIG;
 import static com.imyvm.essential.EssentialMod.LAZY_TICKER;
+import static com.imyvm.essential.EssentialMod.PLAYER_DATA_STORAGE;
 import static com.imyvm.essential.Translator.tr;
 
 public class FlySystem extends BaseSystem implements LazyTicker.LazyTickable {
@@ -51,7 +51,7 @@ public class FlySystem extends BaseSystem implements LazyTicker.LazyTickable {
 
     public void onPlayerDisconnect(ServerPlayerEntity player) {
         FlySession session = this.playerToSession.get(player.getUuid());
-        PlayerData data = PlayerDataStorage.getOrCreate(player);
+        PlayerData data = PLAYER_DATA_STORAGE.getOrCreate(player.getUuid());
         data.setSavedFlySession(session.toSaved());
 
         Pal.revokeAbility(player, VanillaAbilities.ALLOW_FLYING, AbilitySources.PAID_FLY);
@@ -59,9 +59,9 @@ public class FlySystem extends BaseSystem implements LazyTicker.LazyTickable {
     }
 
     public void onPlayerJoin(ServerPlayerEntity player) {
-        PlayerData data = PlayerDataStorage.getOrCreate(player);
+        PlayerData data = PLAYER_DATA_STORAGE.getOrCreate(player.getUuid());
 
-        SavedFlySession savedSession = data.resumeFlySession();
+        SavedFlySession savedSession = data.resumeSavedFlySession();
         if (savedSession != null) {
             FlySession session = FlySession.fromSaved(player, savedSession);
             this.addSession(player, session);
