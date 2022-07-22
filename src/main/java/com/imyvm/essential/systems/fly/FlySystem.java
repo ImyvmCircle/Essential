@@ -51,11 +51,13 @@ public class FlySystem extends BaseSystem implements LazyTicker.LazyTickable {
 
     public void onPlayerDisconnect(ServerPlayerEntity player) {
         FlySession session = this.playerToSession.get(player.getUuid());
-        PlayerData data = PLAYER_DATA_STORAGE.getOrCreate(player.getUuid());
-        data.setSavedFlySession(session.toSaved());
+        if (session != null) {
+            PlayerData data = PLAYER_DATA_STORAGE.getOrCreate(player.getUuid());
+            data.setSavedFlySession(session.toSaved());
 
-        Pal.revokeAbility(player, VanillaAbilities.ALLOW_FLYING, AbilitySources.PAID_FLY);
-        this.playerToSession.remove(player.getUuid());
+            Pal.revokeAbility(player, VanillaAbilities.ALLOW_FLYING, AbilitySources.PAID_FLY);
+            this.playerToSession.remove(player.getUuid());
+        }
     }
 
     public void onPlayerJoin(ServerPlayerEntity player) {
