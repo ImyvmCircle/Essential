@@ -32,6 +32,7 @@ public class ModConfig extends HokiConfig {
 
     @ConfigOption public final Option<Boolean> DO_CREEPER_GRIEFING = new Option<>("doCreeperGriefing", true, "If disabled, creeper explosions do not break blocks", Config::getBoolean);
     @ConfigOption public final Option<Boolean> DO_LIGHTNING_SPAWN_FIRE = new Option<>("doLightningSpawnFire", true, "If disabled, lightnings do not spawn fire", Config::getBoolean);
+    @ConfigOption public final Option<Boolean> DO_LAVA_SPREAD_FIRE = new Option<>("doLavaSpreadFire", true, "If disabled, lava does not spread fire", Config::getBoolean);
 
     @ConfigOption public final Option<Boolean> FIX_ALLAY_DUPLICATE_ITEM = new Option<>("fix.allay_duplicate_item", true, "Whether to fix allay duplicating item when it goes through the nether portal", Config::getBoolean);
 }

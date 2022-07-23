@@ -6,6 +6,7 @@
   "mixins": [
     "CreeperEntityMixin",
     "GiveInventoryToLookTargetTaskMixin",
+    "LavaFluidMixin",
     "LightningEntityMixin",
     "PlayerEntityMixin",
     "ServerPlayerEntityMixin",
