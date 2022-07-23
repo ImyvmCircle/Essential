@@ -22,7 +22,6 @@ public class EssentialMod implements ModInitializer {
     public void onInitialize() {
         CONFIG.loadAndSave();
         EssentialStatistics.initialize();
-        EssentialGameRules.initialize();
 
         CommandRegistrationCallback.EVENT.register(CommandRegistry::register);
         this.registerSystems();
