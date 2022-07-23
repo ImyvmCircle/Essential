@@ -34,5 +34,6 @@
     "gui.paid_fly.cancel.name": "§4§l取消飞行",
     "gui.paid_fly.goods.price": "价格: {0}$",
     "gui.paid_fly.goods.purchased": "购买",
-    "gui.paid_fly.goods.purchased.hourly": "购买成功, 剩余时间: {0}"
+    "gui.paid_fly.goods.purchased.hourly": "购买成功, 剩余时间: {0}",
+    "commands.imyvm_essential.reload.success": "配置已重新加载"
 }

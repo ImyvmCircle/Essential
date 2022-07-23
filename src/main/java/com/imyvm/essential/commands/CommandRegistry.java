@@ -1,7 +1,9 @@
 package com.imyvm.essential.commands;
 
+import com.imyvm.essential.EssentialMod;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
+import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
@@ -11,6 +13,7 @@ import static net.minecraft.server.command.CommandManager.literal;
 
 public class CommandRegistry {
     public static final AfkCommand AFK_COMMAND = new AfkCommand();
+    public static final ImyvmEssentialManageCommand IMYVM_ESSENTIAL_MANAGE_COMMAND = new ImyvmEssentialManageCommand();
     public static final ItemShowCommand ITEM_SHOW_COMMAND = new ItemShowCommand();
     public static final PlayTimeTrackCommand PLAY_TIME_TRACK_COMMAND = new PlayTimeTrackCommand();
     public static final PaidFlyCommand PAID_FLY_COMMAND = new PaidFlyCommand();
@@ -30,6 +33,12 @@ public class CommandRegistry {
             literal("ptt")
                 .requires(ServerCommandSource::isExecutedByPlayer)
                 .executes(PLAY_TIME_TRACK_COMMAND));
+
+        dispatcher.register(
+            literal("imyvm_essential")
+                .requires(Permissions.require(EssentialMod.MOD_ID + ".manage", 3))
+                .then(literal("reload")
+                    .executes(IMYVM_ESSENTIAL_MANAGE_COMMAND::runReload)));
 
         registerPaidFly(dispatcher);
     }

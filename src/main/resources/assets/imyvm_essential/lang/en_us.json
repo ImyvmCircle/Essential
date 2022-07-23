@@ -16,6 +16,7 @@
   "commands.buyfly.status.not_flying": "You are not enabled flying",
   "commands.buyfly.status.hourly": "You have enabled Hourly Flying, time left: {0}",
   "commands.buyfly.status.one_time": "You have purchased {0}",
+  "commands.imyvm_essential.reload.success": "Configuration reloaded",
   "commands.ss.empty": "{0} is showing his empty hand",
   "commands.ss.show.single": "{0} is showing {1}",
   "commands.ss.show.multiple": "{0} is showing {1} * {2}",
