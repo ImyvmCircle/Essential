@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.Optional;
 
+import static com.imyvm.essential.EssentialMod.CONFIG;
 import static com.imyvm.essential.EssentialMod.LOGGER;
 
 @Mixin(GiveInventoryToLookTargetTask.class)
@@ -24,7 +25,7 @@ public class GiveInventoryToLookTargetTaskMixin<E extends LivingEntity> {
         cancellable = true,
         locals = LocalCapture.CAPTURE_FAILHARD)
     private void skipThrowingWhenRemoved(ServerWorld world, E entity, long time, CallbackInfo ci, Optional<LookTarget> optional, LookTarget lookTarget, double distance, ItemStack itemStack) {
-        if (entity.isRemoved()) {
+        if (CONFIG.FIX_ALLAY_DUPLICATE_ITEM.getValue() && entity.isRemoved()) {
             logSuspiciousBehaviour(entity, itemStack);
             ci.cancel();
         }
@@ -32,7 +33,7 @@ public class GiveInventoryToLookTargetTaskMixin<E extends LivingEntity> {
 
     @Surrogate
     private void skipThrowingWhenRemoved(ServerWorld world, E entity, long time, CallbackInfo ci) {
-        if (entity.isRemoved()) {
+        if (CONFIG.FIX_ALLAY_DUPLICATE_ITEM.getValue() && entity.isRemoved()) {
             logSuspiciousBehaviour(entity, null);
             ci.cancel();
         }

@@ -29,4 +29,6 @@ public class ModConfig extends HokiConfig {
     @ConfigOption public final Option<String> FLY_INTER_WORLD_ICON = new Option<>("fly.icon.inter_world", "minecraft:gold_ingot", "The icon of inter-world flying, represented by Minecraft item identifier", Config::getString);
     @ConfigOption public final Option<String> FLY_LIFETIME_ICON = new Option<>("fly.icon.lifetime", "minecraft:diamond", "The icon of lifetime flying, represented by Minecraft item identifier", Config::getString);
     @ConfigOption public final Option<String> FLY_CANCEL_ICON = new Option<>("fly.icon.cancel", "minecraft:barrier", "The icon of cancelling, represented by Minecraft item identifier", Config::getString);
+
+    @ConfigOption public final Option<Boolean> FIX_ALLAY_DUPLICATE_ITEM = new Option<>("fix.allay_duplicate_item", true, "Whether to fix allay duplicating item when it goes through the nether portal", Config::getBoolean);
 }
