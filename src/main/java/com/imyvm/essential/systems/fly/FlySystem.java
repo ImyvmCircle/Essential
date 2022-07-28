@@ -27,7 +27,7 @@ public class FlySystem extends BaseSystem implements LazyTicker.LazyTickable {
     private final Map<UUID, FlySession> playerToSession = new ConcurrentHashMap<>();
     private final Map<UUID, Long> fallProtectionEnd = new ConcurrentHashMap<>();
     private final Set<PaidFlyGui> guiSet = ConcurrentHashMap.newKeySet();
-    private static final FlySystem instance = new FlySystem();
+    private static final FlySystem INSTANCE = new FlySystem();
 
     private FlySystem() {
     }
@@ -110,6 +110,6 @@ public class FlySystem extends BaseSystem implements LazyTicker.LazyTickable {
     }
 
     public static FlySystem getInstance() {
-        return instance;
+        return INSTANCE;
     }
 }

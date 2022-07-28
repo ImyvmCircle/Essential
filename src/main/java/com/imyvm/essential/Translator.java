@@ -9,11 +9,11 @@ import java.io.InputStream;
 import static com.imyvm.essential.EssentialMod.CONFIG;
 
 public class Translator extends HokiTranslator {
-    private static HokiLanguage instance = createLanguage(CONFIG.LANGUAGE.getValue());
+    private static HokiLanguage INSTANCE = createLanguage(CONFIG.LANGUAGE.getValue());
 
     static {
         CONFIG.LANGUAGE.changeEvents.register((option, oldValue, newValue) -> {
-            instance = createLanguage(option.getValue());
+            INSTANCE = createLanguage(option.getValue());
         });
     }
 
@@ -22,7 +22,7 @@ public class Translator extends HokiTranslator {
     }
 
     public static HokiLanguage getLanguageInstance() {
-        return instance;
+        return INSTANCE;
     }
 
     private static HokiLanguage createLanguage(String languageId) {
