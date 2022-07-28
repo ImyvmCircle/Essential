@@ -31,7 +31,7 @@
     "java": ">=17",
     "playerabilitylib": ">=1.6.0",
     "sgui": ">=1.1.2",
-    "hoki": ">=1.1.0",
+    "hoki": ">=1.1.1",
     "imyvm_economy": "~1.2.2"
   }
 }
