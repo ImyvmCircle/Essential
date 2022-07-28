@@ -10,9 +10,7 @@
     "LightningEntityMixin",
     "PlayerEntityMixin",
     "ServerPlayerEntityMixin",
-    "SleepManagerMixin",
-    "StatisticsS2CPacketMixin",
-    "StatTypeAccessor"
+    "SleepManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

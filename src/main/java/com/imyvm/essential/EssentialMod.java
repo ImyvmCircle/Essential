@@ -21,7 +21,6 @@ public class EssentialMod implements ModInitializer {
     @Override
     public void onInitialize() {
         CONFIG.loadAndSave();
-        EssentialStatistics.initialize();
 
         CommandRegistrationCallback.EVENT.register(CommandRegistry::register);
         this.registerSystems();
@@ -31,7 +30,7 @@ public class EssentialMod implements ModInitializer {
 
     public void registerSystems() {
         new AfkSystem().register();
-        new PlayTimeTrackSystem().register();
+        PlayTimeTrackSystem.getInstance().register();
         FlySystem.getInstance().register();
     }
 }

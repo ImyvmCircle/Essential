@@ -1,8 +1,11 @@
 package com.imyvm.essential.commands;
 
 import com.imyvm.essential.EssentialMod;
+import com.imyvm.essential.systems.ptt.TimeCounter;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.server.command.CommandManager;
@@ -13,6 +16,7 @@ import static net.minecraft.server.command.CommandManager.literal;
 
 public class CommandRegistry {
     public static final AfkCommand AFK_COMMAND = new AfkCommand();
+    public static final BonusAcquireCommand BONUS_ACQUIRE_COMMAND = new BonusAcquireCommand();
     public static final ImyvmEssentialManageCommand IMYVM_ESSENTIAL_MANAGE_COMMAND = new ImyvmEssentialManageCommand();
     public static final ItemShowCommand ITEM_SHOW_COMMAND = new ItemShowCommand();
     public static final PlayTimeTrackCommand PLAY_TIME_TRACK_COMMAND = new PlayTimeTrackCommand();
@@ -41,6 +45,7 @@ public class CommandRegistry {
                     .executes(IMYVM_ESSENTIAL_MANAGE_COMMAND::runReload)));
 
         registerPaidFly(dispatcher);
+        registerBonusAcquire(dispatcher);
     }
 
     private static void registerPaidFly(CommandDispatcher<ServerCommandSource> dispatcher) {
@@ -67,5 +72,14 @@ public class CommandRegistry {
                 .then(literal("cancel")
                     .executes(PAID_FLY_COMMAND::runCancel))
         );
+    }
+
+    private static void registerBonusAcquire(CommandDispatcher<ServerCommandSource> dispatcher) {
+        LiteralArgumentBuilder<ServerCommandSource> builder = literal("bonus").requires(ServerCommandSource::isExecutedByPlayer);
+        for (TimeCounter value : TimeCounter.values())
+            builder.then(literal(value.getTypeId())
+                .then(argument("token", StringArgumentType.word())
+                    .executes(context -> BONUS_ACQUIRE_COMMAND.runAcquire(context, value.getTypeId()))));
+        dispatcher.register(builder);
     }
 }

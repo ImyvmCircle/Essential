@@ -16,7 +16,17 @@ public class ModConfig extends HokiConfig {
 
     @ConfigOption public final Option<Long> AFK_AFTER_NO_ACTION = new Option<>("afk.afk_after_no_action", 600L * 1000, "how long (in milliseconds) after the player has no actions, he will be set to AFK status.", Config::getLong);
 
-    @ConfigOption public final Option<Integer> USER_GROUP_REQUIRED_PTT = new Option<>("ptt.user_group_required_ptt", (42 * 60 + 16) * 60 /* 42 h 16 m */, "How long (in seconds) players will be set to the \"user\" group after playing", Config::getInt);
+    @ConfigOption public final Option<Long> PTT_ACQUIRE_TIME_LIMIT = new Option<>("ptt.time_limit", 60 * 1000L /* 1 m */, "The time limit (in milliseconds) for player to acquire the bonus", Config::getLong);
+    @ConfigOption public final Option<Long> PTT_CONTINUOUS_REQUIRED = new Option<>("ptt.required.continuous", (10 * 60 - 30) * 1000L /* 9 m 30 s */, "How long (in milliseconds) player need to be online to acquire 10-minute (i.e. continuous) bonus", Config::getLong);
+    @ConfigOption public final Option<Long> PTT_DAY_REQUIRED = new Option<>("ptt.required.day", 3600 * 1000L /* 1 h */, "How long (in milliseconds) player need to be online to acquire daily bonus", Config::getLong);
+    @ConfigOption public final Option<Long> PTT_WEEK_REQUIRED = new Option<>("ptt.required.week", (16 * 60 + 40) * 60 * 1000L /* 16 h 40 m */, "How long (in milliseconds) player need to be online to acquire weekly bonus", Config::getLong);
+    @ConfigOption public final Option<Long> PTT_MONTH_REQUIRED = new Option<>("ptt.required.month", 70 * 3600 * 1000L /* 70 h */, "How long (in milliseconds) player need to be online to acquire monthly bonus", Config::getLong);
+    @ConfigOption public final Option<Long> PTT_YEAR_REQUIRED = new Option<>("ptt.required.year", 850 * 3600 * 1000L /* 850 h */, "How long (in milliseconds) player need to be online to acquire yearly bonus", Config::getLong);
+    @ConfigOption public final Option<Integer> PTT_CONTINUOUS_BONUS = new Option<>("ptt.bonus.continuous", 2 * 100, "How much money player can get from 10-minute (continuous) bonus", Config::getInt);
+    @ConfigOption public final Option<Integer> PTT_DAY_BONUS = new Option<>("ptt.bonus.day", 45 * 100, "How much money player can get from daily bonus", Config::getInt);
+    @ConfigOption public final Option<Integer> PTT_WEEK_BONUS = new Option<>("ptt.bonus.week", 350 * 100, "How much money player can get from weekly bonus", Config::getInt);
+    @ConfigOption public final Option<Integer> PTT_MONTH_BONUS = new Option<>("ptt.bonus.month", 1000 * 100, "How much money player can get from monthly bonus", Config::getInt);
+    @ConfigOption public final Option<Integer> PTT_YEAR_BONUS = new Option<>("ptt.bonus.year", 12000 * 100, "How much money player can get from yearly bonus", Config::getInt);
 
     @ConfigOption public final Option<Long> FLY_HOURLY_NOTICE_AT = new Option<>("fly.hourly_notice_at", 60 * 1000L, "How long (in milliseconds) the flying session will be over, the player will be notified", Config::getLong);
     @ConfigOption public final Option<Integer> FLY_HOURLY_PRICE = new Option<>("fly.price.hourly", 40 * 100, "The price (in cents) of flying which changes hourly", Config::getInt);
