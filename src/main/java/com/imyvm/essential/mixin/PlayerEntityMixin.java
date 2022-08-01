@@ -1,6 +1,7 @@
 package com.imyvm.essential.mixin;
 
 import com.imyvm.essential.EssentialMod;
+import com.imyvm.essential.data.PlayerData;
 import com.imyvm.essential.interfaces.PlayerEntityMixinInterface;
 import com.imyvm.essential.systems.fly.FlySystem;
 import net.minecraft.entity.damage.DamageSource;
@@ -12,17 +13,33 @@ import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import static com.imyvm.essential.EssentialMod.PLAYER_DATA_STORAGE;
 import static com.imyvm.essential.Translator.tr;
 
-@Mixin(PlayerEntity.class)
+@Mixin(value = PlayerEntity.class, priority = 900)
 public class PlayerEntityMixin implements PlayerEntityMixinInterface {
     @Inject(method = "handleFallDamage", at = @At("HEAD"), cancellable = true)
     private void fallDamageProtect(float fallDistance, float damageMultiplier, DamageSource damageSource, CallbackInfoReturnable<Boolean> ci) {
         PlayerEntity player = (PlayerEntity) (Object) this;
         if (FlySystem.getInstance().checkAndClearFallProtect(player))
             ci.setReturnValue(false);
+    }
+
+    @Inject(method = "dropInventory", at = @At("HEAD"), cancellable = true)
+    private void checkDeathProtect(CallbackInfo ci) {
+        PlayerEntity player = (PlayerEntity) (Object) this;
+
+        PlayerData data = PLAYER_DATA_STORAGE.getOrCreate(player.getUuid());
+        int level = data.getDeathProtectLevel();
+        if (level > 0) {
+            data.setDeathProtectLevel(level - 1);
+            data.setKeepInventoryAtRespawn(true);
+            player.sendMessage(tr("message.death_protect.consume", level - 1));
+            ci.cancel();
+        }
     }
 
     private boolean isAwayFromKeyboard = false;

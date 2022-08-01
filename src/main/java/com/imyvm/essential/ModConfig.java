@@ -16,6 +16,8 @@ public class ModConfig extends HokiConfig {
 
     @ConfigOption public final Option<Long> AFK_AFTER_NO_ACTION = new Option<>("afk.afk_after_no_action", 600L * 1000, "how long (in milliseconds) after the player has no actions, he will be set to AFK status.", Config::getLong);
 
+    @ConfigOption public final Option<Integer> DEATH_PROTECT_BASE_PRICE = new Option<>("death_protect.base_price", 40 * 100, "The base price (in cents) of one death-protect level", Config::getInt);
+
     @ConfigOption public final Option<Long> PTT_ACQUIRE_TIME_LIMIT = new Option<>("ptt.time_limit", 60 * 1000L /* 1 m */, "The time limit (in milliseconds) for player to acquire the bonus", Config::getLong);
     @ConfigOption public final Option<Long> PTT_CONTINUOUS_REQUIRED = new Option<>("ptt.required.continuous", (10 * 60 - 30) * 1000L /* 9 m 30 s */, "How long (in milliseconds) player need to be online to acquire 10-minute (i.e. continuous) bonus", Config::getLong);
     @ConfigOption public final Option<Long> PTT_DAY_REQUIRED = new Option<>("ptt.required.day", 3600 * 1000L /* 1 h */, "How long (in milliseconds) player need to be online to acquire daily bonus", Config::getLong);

@@ -17,6 +17,7 @@ import static net.minecraft.server.command.CommandManager.literal;
 public class CommandRegistry {
     public static final AfkCommand AFK_COMMAND = new AfkCommand();
     public static final BonusAcquireCommand BONUS_ACQUIRE_COMMAND = new BonusAcquireCommand();
+    public static final DeathProtectCommand DEATH_PROTECT_COMMAND = new DeathProtectCommand();
     public static final ImyvmEssentialManageCommand IMYVM_ESSENTIAL_MANAGE_COMMAND = new ImyvmEssentialManageCommand();
     public static final ItemShowCommand ITEM_SHOW_COMMAND = new ItemShowCommand();
     public static final PlayTimeTrackCommand PLAY_TIME_TRACK_COMMAND = new PlayTimeTrackCommand();
@@ -27,6 +28,17 @@ public class CommandRegistry {
             literal("afk")
                 .requires(ServerCommandSource::isExecutedByPlayer)
                 .executes(AFK_COMMAND));
+
+        dispatcher.register(
+            literal("death_protect")
+                .requires(ServerCommandSource::isExecutedByPlayer)
+                .then(literal("buy")
+                    .executes(DEATH_PROTECT_COMMAND))
+                .then(literal("confirm")
+                    .executes(DEATH_PROTECT_COMMAND::runConfirm))
+                .then(literal("status")
+                    .executes(DEATH_PROTECT_COMMAND::runStatus))
+        );
 
         dispatcher.register(
             literal("ss")
