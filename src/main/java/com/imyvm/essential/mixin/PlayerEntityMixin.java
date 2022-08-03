@@ -78,7 +78,8 @@ public class PlayerEntityMixin implements PlayerEntityMixinInterface {
         if (this.imyvm$isAwayFromKeyboard() && this.movedSquaredDistance() > 9)
             this.imyvm$updateActivity();
 
-        if (!this.imyvm$isAwayFromKeyboard() && System.currentTimeMillis() > this.lastActivity + EssentialMod.CONFIG.AFK_AFTER_NO_ACTION.getValue())
+        long timeoutAt = this.lastActivity + EssentialMod.CONFIG.AFK_AFTER_NO_ACTION.getValue();
+        if (!this.imyvm$isAwayFromKeyboard() && System.currentTimeMillis() > timeoutAt)
             this.imyvm$updateAwayFromKeyboard(true);
     }
 

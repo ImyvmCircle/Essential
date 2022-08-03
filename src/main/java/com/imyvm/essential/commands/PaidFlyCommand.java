@@ -23,8 +23,11 @@ import static com.imyvm.essential.EssentialMod.CONFIG;
 import static com.imyvm.essential.Translator.tr;
 
 public class PaidFlyCommand extends BaseCommand {
-    private static final Dynamic2CommandExceptionType INCOMPATIBLE_PLAN_EXCEPTION = new Dynamic2CommandExceptionType((current, wanted) -> tr("commands.buyfly.failed.incompatible_plan", current, wanted));
-    private static final SimpleCommandExceptionType NOT_ENABLED_FLYING_EXCEPTION = new SimpleCommandExceptionType(tr("commands.buyfly.cancel.failed.not_flying"));
+    private static final Dynamic2CommandExceptionType INCOMPATIBLE_PLAN_EXCEPTION =
+        new Dynamic2CommandExceptionType((current, wanted) ->
+            tr("commands.buyfly.failed.incompatible_plan", current, wanted));
+    private static final SimpleCommandExceptionType NOT_ENABLED_FLYING_EXCEPTION =
+        new SimpleCommandExceptionType(tr("commands.buyfly.cancel.failed.not_flying"));
 
     private static final long MILLISECONDS_OF_HOUR = 1000 * 3600;
 
@@ -86,9 +89,10 @@ public class PaidFlyCommand extends BaseCommand {
 
         if (session == null)
             player.sendMessage(tr("commands.buyfly.status.not_flying"));
-        else if (session.getType() == PurchaseType.HOURLY)
-            player.sendMessage(tr("commands.buyfly.status.hourly", TimeUtil.formatDuration((int) (session.getTimeLeft() / 1000))));
-        else
+        else if (session.getType() == PurchaseType.HOURLY) {
+            int duration = (int) (session.getTimeLeft() / 1000);
+            player.sendMessage(tr("commands.buyfly.status.hourly", TimeUtil.formatDuration(duration)));
+        } else
             player.sendMessage(tr("commands.buyfly.status.one_time", session.getType().getName()));
 
         return Command.SINGLE_SUCCESS;
@@ -107,8 +111,7 @@ public class PaidFlyCommand extends BaseCommand {
             currentSession.addTime(duration);
             Text nowTimeLeft = TimeUtil.formatDuration((int) (currentSession.getTimeLeft() / 1000));
             player.sendMessage(tr("commands.buyfly.buy.success.hourly.extend", hours, nowTimeLeft));
-        }
-        else {
+        } else {
             FlySession session = new FlySession(player, PurchaseType.HOURLY);
             session.start(duration);
             FlySystem.getInstance().addSession(player, session);

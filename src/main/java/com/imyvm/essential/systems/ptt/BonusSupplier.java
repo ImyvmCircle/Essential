@@ -18,8 +18,10 @@ import static com.imyvm.essential.EssentialMod.LAZY_TICKER;
 import static com.imyvm.essential.Translator.tr;
 
 public class BonusSupplier implements LazyTicker.LazyTickable {
-    private static final SimpleCommandExceptionType NO_SUCH_TICKET_EXCEPTION = new SimpleCommandExceptionType(tr("commands.bonus.failed.no_such_ticket"));
-    private static final SimpleCommandExceptionType TOKEN_NOT_MATCHED_EXCEPTION = new SimpleCommandExceptionType(tr("commands.bonus.failed.token_not_matched"));
+    private static final SimpleCommandExceptionType NO_SUCH_TICKET_EXCEPTION =
+        new SimpleCommandExceptionType(tr("commands.bonus.failed.no_such_ticket"));
+    private static final SimpleCommandExceptionType TOKEN_NOT_MATCHED_EXCEPTION =
+        new SimpleCommandExceptionType(tr("commands.bonus.failed.token_not_matched"));
     private static final BonusSupplier INSTANCE = new BonusSupplier();
 
     private final Set<Ticket> tickets = ConcurrentHashMap.newKeySet();
@@ -33,7 +35,8 @@ public class BonusSupplier implements LazyTicker.LazyTickable {
 
     public void register() {
         LAZY_TICKER.register(this);
-        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> this.onPlayerDisconnected(handler.getPlayer()));
+        ServerPlayConnectionEvents.DISCONNECT.register(
+            (handler, server) -> this.onPlayerDisconnected(handler.getPlayer()));
     }
 
     public void addTicket(Ticket ticket) {
@@ -43,7 +46,9 @@ public class BonusSupplier implements LazyTicker.LazyTickable {
     }
 
     public void onTicketAcquire(ServerPlayerEntity player, String typeId, String token) throws CommandSyntaxException {
-        Optional<Ticket> optional = this.tickets.stream().filter((ticket) -> ticket.player == player && ticket.typeId.equals(typeId)).findFirst();
+        Optional<Ticket> optional = this.tickets.stream()
+            .filter((ticket) -> ticket.player == player && ticket.typeId.equals(typeId))
+            .findFirst();
         if (optional.isEmpty())
             throw NO_SUCH_TICKET_EXCEPTION.create();
 

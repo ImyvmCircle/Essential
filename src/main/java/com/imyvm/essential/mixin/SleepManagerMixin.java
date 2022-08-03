@@ -20,6 +20,7 @@ public class SleepManagerMixin {
 
     @ModifyArg(method = "canResetTime", at = @At(value = "INVOKE", target = "Ljava/util/stream/Stream;filter(Ljava/util/function/Predicate;)Ljava/util/stream/Stream;"), index = 0)
     private Predicate<PlayerEntity> hookCanResetTimeBySleeping(Predicate<PlayerEntity> predicate) {
-        return player -> player.canResetTimeBySleeping() && !((PlayerEntityMixinInterface) player).imyvm$isAwayFromKeyboard();
+        return player ->
+            player.canResetTimeBySleeping() && !((PlayerEntityMixinInterface) player).imyvm$isAwayFromKeyboard();
     }
 }

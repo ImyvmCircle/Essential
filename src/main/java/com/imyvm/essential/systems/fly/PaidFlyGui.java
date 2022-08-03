@@ -17,9 +17,9 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
-import static com.imyvm.essential.commands.CommandRegistry.PAID_FLY_COMMAND;
 import static com.imyvm.essential.EssentialMod.CONFIG;
 import static com.imyvm.essential.Translator.tr;
+import static com.imyvm.essential.commands.CommandRegistry.PAID_FLY_COMMAND;
 
 public class PaidFlyGui implements LazyTicker.LazyTickable {
     private final ServerPlayerEntity player;
@@ -54,24 +54,33 @@ public class PaidFlyGui implements LazyTicker.LazyTickable {
         this.setGoodsIconByPurchaseType(2, PurchaseType.INTER_WORLD);
         this.setGoodsIconByPurchaseType(3, PurchaseType.LIFETIME);
 
-        this.setIcon(8, parseItem(CONFIG.FLY_CANCEL_ICON.getValue()), tr("gui.paid_fly.cancel.name"), false, null, this.wrapExecute(() -> PAID_FLY_COMMAND.executeCancel(this.player)));
+        this.setIcon(8,
+            parseItem(CONFIG.FLY_CANCEL_ICON.getValue()),
+            tr("gui.paid_fly.cancel.name"),
+            false,
+            null,
+            this.wrapExecute(() -> PAID_FLY_COMMAND.executeCancel(this.player)));
     }
 
     private void setGoodsIconByPurchaseType(int slot, PurchaseType type) {
         boolean purchased = this.session != null && this.session.getType() == type;
         Text lore = purchased ? tr("gui.paid_fly.goods.purchased") : null;
 
-        this.setGoodsIcon(slot, type, purchased, lore, this.wrapExecute(() -> PAID_FLY_COMMAND.universalBuy(this.player, type)));
+        Runnable executor = this.wrapExecute(() -> PAID_FLY_COMMAND.universalBuy(this.player, type));
+        this.setGoodsIcon(slot, type, purchased, lore, executor);
     }
 
     private void setHourlyIcon() {
         Text lore = null;
         boolean purchased = this.session != null && this.session.getType() == PurchaseType.HOURLY;
 
-        if (purchased)
-            lore = tr("gui.paid_fly.goods.purchased.hourly", TimeUtil.formatDuration((int) (this.session.getTimeLeft() / 1000)));
+        if (purchased) {
+            int duration = (int) (this.session.getTimeLeft() / 1000);
+            lore = tr("gui.paid_fly.goods.purchased.hourly", TimeUtil.formatDuration(duration));
+        }
 
-        this.setGoodsIcon(0, PurchaseType.HOURLY, purchased, lore, this.wrapExecute(() -> PAID_FLY_COMMAND.executeBuyHourly(this.player, 1)));
+        Runnable executor = this.wrapExecute(() -> PAID_FLY_COMMAND.executeBuyHourly(this.player, 1));
+        this.setGoodsIcon(0, PurchaseType.HOURLY, purchased, lore, executor);
     }
 
     private void setGoodsIcon(int slot, PurchaseType type, boolean enchanted, Text lore, Runnable callback) {
@@ -107,8 +116,7 @@ public class PaidFlyGui implements LazyTicker.LazyTickable {
         if (session != this.session) {
             this.session = session;
             this.setIcons();
-        }
-        else
+        } else
             this.setHourlyIcon();
     }
 

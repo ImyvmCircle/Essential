@@ -23,7 +23,9 @@ public class CommandRegistry {
     public static final PlayTimeTrackCommand PLAY_TIME_TRACK_COMMAND = new PlayTimeTrackCommand();
     public static final PaidFlyCommand PAID_FLY_COMMAND = new PaidFlyCommand();
 
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment environment) {
+    public static void register(CommandDispatcher<ServerCommandSource> dispatcher,
+                                CommandRegistryAccess registryAccess,
+                                CommandManager.RegistrationEnvironment environment) {
         dispatcher.register(
             literal("afk")
                 .requires(ServerCommandSource::isExecutedByPlayer)
@@ -87,11 +89,14 @@ public class CommandRegistry {
     }
 
     private static void registerBonusAcquire(CommandDispatcher<ServerCommandSource> dispatcher) {
-        LiteralArgumentBuilder<ServerCommandSource> builder = literal("bonus").requires(ServerCommandSource::isExecutedByPlayer);
+        LiteralArgumentBuilder<ServerCommandSource> builder = literal("bonus")
+            .requires(ServerCommandSource::isExecutedByPlayer);
+
         for (TimeCounter value : TimeCounter.values())
             builder.then(literal(value.getTypeId())
                 .then(argument("token", StringArgumentType.word())
                     .executes(context -> BONUS_ACQUIRE_COMMAND.runAcquire(context, value.getTypeId()))));
+
         dispatcher.register(builder);
     }
 }

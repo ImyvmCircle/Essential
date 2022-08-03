@@ -45,7 +45,8 @@ public class FlySystem extends BaseSystem implements LazyTicker.LazyTickable {
                 session.onWorldChange();
         });
 
-        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> this.onPlayerDisconnect(handler.getPlayer()));
+        ServerPlayConnectionEvents.DISCONNECT.register(
+            (handler, server) -> this.onPlayerDisconnect(handler.getPlayer()));
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> this.onPlayerJoin(handler.getPlayer()));
     }
 
@@ -81,7 +82,8 @@ public class FlySystem extends BaseSystem implements LazyTicker.LazyTickable {
     }
 
     public void addFallProtect(ServerPlayerEntity player) {
-        this.fallProtectionEnd.put(player.getUuid(), System.currentTimeMillis() + CONFIG.FLY_FALL_PROTECT_DURATION.getValue());
+        long expireAt = System.currentTimeMillis() + CONFIG.FLY_FALL_PROTECT_DURATION.getValue();
+        this.fallProtectionEnd.put(player.getUuid(), expireAt);
     }
 
     public boolean checkAndClearFallProtect(PlayerEntity player) {

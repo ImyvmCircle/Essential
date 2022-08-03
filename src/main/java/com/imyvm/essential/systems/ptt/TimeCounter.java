@@ -11,12 +11,18 @@ import java.util.function.Function;
 import static com.imyvm.essential.EssentialMod.CONFIG;
 
 public enum TimeCounter {
-    CONTINUOUS("continuous", PlayerTrackData::getContinuous, TimeCounter::getContinuous, CONFIG.PTT_CONTINUOUS_REQUIRED, CONFIG.PTT_CONTINUOUS_BONUS, false),
-    DAY("day", PlayerTrackData::getDay, TimeCounter::getDayId, CONFIG.PTT_DAY_REQUIRED, CONFIG.PTT_DAY_BONUS, true),
-    WEEK("week", PlayerTrackData::getWeek, TimeCounter::getWeekId, CONFIG.PTT_WEEK_REQUIRED, CONFIG.PTT_WEEK_BONUS, true),
-    MONTH("month", PlayerTrackData::getMonth, TimeCounter::getMonthId, CONFIG.PTT_MONTH_REQUIRED, CONFIG.PTT_MONTH_BONUS, true),
-    YEAR("year", PlayerTrackData::getYear, TimeCounter::getYearId, CONFIG.PTT_YEAR_REQUIRED, CONFIG.PTT_YEAR_BONUS, true),
-    TOTAL("total", PlayerTrackData::getTotal, (calendar) -> 1, new Option<>("", Long.MAX_VALUE, Config::getLong), new Option<>("", 0, Config::getInt), false);
+    CONTINUOUS("continuous", PlayerTrackData::getContinuous, TimeCounter::getContinuous,
+        CONFIG.PTT_CONTINUOUS_REQUIRED, CONFIG.PTT_CONTINUOUS_BONUS, false),
+    DAY("day", PlayerTrackData::getDay, TimeCounter::getDayId,
+        CONFIG.PTT_DAY_REQUIRED, CONFIG.PTT_DAY_BONUS, true),
+    WEEK("week", PlayerTrackData::getWeek, TimeCounter::getWeekId,
+        CONFIG.PTT_WEEK_REQUIRED, CONFIG.PTT_WEEK_BONUS, true),
+    MONTH("month", PlayerTrackData::getMonth, TimeCounter::getMonthId,
+        CONFIG.PTT_MONTH_REQUIRED, CONFIG.PTT_MONTH_BONUS, true),
+    YEAR("year", PlayerTrackData::getYear, TimeCounter::getYearId,
+        CONFIG.PTT_YEAR_REQUIRED, CONFIG.PTT_YEAR_BONUS, true),
+    TOTAL("total", PlayerTrackData::getTotal, (calendar) -> 1,
+        new Option<>("", Long.MAX_VALUE, Config::getLong), new Option<>("", 0, Config::getInt), false);
 
     private final String typeId;
     private final Function<PlayerTrackData, TrackData> getDataFunction;
@@ -26,7 +32,9 @@ public enum TimeCounter {
     private final boolean shouldAcquire;
     private int periodId;
 
-    TimeCounter(String typeId, Function<PlayerTrackData, TrackData> getDataFunction, Function<Calendar, Integer> periodIdCalculator, Option<Long> timeRequiredOption, Option<Integer> bonusOption, boolean shouldAcquire) {
+    TimeCounter(String typeId, Function<PlayerTrackData, TrackData> getDataFunction,
+                Function<Calendar, Integer> periodIdCalculator, Option<Long> timeRequiredOption,
+                Option<Integer> bonusOption, boolean shouldAcquire) {
         this.typeId = typeId;
         this.getDataFunction = getDataFunction;
         this.periodIdCalculator = periodIdCalculator;
@@ -51,7 +59,8 @@ public enum TimeCounter {
                 data.setStatus(TrackData.Status.PENDING);
                 String token = RandomUtil.getRandomString(5);
                 long expiredAt = System.currentTimeMillis() + CONFIG.PTT_ACQUIRE_TIME_LIMIT.getValue();
-                BonusSupplier.getInstance().addTicket(new BonusSupplier.Ticket(player, data, this.typeId, token, bonus, expiredAt));
+                BonusSupplier.getInstance().addTicket(
+                    new BonusSupplier.Ticket(player, data, this.typeId, token, bonus, expiredAt));
             } else {
                 data.setStatus(TrackData.Status.OBTAINED);
                 BonusSupplier.getInstance().quickTransfer(player, bonus, this.typeId);

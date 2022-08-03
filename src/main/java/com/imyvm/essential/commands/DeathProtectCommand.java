@@ -21,8 +21,10 @@ import static com.imyvm.essential.EssentialMod.PLAYER_DATA_STORAGE;
 import static com.imyvm.essential.Translator.tr;
 
 public class DeathProtectCommand extends BaseCommand {
-    private static final SimpleCommandExceptionType LEVEL_TOO_HIGH_EXCEPTION = new SimpleCommandExceptionType(tr("commands.death_protect.failed.level_too_high"));
-    private static final SimpleCommandExceptionType NO_PENDING_TRANSACTION_EXCEPTION = new SimpleCommandExceptionType(tr("commands.death_protect.failed.no_pending"));
+    private static final SimpleCommandExceptionType LEVEL_TOO_HIGH_EXCEPTION =
+        new SimpleCommandExceptionType(tr("commands.death_protect.failed.level_too_high"));
+    private static final SimpleCommandExceptionType NO_PENDING_TRANSACTION_EXCEPTION =
+        new SimpleCommandExceptionType(tr("commands.death_protect.failed.no_pending"));
     private static final String CONFIRM_COMMAND = "/death_protect confirm";
     private static final long PENDING_TIME_LIMIT = 60 * 1000;  // 1 minute
 
@@ -40,7 +42,8 @@ public class DeathProtectCommand extends BaseCommand {
             wallet.buyGoodsWithNotificationInCommand(money, tr("goods.death_protect.with_level", level + 1));
 
         this.pendingTransaction.put(player.getUuid(), System.currentTimeMillis() + PENDING_TIME_LIMIT);
-        player.sendMessage(tr("commands.death_protect.message.to_confirm", MoneyUtil.format(money), level + 1, CommandUtil.asSuggestCommandText(CONFIRM_COMMAND)));
+        player.sendMessage(tr("commands.death_protect.message.to_confirm",
+            MoneyUtil.format(money), level + 1, CommandUtil.asSuggestCommandText(CONFIRM_COMMAND)));
 
         return Command.SINGLE_SUCCESS;
     }
@@ -55,7 +58,8 @@ public class DeathProtectCommand extends BaseCommand {
         int level = data.getDeathProtectLevel();
         long money = calculateNextLevelPrice(level);
 
-        DatabaseApi.getInstance().getPlayer(player).buyGoodsWithNotificationInCommand(money, tr("goods.death_protect.with_level", level + 1));
+        DatabaseApi.getInstance().getPlayer(player).buyGoodsWithNotificationInCommand(money,
+            tr("goods.death_protect.with_level", level + 1));
         data.setDeathProtectLevel(level + 1);
 
         return Command.SINGLE_SUCCESS;

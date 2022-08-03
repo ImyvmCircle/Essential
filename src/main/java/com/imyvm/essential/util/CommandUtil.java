@@ -28,6 +28,7 @@ public class CommandUtil {
     }
 
     public static Text asSuggestCommandText(String command) {
-        return Text.literal(command).setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, command)));
+        Style style = Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, command));
+        return Text.literal(command).setStyle(style);
     }
 }

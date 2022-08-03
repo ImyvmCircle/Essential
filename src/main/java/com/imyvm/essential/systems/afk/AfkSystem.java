@@ -3,7 +3,7 @@ package com.imyvm.essential.systems.afk;
 import com.imyvm.essential.LazyTicker;
 import com.imyvm.essential.interfaces.PlayerEntityMixinInterface;
 import com.imyvm.essential.systems.BaseSystem;
-import net.fabricmc.fabric.api.event.player.*;
+import net.fabricmc.fabric.api.event.player.*;  // CHECKSTYLE.SUPPRESS: AvoidStarImport
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
@@ -40,6 +40,7 @@ public class AfkSystem extends BaseSystem implements LazyTicker.LazyTickable {
 
     @Override
     public void lazyTick(MinecraftServer server, long tickCounts, long msSinceLastTick) {
-        server.getPlayerManager().getPlayerList().forEach(player -> ((PlayerEntityMixinInterface) player).imyvm$lazyTick());
+        server.getPlayerManager().getPlayerList().forEach(
+            player -> ((PlayerEntityMixinInterface) player).imyvm$lazyTick());
     }
 }

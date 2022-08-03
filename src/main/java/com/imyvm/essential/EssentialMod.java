@@ -16,7 +16,8 @@ public class EssentialMod implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger("Essential");
     public static final ModConfig CONFIG = new ModConfig();
     public static final LazyTicker LAZY_TICKER = new LazyTicker(20);
-    public static final PersistentStorage<PlayerData> PLAYER_DATA_STORAGE = new PersistentStorage<>(MOD_ID, (uuid) -> new PlayerData());
+    public static final PersistentStorage<PlayerData> PLAYER_DATA_STORAGE =
+        new PersistentStorage<>(MOD_ID, (uuid) -> new PlayerData());
 
     @Override
     public void onInitialize() {
