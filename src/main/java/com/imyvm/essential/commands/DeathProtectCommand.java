@@ -35,7 +35,7 @@ public class DeathProtectCommand extends BaseCommand {
         ServerPlayerEntity player = context.getSource().getPlayer();
         PlayerData data = PLAYER_DATA_STORAGE.getOrCreate(player.getUuid());
         int level = data.getDeathProtectLevel();
-        long money = calculateNextLevelPrice(level);
+        long money = this.calculateNextLevelPrice(level);
 
         PlayerWallet wallet = DatabaseApi.getInstance().getPlayer(player);
         if (wallet.getMoney() < money)  // if insufficient, throw an `INSUFFICIENT_BALANCE_EXCEPTION` by ImyvmEconomy
@@ -56,7 +56,7 @@ public class DeathProtectCommand extends BaseCommand {
 
         PlayerData data = PLAYER_DATA_STORAGE.getOrCreate(player.getUuid());
         int level = data.getDeathProtectLevel();
-        long money = calculateNextLevelPrice(level);
+        long money = this.calculateNextLevelPrice(level);
 
         DatabaseApi.getInstance().getPlayer(player).buyGoodsWithNotificationInCommand(money,
             tr("goods.death_protect.with_level", level + 1));

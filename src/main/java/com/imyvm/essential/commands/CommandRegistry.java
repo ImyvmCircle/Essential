@@ -23,6 +23,9 @@ public class CommandRegistry {
     public static final PlayTimeTrackCommand PLAY_TIME_TRACK_COMMAND = new PlayTimeTrackCommand();
     public static final PaidFlyCommand PAID_FLY_COMMAND = new PaidFlyCommand();
 
+    private CommandRegistry() {
+    }
+
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher,
                                 CommandRegistryAccess registryAccess,
                                 CommandManager.RegistrationEnvironment environment) {

@@ -26,7 +26,7 @@ public class PlayerData implements NbtPersistent {
     }
 
     public PlayerTrackData getPlayerTrackData() {
-        return playerTrackData;
+        return this.playerTrackData;
     }
 
     public int getDeathProtectLevel() {

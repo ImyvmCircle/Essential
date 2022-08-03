@@ -6,6 +6,9 @@ public class RandomUtil {
     public static final String ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     public static final Random RANDOM = new Random();
 
+    private RandomUtil() {
+    }
+
     public static String getRandomString(int length, String alphabet) {
         StringBuilder builder = new StringBuilder(length);
         for (int i = 0; i < length; i++)

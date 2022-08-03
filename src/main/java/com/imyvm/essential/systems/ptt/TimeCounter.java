@@ -73,7 +73,7 @@ public enum TimeCounter {
     }
 
     public Function<PlayerTrackData, TrackData> getGetDataFunction() {
-        return getDataFunction;
+        return this.getDataFunction;
     }
 
     private static int getContinuous(Calendar calendar) {

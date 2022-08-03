@@ -24,10 +24,11 @@ import static com.imyvm.essential.EssentialMod.PLAYER_DATA_STORAGE;
 import static com.imyvm.essential.Translator.tr;
 
 public class FlySystem extends BaseSystem implements LazyTicker.LazyTickable {
+    private static final FlySystem INSTANCE = new FlySystem();
+
     private final Map<UUID, FlySession> playerToSession = new ConcurrentHashMap<>();
     private final Map<UUID, Long> fallProtectionEnd = new ConcurrentHashMap<>();
     private final Set<PaidFlyGui> guiSet = ConcurrentHashMap.newKeySet();
-    private static final FlySystem INSTANCE = new FlySystem();
 
     private FlySystem() {
     }

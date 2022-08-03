@@ -19,6 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import static com.imyvm.essential.EssentialMod.PLAYER_DATA_STORAGE;
 import static com.imyvm.essential.Translator.tr;
 
+@SuppressWarnings("DeclarationOrder")
 @Mixin(value = PlayerEntity.class, priority = 900)
 public class PlayerEntityMixin implements PlayerEntityMixinInterface {
     @Inject(method = "handleFallDamage", at = @At("HEAD"), cancellable = true)

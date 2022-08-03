@@ -22,7 +22,7 @@ public class LazyTicker {
 
         long currentTimestamp = System.currentTimeMillis();
         int phase = (int) (this.tick % this.period);
-        for (int i = phase; i < tasks.size(); i += this.period)
+        for (int i = phase; i < this.tasks.size(); i += this.period)
             this.tasks.get(i).tick(server, this.tick, currentTimestamp);
     }
 
@@ -34,7 +34,7 @@ public class LazyTicker {
         private final LazyTickable target;
         private long lastTickAt;
 
-        public Task(LazyTickable target) {
+        Task(LazyTickable target) {
             this.target = target;
         }
 

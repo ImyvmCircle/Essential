@@ -12,6 +12,9 @@ import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 
 public class CommandUtil {
+    private CommandUtil() {
+    }
+
     public static ServerCommandSource getServerCommandSource(MinecraftServer server) {
         ServerWorld world = server.getOverworld();
 

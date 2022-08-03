@@ -29,9 +29,7 @@
 
   <!-- Checks for whitespace -->
   <!-- See http://checkstyle.org/config_whitespace.html -->
-  <module name="FileTabCharacter">
-    <property name="eachLine" value="true"/>
-  </module>
+  <module name="FileTabCharacter"/>
 
   <module name="LineLength">
     <property name="fileExtensions" value="java"/>
@@ -39,12 +37,19 @@
     <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://|@(At|Inject|Modify(Constant|Variable|Args?)|Redirect)|CallbackInfo"/>
   </module>
 
+  <module name="NewlineAtEndOfFile"/>
+
   <module name="RegexpMultiline">
     <property name="fileExtensions" value="java"/>
     <property name="format" value="\bSystem\.(out)|(err)\b"/>
     <property name="matchAcrossLines" value="true"/>
-    <property name="message" value="Consider using LOGGER to print messages to the console"/>
+    <property name="message" value="Consider using LOGGER to print messages to the console."/>
   </module>
+
+  <module name="RegexpSingleline">
+    <property name="format" value="(?!\*)[^$]\s+$"/>
+    <property name="message" value="The line has trailing spaces."/>
+</module>
 
   <module name="TreeWalker">
     <module name="OuterTypeFilename"/>
@@ -61,10 +66,13 @@
       <property name="allowNonPrintableEscapes" value="true"/>
     </module>
     <module name="AvoidStarImport"/>
+    <module name="RedundantImport"/>
+    <module name="UnusedImports"/>
     <module name="OneTopLevelClass"/>
     <module name="NoLineWrap">
       <property name="tokens" value="PACKAGE_DEF, IMPORT, STATIC_IMPORT"/>
     </module>
+    <module name="EmptyStatement"/>
     <module name="EmptyBlock">
       <property name="option" value="TEXT"/>
       <property name="tokens"
@@ -102,6 +110,9 @@
       <property name="query" value="//RCURLY[parent::SLIST[count(./*)=1]
                                      or preceding-sibling::*[last()][self::LCURLY]]"/>
     </module>
+    <module name="NoWhitespaceAfter">
+      <property name="tokens" value="AT,INC,DEC,UNARY_MINUS,UNARY_PLUS,BNOT,LNOT,DOT,ARRAY_DECLARATOR"/>
+    </module>
     <module name="WhitespaceAfter">
       <property name="tokens"
                value="COMMA, SEMI, TYPECAST, LITERAL_IF, LITERAL_ELSE, LITERAL_RETURN,
@@ -130,19 +141,39 @@
       <message key="ws.notPreceded"
               value="WhitespaceAround: ''{0}'' is not preceded with whitespace."/>
     </module>
+    <module name="SimplifyBooleanExpression"/>
+    <module name="SimplifyBooleanReturn"/>
+    <module name="StringLiteralEquality"/>
+    <module name="UnusedLocalVariable"/>
     <module name="OneStatementPerLine"/>
     <module name="MultipleVariableDeclarations"/>
     <module name="ArrayTypeStyle"/>
+    <module name="ModifiedControlVariable">
+      <property name="skipEnhancedForLoopVariable" value="true"/>
+    </module>
     <module name="MissingSwitchDefault"/>
     <module name="FallThrough"/>
+    <module name="DefaultComesLast">
+      <property name="skipIfLastAndSharedWithCase" value="true"/>
+    </module>
+    <module name="AvoidNestedBlocks">
+      <property name="allowInSwitchCase" value="true"/>
+    </module>
     <module name="UpperEll"/>
     <module name="ModifierOrder"/>
+    <module name="RedundantModifier"/>
+    <module name="ArrayTrailingComma"/>
+    <module name="RequireThis">
+      <property name="validateOnlyOverlapping" value="false"/>
+    </module>
     <module name="EmptyLineSeparator">
       <property name="tokens"
                value="PACKAGE_DEF, IMPORT, STATIC_IMPORT, CLASS_DEF, INTERFACE_DEF, ENUM_DEF,
                     STATIC_INIT, INSTANCE_INIT, METHOD_DEF, CTOR_DEF, VARIABLE_DEF, RECORD_DEF,
                     COMPACT_CTOR_DEF"/>
       <property name="allowNoEmptyLineBetweenFields" value="true"/>
+      <property name="allowMultipleEmptyLines" value="false"/>
+      <property name="allowMultipleEmptyLinesInsideClassMembers" value="false"/>
     </module>
     <module name="SeparatorWrap">
       <property name="id" value="SeparatorWrapDot"/>
@@ -265,19 +296,27 @@
                     RECORD_COMPONENT_DEF"/>
     </module>
     <module name="NoWhitespaceBeforeCaseDefaultColon"/>
+    <module name="UnnecessarySemicolonAfterTypeMemberDeclaration"/>
+    <module name="UnnecessarySemicolonInEnumeration"/>
+    <module name="UnnecessarySemicolonInTryWithResources"/>
     <module name="OverloadMethodsDeclarationOrder"/>
     <module name="VariableDeclarationUsageDistance"/>
+    <module name="DeclarationOrder"/>
+    <module name="EqualsHashCode"/>
+    <module name="InnerTypeLast"/>
     <module name="CustomImportOrder">
       <property name="sortImportsInGroupAlphabetically" value="true"/>
       <property name="separateLineBetweenGroups" value="true"/>
       <property name="customImportOrderRules" value="THIRD_PARTY_PACKAGE###STANDARD_JAVA_PACKAGE###STATIC"/>
       <property name="tokens" value="IMPORT, STATIC_IMPORT, PACKAGE_DEF"/>
     </module>
+    <module name="EmptyForInitializerPad"/>
     <module name="MethodParamPad">
       <property name="tokens"
                value="CTOR_DEF, LITERAL_NEW, METHOD_CALL, METHOD_DEF,
                     SUPER_CTOR_CALL, ENUM_CONSTANT_DEF, RECORD_DEF"/>
     </module>
+    <module name="SingleSpaceSeparator"/>
     <module name="NoWhitespaceBefore">
       <property name="tokens"
                value="COMMA, SEMI, POST_INC, POST_DEC, DOT,
@@ -345,18 +384,24 @@
                       RECORD_DEF, ANNOTATION_DEF"/>
       <property name="excludeScope" value="nothing"/>
     </module> -->
+    <module name="MissingOverride"/>
     <module name="MethodName">
       <property name="format" value="^(imyvm\$)?[a-z][a-z0-9][a-zA-Z0-9_]*$"/>
       <message key="name.invalidPattern"
              value="Method name ''{0}'' must match pattern ''{1}''."/>
     </module>
     <module name="SingleLineJavadoc"/>
+    <module name="IllegalThrows"/>
     <module name="EmptyCatchBlock">
       <property name="exceptionVariableName" value="ignored"/>
     </module>
     <module name="CommentsIndentation">
       <property name="tokens" value="SINGLE_LINE_COMMENT, BLOCK_COMMENT_BEGIN"/>
     </module>
+    <module name="HideUtilityClassConstructor"/>
+    <module name="InterfaceIsType"/>
+    <module name="BooleanExpressionComplexity"/>
+    <module name="CyclomaticComplexity"/>
 
     <!-- https://checkstyle.org/config_filters.html#SuppressionXpathFilter -->
     <module name="SuppressionXpathFilter">

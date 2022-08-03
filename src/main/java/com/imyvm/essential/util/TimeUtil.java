@@ -5,6 +5,9 @@ import net.minecraft.text.Text;
 import static com.imyvm.essential.Translator.tr;
 
 public class TimeUtil {
+    private TimeUtil() {
+    }
+
     public static Text formatDuration(int duration) {
         int hour = duration / 3600;
         int minute = duration % 3600 / 60;

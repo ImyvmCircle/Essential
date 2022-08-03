@@ -26,7 +26,7 @@ public class GiveInventoryToLookTargetTaskMixin<E extends LivingEntity> {
         locals = LocalCapture.CAPTURE_FAILHARD)
     private void skipThrowingWhenRemoved(ServerWorld world, E entity, long time, CallbackInfo ci, Optional<LookTarget> optional, LookTarget lookTarget, double distance, ItemStack itemStack) {
         if (CONFIG.FIX_ALLAY_DUPLICATE_ITEM.getValue() && entity.isRemoved()) {
-            logSuspiciousBehaviour(entity, itemStack);
+            this.logSuspiciousBehaviour(entity, itemStack);
             ci.cancel();
         }
     }
@@ -34,7 +34,7 @@ public class GiveInventoryToLookTargetTaskMixin<E extends LivingEntity> {
     @Surrogate
     private void skipThrowingWhenRemoved(ServerWorld world, E entity, long time, CallbackInfo ci) {
         if (CONFIG.FIX_ALLAY_DUPLICATE_ITEM.getValue() && entity.isRemoved()) {
-            logSuspiciousBehaviour(entity, null);
+            this.logSuspiciousBehaviour(entity, null);
             ci.cancel();
         }
     }
