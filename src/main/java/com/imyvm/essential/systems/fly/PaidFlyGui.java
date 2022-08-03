@@ -60,9 +60,8 @@ public class PaidFlyGui implements LazyTicker.LazyTickable {
     private void setGoodsIconByPurchaseType(int slot, PurchaseType type) {
         boolean purchased = this.session != null && this.session.getType() == type;
         Text lore = purchased ? tr("gui.paid_fly.goods.purchased") : null;
-        Item item = Registry.ITEM.get(Identifier.tryParse(type.getGuiIconName()));
 
-        this.setGoodsIcon(slot, item, type.getName(), purchased, type.getPrice(), lore, this.wrapExecute(() -> PAID_FLY_COMMAND.universalBuy(this.player, type)));
+        this.setGoodsIcon(slot, type, purchased, lore, this.wrapExecute(() -> PAID_FLY_COMMAND.universalBuy(this.player, type)));
     }
 
     private void setHourlyIcon() {
@@ -71,13 +70,16 @@ public class PaidFlyGui implements LazyTicker.LazyTickable {
 
         if (purchased)
             lore = tr("gui.paid_fly.goods.purchased.hourly", TimeUtil.formatDuration((int) (this.session.getTimeLeft() / 1000)));
-        Item item = parseItem(PurchaseType.HOURLY.getGuiIconName());
 
-        this.setGoodsIcon(0, item, PurchaseType.HOURLY.getName(), purchased, PurchaseType.HOURLY.getPrice(), lore, this.wrapExecute(() -> PAID_FLY_COMMAND.executeBuyHourly(this.player, 1)));
+        this.setGoodsIcon(0, PurchaseType.HOURLY, purchased, lore, this.wrapExecute(() -> PAID_FLY_COMMAND.executeBuyHourly(this.player, 1)));
     }
 
-    private void setGoodsIcon(int slot, Item item, Text name, boolean enchanted, int price, Text lore, Runnable callback) {
+    private void setGoodsIcon(int slot, PurchaseType type, boolean enchanted, Text lore, Runnable callback) {
+        Item item = parseItem(type.getGuiIconName());
+        Text name = type.getName();
+        int price = type.getPrice();
         Text priceText = tr("gui.paid_fly.goods.price", MoneyUtil.format(price));
+
         this.setIcon(slot, item, name, enchanted, new Text[]{ priceText, lore }, callback);
     }
 
