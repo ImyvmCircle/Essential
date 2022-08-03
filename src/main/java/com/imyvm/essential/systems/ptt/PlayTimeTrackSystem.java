@@ -37,15 +37,10 @@ public class PlayTimeTrackSystem extends BaseSystem implements LazyTicker.LazyTi
         for (TimeCounter counter : TimeCounter.values()) {
             text.append("\n");
 
-            System.out.println("0 " + counter.getTypeId());
             TrackData data = counter.getGetDataFunction().apply(trackData);
-            System.out.println("A ");
             Text name = tr("name.ptt.category." + counter.getTypeId());
-            System.out.println("B " + name.getString());
             int duration = (int) (data.getDuration() / 1000);
-            System.out.println("C " + duration);
             Text status = tr("name.ptt.status." + data.getStatus().toString().toLowerCase());
-            System.out.println("D " + status.getString());
 
             if (counter == TimeCounter.TOTAL)
                 text.append(tr("commands.ptt.item.total", name, TimeUtil.formatDuration(duration)));
