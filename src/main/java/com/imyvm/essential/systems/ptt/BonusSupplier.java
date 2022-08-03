@@ -19,7 +19,7 @@ import static com.imyvm.essential.Translator.tr;
 
 public class BonusSupplier implements LazyTicker.LazyTickable {
     private static final SimpleCommandExceptionType NO_SUCH_TICKET_EXCEPTION = new SimpleCommandExceptionType(tr("commands.bonus.failed.no_such_ticket"));
-    private static final SimpleCommandExceptionType RANDOM_TOKEN_NOT_MATCHED_EXCEPTION = new SimpleCommandExceptionType(tr("commands.bonus.failed.token_not_matched"));
+    private static final SimpleCommandExceptionType TOKEN_NOT_MATCHED_EXCEPTION = new SimpleCommandExceptionType(tr("commands.bonus.failed.token_not_matched"));
     private static final BonusSupplier INSTANCE = new BonusSupplier();
 
     private final Set<Ticket> tickets = ConcurrentHashMap.newKeySet();
@@ -39,17 +39,17 @@ public class BonusSupplier implements LazyTicker.LazyTickable {
     public void addTicket(Ticket ticket) {
         this.tickets.add(ticket);
         Text name = tr("name.bonus." + ticket.typeId);
-        ticket.player.sendMessage(tr("message.ptt.bonus.to_receive", name, ticket.typeId, ticket.randomId));
+        ticket.player.sendMessage(tr("message.ptt.bonus.to_receive", name, ticket.typeId, ticket.token));
     }
 
-    public void onTicketAcquire(ServerPlayerEntity player, String typeId, String randomId) throws CommandSyntaxException {
+    public void onTicketAcquire(ServerPlayerEntity player, String typeId, String token) throws CommandSyntaxException {
         Optional<Ticket> optional = this.tickets.stream().filter((ticket) -> ticket.player == player && ticket.typeId.equals(typeId)).findFirst();
         if (optional.isEmpty())
             throw NO_SUCH_TICKET_EXCEPTION.create();
 
         Ticket ticket = optional.get();
-        if (!ticket.randomId.equals(randomId))
-            throw RANDOM_TOKEN_NOT_MATCHED_EXCEPTION.create();
+        if (!ticket.token.equals(token))
+            throw TOKEN_NOT_MATCHED_EXCEPTION.create();
 
         DatabaseApi.getInstance().getPlayer(player).addMoney(ticket.bonus);
         ticket.data.setStatus(TrackData.Status.OBTAINED);
@@ -90,7 +90,7 @@ public class BonusSupplier implements LazyTicker.LazyTickable {
         ServerPlayerEntity player,
         TrackData data,
         String typeId,
-        String randomId,
+        String token,
         int bonus,
         long expiredAt
     ) {}
