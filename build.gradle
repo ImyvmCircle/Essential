@@ -17,20 +17,9 @@ repositories {
 	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
 	// for more information about repositories.
 
+	// Imyvm Hoki
 	maven {
-		url = uri("https://maven.pkg.github.com/ImyvmCircle/Hoki")
-		credentials {
-			username = System.getenv("GITHUB_USERNAME")
-			password = System.getenv("GITHUB_TOKEN")
-		}
-	}
-
-	maven {
-		url = uri("https://maven.pkg.github.com/John-Paul-R/Essential-Commands")
-		credentials {
-			username = System.getenv("GITHUB_USERNAME")
-			password = System.getenv("GITHUB_TOKEN")
-		}
+		url = 'https://maven.victorica.dev'
 	}
 
 	maven {
@@ -69,7 +58,6 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	modImplementation "com.mojang:brigadier:${project.brigadier_version}"
-//	modImplementation "com.fibermc:essential_commands:${project.essential_commands_version}"
 	modImplementation "eu.pb4:sgui:${project.sgui_version}"
 	modImplementation "io.github.ladysnake:PlayerAbilityLib:${project.pal_version}"
 
