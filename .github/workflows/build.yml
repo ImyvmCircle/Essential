@@ -46,3 +46,16 @@ jobs:
         with:
           name: Artifacts
           path: build/libs/
+
+  checkstyle:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: checkstyle
+        uses: nikitasavinov/checkstyle-action@0.6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          checkstyle_config: "rulesets.xml"
+          reporter: ${{ github.event_name == 'pull_request' && 'github-pr-check' || 'github-check' }}
