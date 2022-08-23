@@ -3,6 +3,7 @@ package com.imyvm.essential.systems.ptt;
 import com.imyvm.economy.api.DatabaseApi;
 import com.imyvm.economy.util.MoneyUtil;
 import com.imyvm.essential.LazyTicker;
+import com.imyvm.hoki.util.CommandUtil;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
@@ -18,6 +19,7 @@ import static com.imyvm.essential.EssentialMod.LAZY_TICKER;
 import static com.imyvm.essential.Translator.tr;
 
 public class BonusSupplier implements LazyTicker.LazyTickable {
+    private static final String BONUS_ACQUIRE_COMMAND_FMT = "/bonus %s %s";
     private static final SimpleCommandExceptionType NO_SUCH_TICKET_EXCEPTION =
         new SimpleCommandExceptionType(tr("commands.bonus.failed.no_such_ticket"));
     private static final SimpleCommandExceptionType TOKEN_NOT_MATCHED_EXCEPTION =
@@ -42,7 +44,9 @@ public class BonusSupplier implements LazyTicker.LazyTickable {
     public void addTicket(Ticket ticket) {
         this.tickets.add(ticket);
         Text name = tr("name.bonus." + ticket.typeId);
-        ticket.player.sendMessage(tr("message.ptt.bonus.to_receive", name, ticket.typeId, ticket.token));
+        Text command = CommandUtil.getSuggestCommandText(
+            String.format(BONUS_ACQUIRE_COMMAND_FMT, ticket.typeId, ticket.token));
+        ticket.player.sendMessage(tr("message.ptt.bonus.to_receive", name, command));
     }
 
     public void onTicketAcquire(ServerPlayerEntity player, String typeId, String token) throws CommandSyntaxException {
