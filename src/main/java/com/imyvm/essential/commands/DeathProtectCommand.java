@@ -4,7 +4,7 @@ import com.imyvm.economy.api.DatabaseApi;
 import com.imyvm.economy.api.PlayerWallet;
 import com.imyvm.economy.util.MoneyUtil;
 import com.imyvm.essential.data.PlayerData;
-import com.imyvm.essential.util.CommandUtil;
+import com.imyvm.hoki.util.CommandUtil;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -43,7 +43,7 @@ public class DeathProtectCommand extends BaseCommand {
 
         this.pendingTransaction.put(player.getUuid(), System.currentTimeMillis() + PENDING_TIME_LIMIT);
         player.sendMessage(tr("commands.death_protect.message.to_confirm",
-            MoneyUtil.format(money), level + 1, CommandUtil.asSuggestCommandText(CONFIRM_COMMAND)));
+            MoneyUtil.format(money), level + 1, CommandUtil.getSuggestCommandText(CONFIRM_COMMAND)));
 
         return Command.SINGLE_SUCCESS;
     }
