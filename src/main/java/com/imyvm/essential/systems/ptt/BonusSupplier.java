@@ -11,10 +11,12 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 
+import javax.xml.crypto.Data;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.imyvm.essential.EssentialMod.CONFIG;
 import static com.imyvm.essential.EssentialMod.LAZY_TICKER;
 import static com.imyvm.essential.Translator.tr;
 
@@ -91,6 +93,8 @@ public class BonusSupplier implements LazyTicker.LazyTickable {
                 ticket.data.setStatus(TrackData.Status.EXPIRED);
                 this.tickets.remove(ticket);
                 ticket.player.sendMessage(tr("message.ptt.bonus.expired", tr("name.bonus." + ticket.typeId)));
+                DatabaseApi.getInstance().getPlayer(ticket.player).addMoney((long) (ticket.bonus*CONFIG.PTT_REISSUE_RATIO.getValue()));
+                ticket.player.sendMessage(tr("message.ptt.bonus.expired.reissue", (long) (ticket.bonus*CONFIG.PTT_REISSUE_RATIO.getValue())));
             }
         }
     }

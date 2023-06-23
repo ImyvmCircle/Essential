@@ -10,12 +10,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
+import net.minecraft.registry.Registries;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registry;
 
 import static com.imyvm.essential.EssentialMod.CONFIG;
 import static com.imyvm.essential.Translator.tr;
@@ -121,7 +122,8 @@ public class PaidFlyGui implements LazyTicker.LazyTickable {
     }
 
     private static Item parseItem(String id) {
-        return Registry.ITEM.getOrEmpty(Identifier.tryParse(id)).orElseThrow();
+        Registry<Item> itemRegistry = Registries.ITEM;
+        return itemRegistry.getOrEmpty(Identifier.tryParse(id)).orElseThrow();
     }
 
     private Runnable wrapExecute(CommandExecutor function) {

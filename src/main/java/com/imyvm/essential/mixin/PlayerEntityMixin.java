@@ -16,6 +16,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.Objects;
+
 import static com.imyvm.essential.EssentialMod.PLAYER_DATA_STORAGE;
 import static com.imyvm.essential.Translator.tr;
 
@@ -54,7 +56,7 @@ public class PlayerEntityMixin implements PlayerEntityMixinInterface {
 
         ServerPlayerEntity player = this.asServerPlayerEntity();
         PlayerListS2CPacket packet = new PlayerListS2CPacket(PlayerListS2CPacket.Action.UPDATE_DISPLAY_NAME, player);
-        player.getServer().getPlayerManager().sendToAll(packet);
+        Objects.requireNonNull(player.getServer()).getPlayerManager().sendToAll(packet);
 
         String baseKey = this.imyvm$isAwayFromKeyboard() ? "commands.afk.away" : "commands.afk.back";
         player.sendMessage(tr(baseKey));
@@ -63,7 +65,8 @@ public class PlayerEntityMixin implements PlayerEntityMixinInterface {
             .filter(u -> u != player)
             .forEach(u -> u.sendMessage(broadcastMessage));
 
-        player.getWorld().updateSleepingPlayers();
+//        player.getWorld().updateSleepingPlayers();
+        player.getServerWorld().updateSleepingPlayers();
     }
 
     public void imyvm$updateActivity() {

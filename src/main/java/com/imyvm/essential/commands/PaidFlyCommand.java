@@ -19,6 +19,8 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
+import java.util.function.Supplier;
+
 import static com.imyvm.essential.EssentialMod.CONFIG;
 import static com.imyvm.essential.Translator.tr;
 
@@ -77,8 +79,8 @@ public class PaidFlyCommand extends BaseCommand {
 
             text.append(tr("commands.buyfly.list.item", type.getName(), MoneyUtil.format(type.getPrice())));
         }
-
-        context.getSource().sendFeedback(text, false);
+        Supplier<Text> textSupplier = () -> text;
+        context.getSource().sendFeedback(textSupplier, false);
 
         return Command.SINGLE_SUCCESS;
     }

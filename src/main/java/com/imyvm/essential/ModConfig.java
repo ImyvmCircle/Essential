@@ -30,6 +30,7 @@ public class ModConfig extends HokiConfig {
     @ConfigOption public final Option<Integer> PTT_WEEK_BONUS = new Option<>("ptt.bonus.week", 350 * 100, "How much money player can get from weekly bonus", Config::getInt);
     @ConfigOption public final Option<Integer> PTT_MONTH_BONUS = new Option<>("ptt.bonus.month", 1000 * 100, "How much money player can get from monthly bonus", Config::getInt);
     @ConfigOption public final Option<Integer> PTT_YEAR_BONUS = new Option<>("ptt.bonus.year", 12000 * 100, "How much money player can get from yearly bonus", Config::getInt);
+    @ConfigOption public final Option<Double> PTT_REISSUE_RATIO = new Option<>("ptt.bonus.reissue.ratio", 0.25, "Reissue ratio after online reward expires", Config::getDouble);
 
     @ConfigOption public final Option<Long> FLY_HOURLY_NOTICE_AT = new Option<>("fly.hourly_notice_at", 60 * 1000L, "How long (in milliseconds) the flying session will be over, the player will be notified", Config::getLong);
     @ConfigOption public final Option<Integer> FLY_HOURLY_PRICE = new Option<>("fly.price.hourly", 40 * 100, "The price (in cents) of flying which changes hourly", Config::getInt);
