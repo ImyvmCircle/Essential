@@ -5,8 +5,6 @@ import com.imyvm.hoki.config.HokiConfig;
 import com.imyvm.hoki.config.Option;
 import com.typesafe.config.Config;
 
-import java.util.List;
-
 @SuppressWarnings({"AbbreviationAsWordInName", "DeclarationOrder", "LineLength", "MemberName"})
 public class ModConfig extends HokiConfig {
     public static final String CONFIG_FILENAME = "imyvm_essential.conf";
