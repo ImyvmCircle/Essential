@@ -91,8 +91,11 @@ public class BonusSupplier implements LazyTicker.LazyTickable {
         for (Ticket ticket : this.tickets) {
             if (timestamp > ticket.expiredAt) {
                 ticket.player.sendMessage(tr("message.ptt.bonus.expired", tr("name.bonus." + ticket.typeId)));
-                DatabaseApi.getInstance().getPlayer(ticket.player).addMoney((long) (ticket.bonus*CONFIG.PTT_REISSUE_RATIO.getValue()),TradeTypeRegistry.TradeType.BONUS);
-                ticket.player.sendMessage(tr("message.ptt.bonus.expired.reissue", (long) (ticket.bonus*CONFIG.PTT_REISSUE_RATIO.getValue() - ticket.bonus*CONFIG.PTT_REISSUE_RATIO.getValue()*TradeTypeRegistry.TradeType.BONUS.getTax()) / 1000));
+                Long bonusFin = (long) (ticket.bonus * CONFIG.PTT_REISSUE_RATIO.getValue());
+                DatabaseApi.getInstance().getPlayer(ticket.player).addMoney(bonusFin, TradeTypeRegistry.TradeType.BONUS);
+                ticket.player.sendMessage(
+                        tr("message.ptt.bonus.expired.reissue",
+                                (bonusFin - bonusFin * TradeTypeRegistry.TradeType.BONUS.getTax()) / 1000));
                 ticket.data.setStatus(TrackData.Status.EXPIRED);
                 this.tickets.remove(ticket);
             }
