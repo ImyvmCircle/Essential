@@ -13,18 +13,31 @@ public class ModConfig extends HokiConfig {
         super(CONFIG_FILENAME);
     }
 
-    @ConfigOption public final Option<String> LANGUAGE = new Option<>("core.language", "en_us", "the display language of Essential mod", Config::getString);
-    @ConfigOption public final Option<String> TAX = new Option<>("core.tax", "BONUS:0.25,FLY:0.3,DEATHPROTECT:0.3","Types of taxes and tax rates, you can only modify tax rates for existing tax types", Config::getString);
+    @ConfigOption
+    public final Option<String> LANGUAGE = new Option<>("core.language", "en_us", "the display language of Essential mod", Config::getString);
+    @ConfigOption
+    public final Option<Double> TAX_BONUS = new Option<>("core.tax.bonus", 0.25, "the tax rate of ptt bonus", Config::getDouble);
+    @ConfigOption
+    public final Option<Double> TAX_FLY = new Option<>("core.tax.fly", 0.3, "the tax rate of buy fly", Config::getDouble);
+    @ConfigOption
+    public final Option<Double> TAX_DEATH_PROTECT = new Option<>("core.tax.death_protect", 0.3, "the tax rate of buy death protect", Config::getDouble);
 
-    @ConfigOption public final Option<Long> AFK_AFTER_NO_ACTION = new Option<>("afk.afk_after_no_action", 600L * 1000, "how long (in milliseconds) after the player has no actions, he will be set to AFK status.", Config::getLong);
+    @ConfigOption
+    public final Option<Long> AFK_AFTER_NO_ACTION = new Option<>("afk.afk_after_no_action", 600L * 1000, "how long (in milliseconds) after the player has no actions, he will be set to AFK status.", Config::getLong);
 
-    @ConfigOption public final Option<Integer> DEATH_PROTECT_BASE_PRICE = new Option<>("death_protect.base_price", 40 * 100, "The base price (in cents) of one death-protect level", Config::getInt);
+    @ConfigOption
+    public final Option<Integer> DEATH_PROTECT_BASE_PRICE = new Option<>("death_protect.base_price", 40 * 100, "The base price (in cents) of one death-protect level", Config::getInt);
 
-    @ConfigOption public final Option<Long> PTT_ACQUIRE_TIME_LIMIT = new Option<>("ptt.time_limit", 60 * 1000L /* 1 m */, "The time limit (in milliseconds) for player to acquire the bonus", Config::getLong);
-    @ConfigOption public final Option<Long> PTT_CONTINUOUS_REQUIRED = new Option<>("ptt.required.continuous", (10 * 60 - 30) * 1000L /* 9 m 30 s */, "How long (in milliseconds) player need to be online to acquire 10-minute (i.e. continuous) bonus", Config::getLong);
-    @ConfigOption public final Option<Long> PTT_DAY_REQUIRED = new Option<>("ptt.required.day", 3600 * 1000L /* 1 h */, "How long (in milliseconds) player need to be online to acquire daily bonus", Config::getLong);
-    @ConfigOption public final Option<Long> PTT_WEEK_REQUIRED = new Option<>("ptt.required.week", (16 * 60 + 40) * 60 * 1000L /* 16 h 40 m */, "How long (in milliseconds) player need to be online to acquire weekly bonus", Config::getLong);
-    @ConfigOption public final Option<Long> PTT_MONTH_REQUIRED = new Option<>("ptt.required.month", 70 * 3600 * 1000L /* 70 h */, "How long (in milliseconds) player need to be online to acquire monthly bonus", Config::getLong);
+    @ConfigOption
+    public final Option<Long> PTT_ACQUIRE_TIME_LIMIT = new Option<>("ptt.time_limit", 60 * 1000L /* 1 m */, "The time limit (in milliseconds) for player to acquire the bonus", Config::getLong);
+    @ConfigOption
+    public final Option<Long> PTT_CONTINUOUS_REQUIRED = new Option<>("ptt.required.continuous", (10 * 60 - 30) * 1000L /* 9 m 30 s */, "How long (in milliseconds) player need to be online to acquire 10-minute (i.e. continuous) bonus", Config::getLong);
+    @ConfigOption
+    public final Option<Long> PTT_DAY_REQUIRED = new Option<>("ptt.required.day", 3600 * 1000L /* 1 h */, "How long (in milliseconds) player need to be online to acquire daily bonus", Config::getLong);
+    @ConfigOption
+    public final Option<Long> PTT_WEEK_REQUIRED = new Option<>("ptt.required.week", (16 * 60 + 40) * 60 * 1000L /* 16 h 40 m */, "How long (in milliseconds) player need to be online to acquire weekly bonus", Config::getLong);
+    @ConfigOption
+    public final Option<Long> PTT_MONTH_REQUIRED = new Option<>("ptt.required.month", 70 * 3600 * 1000L /* 70 h */, "How long (in milliseconds) player need to be online to acquire monthly bonus", Config::getLong);
     @ConfigOption public final Option<Long> PTT_YEAR_REQUIRED = new Option<>("ptt.required.year", 850 * 3600 * 1000L /* 850 h */, "How long (in milliseconds) player need to be online to acquire yearly bonus", Config::getLong);
     @ConfigOption public final Option<Integer> PTT_CONTINUOUS_BONUS = new Option<>("ptt.bonus.continuous", 2 * 100, "How much money player can get from 10-minute (continuous) bonus", Config::getInt);
     @ConfigOption public final Option<Integer> PTT_DAY_BONUS = new Option<>("ptt.bonus.day", 45 * 100, "How much money player can get from daily bonus", Config::getInt);
