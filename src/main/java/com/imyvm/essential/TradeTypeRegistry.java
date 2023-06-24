@@ -10,11 +10,12 @@ public class TradeTypeRegistry {
 
         private Double tax;
 
-        public void setTax(Double tax){
+        public void setTax(Double tax) {
             this.tax = tax;
         }
-        public Double getTax(){
-            return tax;
+
+        public Double getTax() {
+            return this.tax;
         }
     }
 }

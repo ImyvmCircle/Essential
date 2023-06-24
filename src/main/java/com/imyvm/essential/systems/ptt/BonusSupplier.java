@@ -71,7 +71,7 @@ public class BonusSupplier implements LazyTicker.LazyTickable {
     }
 
     public void quickTransfer(ServerPlayerEntity player, int bonus, String typeId) {
-        DatabaseApi.getInstance().getPlayer(player).addMoney(bonus,TradeTypeRegistry.TradeType.BONUS);
+        DatabaseApi.getInstance().getPlayer(player).addMoney(bonus, TradeTypeRegistry.TradeType.BONUS);
         Text name = tr("name.bonus." + typeId);
         player.sendMessage(tr("commands.bonus.success", MoneyUtil.format(bonus), name));
     }

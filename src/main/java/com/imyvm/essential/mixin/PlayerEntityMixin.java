@@ -65,7 +65,6 @@ public class PlayerEntityMixin implements PlayerEntityMixinInterface {
             .filter(u -> u != player)
             .forEach(u -> u.sendMessage(broadcastMessage));
 
-//        player.getWorld().updateSleepingPlayers();
         player.getServerWorld().updateSleepingPlayers();
     }
 

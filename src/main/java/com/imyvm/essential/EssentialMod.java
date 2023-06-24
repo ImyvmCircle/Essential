@@ -35,15 +35,16 @@ public class EssentialMod implements ModInitializer {
         PlayTimeTrackSystem.getInstance().register();
         FlySystem.getInstance().register();
     }
-    public static void taxLoadOrReload(){
+
+    public static void taxLoadOrReload() {
         String taxValue = CONFIG.TAX.getValue();
         String[] parts = taxValue.split(",");
         HashMap<String, Double> tax = new HashMap<>();
-        for (String value : parts){
+        for (String value : parts) {
             String[] partsValue = value.split(":", 2);
             tax.put(partsValue[0], Double.valueOf(partsValue.length > 1 ? partsValue[1] : "0"));
         }
-        for (TradeTypeRegistry.TradeType tradeType : TradeTypeRegistry.TradeType.values()){
+        for (TradeTypeRegistry.TradeType tradeType : TradeTypeRegistry.TradeType.values()) {
             tradeType.setTax(tax.get(tradeType.name()));
         }
     }
