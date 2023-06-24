@@ -5,6 +5,8 @@ import com.imyvm.hoki.config.HokiConfig;
 import com.imyvm.hoki.config.Option;
 import com.typesafe.config.Config;
 
+import java.util.List;
+
 @SuppressWarnings({"AbbreviationAsWordInName", "DeclarationOrder", "LineLength", "MemberName"})
 public class ModConfig extends HokiConfig {
     public static final String CONFIG_FILENAME = "imyvm_essential.conf";
@@ -14,6 +16,7 @@ public class ModConfig extends HokiConfig {
     }
 
     @ConfigOption public final Option<String> LANGUAGE = new Option<>("core.language", "en_us", "the display language of Essential mod", Config::getString);
+    @ConfigOption public final Option<String> TAX = new Option<>("core.tax", "BONUS:0.25,FLY:0.3,DEATHPROTECT:0.3","Types of taxes and tax rates, you can only modify tax rates for existing tax types", Config::getString);
 
     @ConfigOption public final Option<Long> AFK_AFTER_NO_ACTION = new Option<>("afk.afk_after_no_action", 600L * 1000, "how long (in milliseconds) after the player has no actions, he will be set to AFK status.", Config::getLong);
 

@@ -3,6 +3,7 @@ package com.imyvm.essential.commands;
 import com.imyvm.economy.api.DatabaseApi;
 import com.imyvm.economy.api.PlayerWallet;
 import com.imyvm.economy.util.MoneyUtil;
+import com.imyvm.essential.TradeTypeRegistry;
 import com.imyvm.essential.systems.fly.FlySession;
 import com.imyvm.essential.systems.fly.FlySystem;
 import com.imyvm.essential.systems.fly.PaidFlyGui;
@@ -105,7 +106,7 @@ public class PaidFlyCommand extends BaseCommand {
         PlayerWallet wallet = DatabaseApi.getInstance().getPlayer(player);
 
         this.checkPurchasable(player, PurchaseType.HOURLY);
-        wallet.buyGoodsWithNotificationInCommand(price, tr("goods.paid_fly.hourly", hours));
+        wallet.buyGoodsWithNotificationInCommand(price, tr("goods.paid_fly.hourly", hours), TradeTypeRegistry.TradeType.FLY);
 
         long duration = MILLISECONDS_OF_HOUR * hours;
         FlySession currentSession = FlySystem.getInstance().getSession(player);
@@ -139,7 +140,7 @@ public class PaidFlyCommand extends BaseCommand {
         PlayerWallet wallet = DatabaseApi.getInstance().getPlayer(player);
 
         this.checkPurchasable(player, type);
-        wallet.buyGoodsWithNotificationInCommand(type.getPrice(), type.getName());
+        wallet.buyGoodsWithNotificationInCommand(type.getPrice(), type.getName(), TradeTypeRegistry.TradeType.FLY);
 
         FlySession session = new FlySession(player, type);
         session.start(Long.MAX_VALUE);

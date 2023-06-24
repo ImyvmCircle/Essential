@@ -3,6 +3,7 @@ package com.imyvm.essential.commands;
 import com.imyvm.economy.api.DatabaseApi;
 import com.imyvm.economy.api.PlayerWallet;
 import com.imyvm.economy.util.MoneyUtil;
+import com.imyvm.essential.TradeTypeRegistry;
 import com.imyvm.essential.data.PlayerData;
 import com.imyvm.hoki.util.CommandUtil;
 import com.mojang.brigadier.Command;
@@ -39,7 +40,7 @@ public class DeathProtectCommand extends BaseCommand {
 
         PlayerWallet wallet = DatabaseApi.getInstance().getPlayer(player);
         if (wallet.getMoney() < money)  // if insufficient, throw an `INSUFFICIENT_BALANCE_EXCEPTION` by ImyvmEconomy
-            wallet.buyGoodsWithNotificationInCommand(money, tr("goods.death_protect.with_level", level + 1));
+            wallet.buyGoodsWithNotificationInCommand(money, tr("goods.death_protect.with_level", level + 1), TradeTypeRegistry.TradeType.DEATHPROTECT);
 
         this.pendingTransaction.put(player.getUuid(), System.currentTimeMillis() + PENDING_TIME_LIMIT);
         player.sendMessage(tr("commands.death_protect.message.to_confirm",
@@ -59,7 +60,7 @@ public class DeathProtectCommand extends BaseCommand {
         long money = this.calculateNextLevelPrice(level);
 
         DatabaseApi.getInstance().getPlayer(player).buyGoodsWithNotificationInCommand(money,
-            tr("goods.death_protect.with_level", level + 1));
+            tr("goods.death_protect.with_level", level + 1), TradeTypeRegistry.TradeType.DEATHPROTECT);
         data.setDeathProtectLevel(level + 1);
 
         return Command.SINGLE_SUCCESS;
