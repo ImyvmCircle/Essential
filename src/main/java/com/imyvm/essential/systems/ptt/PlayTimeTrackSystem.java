@@ -12,7 +12,8 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-import static com.imyvm.essential.EssentialMod.*;
+import static com.imyvm.essential.EssentialMod.LAZY_TICKER;
+import static com.imyvm.essential.EssentialMod.PLAYER_DATA_STORAGE;
 import static com.imyvm.essential.Translator.tr;
 
 public class PlayTimeTrackSystem extends BaseSystem implements LazyTicker.LazyTickable {
@@ -20,12 +21,6 @@ public class PlayTimeTrackSystem extends BaseSystem implements LazyTicker.LazyTi
     private static final PlayTimeTrackSystem INSTANCE = new PlayTimeTrackSystem();
 
     private PlayTimeTrackSystem() {
-    }
-    public static final class DurationConstants {
-        public static final int DAY = (int) (CONFIG.PTT_DAY_REQUIRED.getValue() / 1000);
-        public static final int WEEK = (int) (CONFIG.PTT_WEEK_REQUIRED.getValue() / 1000);
-        public static final int MONTH = (int) (CONFIG.PTT_MONTH_REQUIRED.getValue() / 1000);
-        public static final int YEAR = (int) (CONFIG.PTT_YEAR_REQUIRED.getValue() / 1000);
     }
 
     public static PlayTimeTrackSystem getInstance() {
@@ -46,18 +41,12 @@ public class PlayTimeTrackSystem extends BaseSystem implements LazyTicker.LazyTi
             TrackData data = counter.getGetDataFunction().apply(trackData);
             Text name = tr("name.ptt.category." + counter.getTypeId());
             int duration = (int) (data.getDuration() / 1000);
-            String statusStr = "name.ptt.status." + data.getStatus().toString().toLowerCase();
+            String statusTemplate = "name.ptt.status." + data.getStatus().toString().toLowerCase();
             Text status;
-            if (statusStr.equals("name.ptt.status.not_meet")){
-                switch (counter.getTypeId()) {
-                    case "day" -> status = tr(statusStr, TimeUtil.formatDuration(DurationConstants.DAY - duration));
-                    case "week" -> status = tr(statusStr, TimeUtil.formatDuration(DurationConstants.WEEK - duration));
-                    case "month" -> status = tr(statusStr, TimeUtil.formatDuration(DurationConstants.MONTH - duration));
-                    case "year" -> status = tr(statusStr, TimeUtil.formatDuration(DurationConstants.YEAR - duration));
-                    default -> status = tr("name.ptt.status.continuous");
-                }
+            if (data.getStatus() == TrackData.Status.NOT_MEET) {
+                status = tr(statusTemplate, TimeUtil.formatDuration((int) (counter.getTimeRequired() - duration)));
             } else {
-                status = tr(statusStr);
+                status = tr(statusTemplate);
             }
 
             if (counter == TimeCounter.TOTAL)

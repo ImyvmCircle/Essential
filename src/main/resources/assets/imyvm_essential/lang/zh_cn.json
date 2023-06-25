@@ -47,7 +47,6 @@
     "name.ptt.category.year": "年在线时长",
     "name.ptt.category.total": "总共在线时长",
     "name.ptt.status.not_meet": "未达到，还需 {0}",
-    "name.ptt.status.continuous": "未达到",
     "name.ptt.status.pending": "可领取",
     "name.ptt.status.expired": "已错过",
     "name.ptt.status.obtained": "已领取",

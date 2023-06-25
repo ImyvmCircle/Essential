@@ -35,8 +35,8 @@ public class EssentialMod implements ModInitializer {
     }
 
     public static void taxLoadOrReload() {
-        TradeTypeRegistry.TradeType.BONUS.setTax(CONFIG.TAX_BONUS.getValue());
-        TradeTypeRegistry.TradeType.FLY.setTax(CONFIG.TAX_FLY.getValue());
-        TradeTypeRegistry.TradeType.DEATHPROTECT.setTax(CONFIG.TAX_DEATH_PROTECT.getValue());
+        TradeType.BONUS.setTax(CONFIG.TAX_BONUS.getValue());
+        TradeType.FLY.setTax(CONFIG.TAX_FLY.getValue());
+        TradeType.DEATH_PROTECT.setTax(CONFIG.TAX_DEATH_PROTECT.getValue());
     }
 }

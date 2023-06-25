@@ -3,7 +3,7 @@ package com.imyvm.essential.systems.ptt;
 import com.imyvm.economy.api.DatabaseApi;
 import com.imyvm.economy.util.MoneyUtil;
 import com.imyvm.essential.LazyTicker;
-import com.imyvm.essential.TradeTypeRegistry;
+import com.imyvm.essential.TradeType;
 import com.imyvm.hoki.util.CommandUtil;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
@@ -62,7 +62,7 @@ public class BonusSupplier implements LazyTicker.LazyTickable {
         if (!ticket.token.equals(token))
             throw TOKEN_NOT_MATCHED_EXCEPTION.create();
 
-        DatabaseApi.getInstance().getPlayer(player).addMoney(ticket.bonus, TradeTypeRegistry.TradeType.BONUS);
+        DatabaseApi.getInstance().getPlayer(player).addMoney(ticket.bonus, TradeType.BONUS);
         ticket.data.setStatus(TrackData.Status.OBTAINED);
         this.tickets.remove(ticket);
 
@@ -71,7 +71,7 @@ public class BonusSupplier implements LazyTicker.LazyTickable {
     }
 
     public void quickTransfer(ServerPlayerEntity player, int bonus, String typeId) {
-        DatabaseApi.getInstance().getPlayer(player).addMoney(bonus, TradeTypeRegistry.TradeType.BONUS);
+        DatabaseApi.getInstance().getPlayer(player).addMoney(bonus, TradeType.BONUS);
         Text name = tr("name.bonus." + typeId);
         player.sendMessage(tr("commands.bonus.success", MoneyUtil.format(bonus), name));
     }
@@ -91,11 +91,11 @@ public class BonusSupplier implements LazyTicker.LazyTickable {
         for (Ticket ticket : this.tickets) {
             if (timestamp > ticket.expiredAt) {
                 ticket.player.sendMessage(tr("message.ptt.bonus.expired", tr("name.bonus." + ticket.typeId)));
-                Long bonusFin = (long) (ticket.bonus * CONFIG.PTT_REISSUE_RATIO.getValue());
-                DatabaseApi.getInstance().getPlayer(ticket.player).addMoney(bonusFin, TradeTypeRegistry.TradeType.BONUS);
+                long bonusFinal = (long) (ticket.bonus * CONFIG.PTT_REISSUE_RATIO.getValue());
+                DatabaseApi.getInstance().getPlayer(ticket.player).addMoney(bonusFinal, TradeType.BONUS);
                 ticket.player.sendMessage(
                         tr("message.ptt.bonus.expired.reissue",
-                                (bonusFin - bonusFin * TradeTypeRegistry.TradeType.BONUS.getTax()) / 1000));
+                                (bonusFinal - bonusFinal * TradeType.BONUS.getTax()) / 1000));
                 ticket.data.setStatus(TrackData.Status.EXPIRED);
                 this.tickets.remove(ticket);
             }
