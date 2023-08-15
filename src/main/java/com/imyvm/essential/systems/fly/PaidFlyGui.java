@@ -15,7 +15,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registries;
 
 import static com.imyvm.essential.EssentialMod.CONFIG;
 import static com.imyvm.essential.Translator.tr;
@@ -121,7 +121,7 @@ public class PaidFlyGui implements LazyTicker.LazyTickable {
     }
 
     private static Item parseItem(String id) {
-        return Registry.ITEM.getOrEmpty(Identifier.tryParse(id)).orElseThrow();
+        return Registries.ITEM.getOrEmpty(Identifier.tryParse(id)).orElseThrow();
     }
 
     private Runnable wrapExecute(CommandExecutor function) {

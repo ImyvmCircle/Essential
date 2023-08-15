@@ -29,7 +29,7 @@ public class ServerPlayerEntityMixin {
     @Inject(method = "copyFrom", at = @At("HEAD"))
     private void checkShouldKeepInventory(ServerPlayerEntity oldPlayer, boolean alive, CallbackInfo ci) {
         ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
-        if (player.world.getGameRules().getBoolean(GameRules.KEEP_INVENTORY))
+        if (player.getWorld().getGameRules().getBoolean(GameRules.KEEP_INVENTORY))
             return;
 
         if (!alive && !oldPlayer.isSpectator()) {

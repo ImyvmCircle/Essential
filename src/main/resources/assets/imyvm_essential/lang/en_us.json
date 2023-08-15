@@ -46,7 +46,7 @@
   "name.ptt.category.month": "Month",
   "name.ptt.category.year": "Year",
   "name.ptt.category.total": "Total",
-  "name.ptt.status.not_meet": "Not Meet",
+  "name.ptt.status.not_meet": "Not Meet, {0} to go",
   "name.ptt.status.pending": "Pending",
   "name.ptt.status.expired": "Expired",
   "name.ptt.status.obtained": "Obtained",

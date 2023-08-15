@@ -11,10 +11,13 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.Objects;
 
 import static com.imyvm.essential.EssentialMod.PLAYER_DATA_STORAGE;
 import static com.imyvm.essential.Translator.tr;
@@ -43,8 +46,11 @@ public class PlayerEntityMixin implements PlayerEntityMixinInterface {
         }
     }
 
+    @Unique
     private boolean isAwayFromKeyboard = false;
+    @Unique
     private long lastActivity = System.currentTimeMillis();
+    @Unique
     private Vec3d lastActiveCoordinate = Vec3d.ZERO;
 
     public void imyvm$updateAwayFromKeyboard(boolean awayFromKeyboard) {
@@ -54,16 +60,16 @@ public class PlayerEntityMixin implements PlayerEntityMixinInterface {
 
         ServerPlayerEntity player = this.asServerPlayerEntity();
         PlayerListS2CPacket packet = new PlayerListS2CPacket(PlayerListS2CPacket.Action.UPDATE_DISPLAY_NAME, player);
-        player.getServer().getPlayerManager().sendToAll(packet);
+        Objects.requireNonNull(player.getServer()).getPlayerManager().sendToAll(packet);
 
         String baseKey = this.imyvm$isAwayFromKeyboard() ? "commands.afk.away" : "commands.afk.back";
         player.sendMessage(tr(baseKey));
         Text broadcastMessage = tr(baseKey + ".broadcast", player.getName());
         player.getServer().getPlayerManager().getPlayerList().stream()
-            .filter(u -> u != player)
-            .forEach(u -> u.sendMessage(broadcastMessage));
+                .filter(u -> u != player)
+                .forEach(u -> u.sendMessage(broadcastMessage));
 
-        player.getWorld().updateSleepingPlayers();
+        player.getServerWorld().updateSleepingPlayers();
     }
 
     public void imyvm$updateActivity() {
@@ -84,10 +90,12 @@ public class PlayerEntityMixin implements PlayerEntityMixinInterface {
             this.imyvm$updateAwayFromKeyboard(true);
     }
 
+    @Unique
     private double movedSquaredDistance() {
         return this.asServerPlayerEntity().getPos().squaredDistanceTo(this.lastActiveCoordinate);
     }
 
+    @Unique
     private ServerPlayerEntity asServerPlayerEntity() {
         return (ServerPlayerEntity) (Object) this;
     }
@@ -96,6 +104,7 @@ public class PlayerEntityMixin implements PlayerEntityMixinInterface {
         return this.isAwayFromKeyboard;
     }
 
+    @Unique
     private void setAwayFromKeyboard(boolean awayFromKeyboard) {
         this.isAwayFromKeyboard = awayFromKeyboard;
     }

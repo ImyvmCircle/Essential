@@ -16,7 +16,7 @@ public class ItemShowCommand extends BaseCommand {
         ServerPlayerEntity player = context.getSource().getPlayer();
 
         Text message = this.getItemShowMessage(player);
-        player.getServer().getPlayerManager().broadcast(message, MessageType.SYSTEM);
+        player.getServer().getPlayerManager().broadcast(message, false);
 
         return Command.SINGLE_SUCCESS;
     }

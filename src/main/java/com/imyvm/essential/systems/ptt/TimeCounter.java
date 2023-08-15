@@ -72,6 +72,10 @@ public enum TimeCounter {
         return this.typeId;
     }
 
+    public Long getTimeRequired() {
+        return this.timeRequiredOption.getValue() / 1000L;
+    }
+
     public Function<PlayerTrackData, TrackData> getGetDataFunction() {
         return this.getDataFunction;
     }

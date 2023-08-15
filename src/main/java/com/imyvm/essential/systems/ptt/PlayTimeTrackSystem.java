@@ -41,7 +41,13 @@ public class PlayTimeTrackSystem extends BaseSystem implements LazyTicker.LazyTi
             TrackData data = counter.getGetDataFunction().apply(trackData);
             Text name = tr("name.ptt.category." + counter.getTypeId());
             int duration = (int) (data.getDuration() / 1000);
-            Text status = tr("name.ptt.status." + data.getStatus().toString().toLowerCase());
+            String statusTemplate = "name.ptt.status." + data.getStatus().toString().toLowerCase();
+            Text status;
+            if (data.getStatus() == TrackData.Status.NOT_MEET) {
+                status = tr(statusTemplate, TimeUtil.formatDuration((int) (counter.getTimeRequired() - duration)));
+            } else {
+                status = tr(statusTemplate);
+            }
 
             if (counter == TimeCounter.TOTAL)
                 text.append(tr("commands.ptt.item.total", name, TimeUtil.formatDuration(duration)));
