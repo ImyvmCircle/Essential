@@ -19,7 +19,7 @@ repositories {
 
 	// Imyvm Hoki
 	maven {
-		url = 'https://maven.victorica.dev'
+		url = 'https://maven.imyvm.org'
 	}
 
 	maven {
