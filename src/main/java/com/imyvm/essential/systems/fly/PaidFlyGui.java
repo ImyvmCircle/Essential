@@ -5,17 +5,23 @@ import com.imyvm.essential.LazyTicker;
 import com.imyvm.essential.util.TimeUtil;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import eu.pb4.sgui.api.gui.SimpleGui;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.LoreComponent;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.nbt.NbtString;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.registry.Registries;
+import net.minecraft.util.Unit;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.imyvm.essential.EssentialMod.CONFIG;
 import static com.imyvm.essential.Translator.tr;
@@ -94,17 +100,21 @@ public class PaidFlyGui implements LazyTicker.LazyTickable {
 
     private void setIcon(int slot, Item item, Text name, boolean enchanted, Text[] loreList, Runnable callback) {
         ItemStack itemStack = item.getDefaultStack();
-        itemStack.addHideFlag(ItemStack.TooltipSection.ENCHANTMENTS);
-        itemStack.setCustomName(name);
-        if (enchanted)
-            itemStack.addEnchantment(Enchantments.MENDING, 1);
+        itemStack.set(DataComponentTypes.HIDE_ADDITIONAL_TOOLTIP, Unit.INSTANCE);
+        itemStack.set(DataComponentTypes.CUSTOM_NAME, name);
+        if (enchanted) {
+            RegistryWrapper<Enchantment> enchantmentRegistry = this.player.getRegistryManager().getWrapperOrThrow(net.minecraft.registry.RegistryKeys.ENCHANTMENT);
+            itemStack.addEnchantment(enchantmentRegistry.getOrThrow(Enchantments.MENDING), 1);
+        }
 
         if (loreList != null && loreList.length > 0) {
-            NbtList lore = new NbtList();
-            for (Text line : loreList)
-                if (line != null)
-                    lore.add(NbtString.of(Text.Serializer.toJson(line)));
-            itemStack.getOrCreateSubNbt(ItemStack.DISPLAY_KEY).put(ItemStack.LORE_KEY, lore);
+            List<Text> lore = new ArrayList<>();
+            for (Text line : loreList) {
+                if (line != null) {
+                    lore.add(line);
+                }
+            }
+            itemStack.set(DataComponentTypes.LORE, new LoreComponent(lore));
         }
 
         this.gui.setSlot(slot, itemStack, (index, type, action, gui) -> callback.run());
