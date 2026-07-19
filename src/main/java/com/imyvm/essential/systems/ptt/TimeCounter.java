@@ -3,7 +3,7 @@ package com.imyvm.essential.systems.ptt;
 import com.imyvm.essential.util.RandomUtil;
 import com.imyvm.hoki.config.Option;
 import com.typesafe.config.Config;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Calendar;
 import java.util.function.Function;
@@ -47,7 +47,7 @@ public enum TimeCounter {
         this.periodId = this.periodIdCalculator.apply(calendar);
     }
 
-    void apply(ServerPlayerEntity player, PlayerTrackData playerTrackData, long msSinceLastTick) {
+    void apply(ServerPlayer player, PlayerTrackData playerTrackData, long msSinceLastTick) {
         TrackData data = this.getDataFunction.apply(playerTrackData);
         data.update(msSinceLastTick, this.periodId);
         if (data.getStatus() == TrackData.Status.NOT_MEET && data.getDuration() > this.timeRequiredOption.getValue()) {

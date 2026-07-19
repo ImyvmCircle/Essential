@@ -2,7 +2,7 @@ package com.imyvm.essential;
 
 import com.imyvm.hoki.i18n.HokiLanguage;
 import com.imyvm.hoki.i18n.HokiTranslator;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 
 import java.io.InputStream;
 
@@ -15,7 +15,7 @@ public class Translator extends HokiTranslator {
         CONFIG.LANGUAGE.changeEvents.register((option, oldValue, newValue) -> INSTANCE = createLanguage(option.getValue()));
     }
 
-    public static Text tr(String key, Object... args) {
+    public static Component tr(String key, Object... args) {
         return HokiTranslator.translate(getLanguageInstance(), key, args);
     }
 

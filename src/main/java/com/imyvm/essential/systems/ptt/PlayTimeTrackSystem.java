@@ -5,8 +5,8 @@ import com.imyvm.essential.interfaces.PlayerEntityMixinInterface;
 import com.imyvm.essential.systems.BaseSystem;
 import com.imyvm.essential.util.TimeUtil;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -33,16 +33,16 @@ public class PlayTimeTrackSystem extends BaseSystem implements LazyTicker.LazyTi
         BonusSupplier.getInstance().register();
     }
 
-    public Text getPlayTimeText(PlayerTrackData trackData) {
-        MutableText text = (MutableText) tr("commands.ptt.header");
+    public Component getPlayTimeText(PlayerTrackData trackData) {
+        MutableComponent text = (MutableComponent) tr("commands.ptt.header");
         for (TimeCounter counter : TimeCounter.values()) {
             text.append("\n");
 
             TrackData data = counter.getGetDataFunction().apply(trackData);
-            Text name = tr("name.ptt.category." + counter.getTypeId());
+            Component name = tr("name.ptt.category." + counter.getTypeId());
             int duration = (int) (data.getDuration() / 1000);
             String statusTemplate = "name.ptt.status." + data.getStatus().toString().toLowerCase();
-            Text status;
+            Component status;
             if (data.getStatus() == TrackData.Status.NOT_MEET) {
                 status = tr(statusTemplate, TimeUtil.formatDuration((int) (counter.getTimeRequired() - duration)));
             } else {
@@ -62,10 +62,10 @@ public class PlayTimeTrackSystem extends BaseSystem implements LazyTicker.LazyTi
         Calendar calendar = Calendar.getInstance(TIME_ZONE);
         Arrays.stream(TimeCounter.values()).forEach(updater -> updater.updatePeriodId(calendar));
 
-        server.getPlayerManager().getPlayerList().stream()
+        server.getPlayerList().getPlayers().stream()
             .filter(player -> !((PlayerEntityMixinInterface) player).imyvm$isAwayFromKeyboard())
             .forEach(player -> {
-                PlayerTrackData data = PLAYER_DATA_STORAGE.getOrCreate(player.getUuid()).getPlayerTrackData();
+                PlayerTrackData data = PLAYER_DATA_STORAGE.getOrCreate(player.getUUID()).getPlayerTrackData();
                 Arrays.stream(TimeCounter.values()).forEach(updater -> updater.apply(player, data, msSinceLastTick));
             });
     }

@@ -9,8 +9,8 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Map;
 import java.util.UUID;
@@ -31,9 +31,9 @@ public class DeathProtectCommand extends BaseCommand {
     private final Map<UUID, Long> pendingTransaction = new ConcurrentHashMap<>();
 
     @Override
-    public int run(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        ServerPlayerEntity player = context.getSource().getPlayer();
-        PlayerData data = PLAYER_DATA_STORAGE.getOrCreate(player.getUuid());
+    public int run(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ServerPlayer player = context.getSource().getPlayer();
+        PlayerData data = PLAYER_DATA_STORAGE.getOrCreate(player.getUUID());
         int level = data.getDeathProtectLevel();
         long money = this.calculateNextLevelPrice(level);
 
@@ -41,20 +41,20 @@ public class DeathProtectCommand extends BaseCommand {
         if (wallet.getMoney() < money)  // if insufficient, throw an `INSUFFICIENT_BALANCE_EXCEPTION` by ImyvmEconomy
             wallet.buyGoodsWithNotificationInCommand(money, tr("goods.death_protect.with_level", level + 1));
 
-        this.pendingTransaction.put(player.getUuid(), System.currentTimeMillis() + PENDING_TIME_LIMIT);
-        player.sendMessage(tr("commands.death_protect.message.to_confirm",
+        this.pendingTransaction.put(player.getUUID(), System.currentTimeMillis() + PENDING_TIME_LIMIT);
+        player.sendSystemMessage(tr("commands.death_protect.message.to_confirm",
             MoneyUtil.format(money), level + 1, CommandUtil.getSuggestCommandText(CONFIRM_COMMAND)));
 
         return Command.SINGLE_SUCCESS;
     }
 
-    public int runConfirm(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        ServerPlayerEntity player = context.getSource().getPlayer();
-        if (this.pendingTransaction.getOrDefault(player.getUuid(), 0L) < System.currentTimeMillis())
+    public int runConfirm(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ServerPlayer player = context.getSource().getPlayer();
+        if (this.pendingTransaction.getOrDefault(player.getUUID(), 0L) < System.currentTimeMillis())
             throw NO_PENDING_TRANSACTION_EXCEPTION.create();
-        this.pendingTransaction.remove(player.getUuid());
+        this.pendingTransaction.remove(player.getUUID());
 
-        PlayerData data = PLAYER_DATA_STORAGE.getOrCreate(player.getUuid());
+        PlayerData data = PLAYER_DATA_STORAGE.getOrCreate(player.getUUID());
         int level = data.getDeathProtectLevel();
         long money = this.calculateNextLevelPrice(level);
 
@@ -65,12 +65,12 @@ public class DeathProtectCommand extends BaseCommand {
         return Command.SINGLE_SUCCESS;
     }
 
-    public int runStatus(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        ServerPlayerEntity player = context.getSource().getPlayer();
+    public int runStatus(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ServerPlayer player = context.getSource().getPlayer();
 
-        PlayerData data = PLAYER_DATA_STORAGE.getOrCreate(player.getUuid());
+        PlayerData data = PLAYER_DATA_STORAGE.getOrCreate(player.getUUID());
         int level = data.getDeathProtectLevel();
-        player.sendMessage(tr("commands.death_protect.status", level));
+        player.sendSystemMessage(tr("commands.death_protect.status", level));
 
         return Command.SINGLE_SUCCESS;
     }

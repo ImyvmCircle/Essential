@@ -1,6 +1,6 @@
 package com.imyvm.essential.systems.fly;
 
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 
 import java.util.function.Supplier;
 
@@ -23,7 +23,7 @@ public enum PurchaseType {
         this.guiIconNameSupplier = guiIconNameSupplier;
     }
 
-    public Text getName() {
+    public Component getName() {
         return tr("goods.paid_fly." + this.id, 1);
     }
 

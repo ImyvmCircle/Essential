@@ -6,13 +6,13 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import me.lucko.fabric.api.permissions.v0.Permissions;
-import net.minecraft.command.CommandRegistryAccess;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.server.permissions.Permissions;
+import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.CommandSourceStack;
 
-import static net.minecraft.server.command.CommandManager.argument;
-import static net.minecraft.server.command.CommandManager.literal;
+import static net.minecraft.commands.Commands.argument;
+import static net.minecraft.commands.Commands.literal;
 
 public class CommandRegistry {
     public static final AfkCommand AFK_COMMAND = new AfkCommand();
@@ -26,17 +26,17 @@ public class CommandRegistry {
     private CommandRegistry() {
     }
 
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher,
-                                CommandRegistryAccess registryAccess,
-                                CommandManager.RegistrationEnvironment environment) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher,
+                                CommandBuildContext registryAccess,
+                                Commands.CommandSelection environment) {
         dispatcher.register(
             literal("afk")
-                .requires(ServerCommandSource::isExecutedByPlayer)
+                .requires(CommandSourceStack::isPlayer)
                 .executes(AFK_COMMAND));
 
         dispatcher.register(
             literal("death_protect")
-                .requires(ServerCommandSource::isExecutedByPlayer)
+                .requires(CommandSourceStack::isPlayer)
                 .then(literal("buy")
                     .executes(DEATH_PROTECT_COMMAND))
                 .then(literal("confirm")
@@ -47,17 +47,17 @@ public class CommandRegistry {
 
         dispatcher.register(
             literal("ss")
-                .requires(ServerCommandSource::isExecutedByPlayer)
+                .requires(CommandSourceStack::isPlayer)
                 .executes(ITEM_SHOW_COMMAND));
 
         dispatcher.register(
             literal("ptt")
-                .requires(ServerCommandSource::isExecutedByPlayer)
+                .requires(CommandSourceStack::isPlayer)
                 .executes(PLAY_TIME_TRACK_COMMAND));
 
         dispatcher.register(
             literal("imyvm_essential")
-                .requires(Permissions.require(EssentialMod.MOD_ID + ".manage", 3))
+                .requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
                 .then(literal("reload")
                     .executes(IMYVM_ESSENTIAL_MANAGE_COMMAND::runReload)));
 
@@ -65,10 +65,10 @@ public class CommandRegistry {
         registerBonusAcquire(dispatcher);
     }
 
-    private static void registerPaidFly(CommandDispatcher<ServerCommandSource> dispatcher) {
+    private static void registerPaidFly(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(
             literal("buyfly")
-                .requires(ServerCommandSource::isExecutedByPlayer)
+                .requires(CommandSourceStack::isPlayer)
                 .then(literal("gui")
                     .executes(PAID_FLY_COMMAND::runOpenGui))
                 .then(literal("list")
@@ -91,9 +91,9 @@ public class CommandRegistry {
         );
     }
 
-    private static void registerBonusAcquire(CommandDispatcher<ServerCommandSource> dispatcher) {
-        LiteralArgumentBuilder<ServerCommandSource> builder = literal("bonus")
-            .requires(ServerCommandSource::isExecutedByPlayer);
+    private static void registerBonusAcquire(CommandDispatcher<CommandSourceStack> dispatcher) {
+        LiteralArgumentBuilder<CommandSourceStack> builder = literal("bonus")
+            .requires(CommandSourceStack::isPlayer);
 
         for (TimeCounter value : TimeCounter.values())
             builder.then(literal(value.getTypeId())

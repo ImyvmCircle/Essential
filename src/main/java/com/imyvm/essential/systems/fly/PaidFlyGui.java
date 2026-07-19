@@ -5,20 +5,14 @@ import com.imyvm.essential.LazyTicker;
 import com.imyvm.essential.util.TimeUtil;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import eu.pb4.sgui.api.gui.SimpleGui;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.LoreComponent;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.screen.ScreenHandlerType;
+import eu.pb4.sgui.api.elements.GuiElementBuilder;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import net.minecraft.registry.Registries;
-import net.minecraft.util.Unit;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.core.registries.BuiltInRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,19 +22,19 @@ import static com.imyvm.essential.Translator.tr;
 import static com.imyvm.essential.commands.CommandRegistry.PAID_FLY_COMMAND;
 
 public class PaidFlyGui implements LazyTicker.LazyTickable {
-    private final ServerPlayerEntity player;
+    private final ServerPlayer player;
     private final SimpleGui gui;
     private FlySession session;
 
-    public PaidFlyGui(ServerPlayerEntity player) {
+    public PaidFlyGui(ServerPlayer player) {
         this.player = player;
         this.session = FlySystem.getInstance().getSession(player);
 
-        this.gui = new SimpleGui(ScreenHandlerType.GENERIC_9X1, player, false) {
+        this.gui = new SimpleGui(MenuType.GENERIC_9x1, player, false) {
             @Override
-            public void onClose() {
+            public void close(boolean alreadyClosed) {
                 FlySystem.getInstance().removeGui(PaidFlyGui.this);
-                super.onClose();
+                super.close(alreadyClosed);
             }
         };
 
@@ -70,14 +64,14 @@ public class PaidFlyGui implements LazyTicker.LazyTickable {
 
     private void setGoodsIconByPurchaseType(int slot, PurchaseType type) {
         boolean purchased = this.session != null && this.session.getType() == type;
-        Text lore = purchased ? tr("gui.paid_fly.goods.purchased") : null;
+        Component lore = purchased ? tr("gui.paid_fly.goods.purchased") : null;
 
         Runnable executor = this.wrapExecute(() -> PAID_FLY_COMMAND.universalBuy(this.player, type));
         this.setGoodsIcon(slot, type, purchased, lore, executor);
     }
 
     private void setHourlyIcon() {
-        Text lore = null;
+        Component lore = null;
         boolean purchased = this.session != null && this.session.getType() == PurchaseType.HOURLY;
 
         if (purchased) {
@@ -89,35 +83,35 @@ public class PaidFlyGui implements LazyTicker.LazyTickable {
         this.setGoodsIcon(0, PurchaseType.HOURLY, purchased, lore, executor);
     }
 
-    private void setGoodsIcon(int slot, PurchaseType type, boolean enchanted, Text lore, Runnable callback) {
+    private void setGoodsIcon(int slot, PurchaseType type, boolean enchanted, Component lore, Runnable callback) {
         Item item = parseItem(type.getGuiIconName());
-        Text name = type.getName();
+        Component name = type.getName();
         int price = type.getPrice();
-        Text priceText = tr("gui.paid_fly.goods.price", MoneyUtil.format(price));
+        Component priceText = tr("gui.paid_fly.goods.price", MoneyUtil.format(price));
 
-        this.setIcon(slot, item, name, enchanted, new Text[]{ priceText, lore }, callback);
+        this.setIcon(slot, item, name, enchanted, new Component[]{ priceText, lore }, callback);
     }
 
-    private void setIcon(int slot, Item item, Text name, boolean enchanted, Text[] loreList, Runnable callback) {
-        ItemStack itemStack = item.getDefaultStack();
-        itemStack.set(DataComponentTypes.HIDE_ADDITIONAL_TOOLTIP, Unit.INSTANCE);
-        itemStack.set(DataComponentTypes.CUSTOM_NAME, name);
+    private void setIcon(int slot, Item item, Component name, boolean enchanted, Component[] loreList, Runnable callback) {
+        GuiElementBuilder builder = new GuiElementBuilder(item)
+            .setName(name)
+            .hideDefaultTooltip();
+
         if (enchanted) {
-            RegistryWrapper<Enchantment> enchantmentRegistry = this.player.getRegistryManager().getWrapperOrThrow(net.minecraft.registry.RegistryKeys.ENCHANTMENT);
-            itemStack.addEnchantment(enchantmentRegistry.getOrThrow(Enchantments.MENDING), 1);
+            builder.glow();
         }
 
         if (loreList != null && loreList.length > 0) {
-            List<Text> lore = new ArrayList<>();
-            for (Text line : loreList) {
+            List<Component> lore = new ArrayList<>();
+            for (Component line : loreList) {
                 if (line != null) {
                     lore.add(line);
                 }
             }
-            itemStack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+            builder.setLore(lore);
         }
 
-        this.gui.setSlot(slot, itemStack, (index, type, action, gui) -> callback.run());
+        this.gui.setSlot(slot, builder.setCallback((index, type, action, gui) -> callback.run()).build());
     }
 
     @Override
@@ -131,7 +125,7 @@ public class PaidFlyGui implements LazyTicker.LazyTickable {
     }
 
     private static Item parseItem(String id) {
-        return Registries.ITEM.getOrEmpty(Identifier.tryParse(id)).orElseThrow();
+        return BuiltInRegistries.ITEM.getValue(Identifier.tryParse(id));
     }
 
     private Runnable wrapExecute(CommandExecutor function) {
@@ -140,7 +134,7 @@ public class PaidFlyGui implements LazyTicker.LazyTickable {
                 function.run();
                 this.setIcons();  // update icons after action is handled
             } catch (CommandSyntaxException e) {
-                this.player.sendMessage((Text) e.getRawMessage());
+                this.player.sendSystemMessage((Component) e.getRawMessage());
             }
         };
     }

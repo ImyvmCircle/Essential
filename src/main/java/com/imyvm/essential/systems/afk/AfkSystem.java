@@ -5,10 +5,10 @@ import com.imyvm.essential.interfaces.PlayerEntityMixinInterface;
 import com.imyvm.essential.systems.BaseSystem;
 import net.fabricmc.fabric.api.event.player.*;  // CHECKSTYLE.SUPPRESS: AvoidStarImport
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.TypedActionResult;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResult;
 
 import java.util.function.Function;
 
@@ -22,9 +22,9 @@ public class AfkSystem extends BaseSystem implements LazyTicker.LazyTickable {
     }
 
     private void registerEvents() {
-        Function<PlayerEntity, ActionResult> onActivity = (player) -> {
+        Function<Player, InteractionResult> onActivity = (player) -> {
             ((PlayerEntityMixinInterface) player).imyvm$updateActivity();
-            return ActionResult.PASS;
+            return InteractionResult.PASS;
         };
 
         ServerMessageEvents.CHAT_MESSAGE.register((message, sender, typeKey) -> onActivity.apply(sender));
@@ -34,13 +34,13 @@ public class AfkSystem extends BaseSystem implements LazyTicker.LazyTickable {
         UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> onActivity.apply(player));
         UseItemCallback.EVENT.register((player, world, hand) -> {
             onActivity.apply(player);
-            return TypedActionResult.pass(null);
+            return InteractionResult.PASS;
         });
     }
 
     @Override
     public void lazyTick(MinecraftServer server, long tickCounts, long msSinceLastTick) {
-        server.getPlayerManager().getPlayerList().forEach(
+        server.getPlayerList().getPlayers().forEach(
             player -> ((PlayerEntityMixinInterface) player).imyvm$lazyTick());
     }
 }

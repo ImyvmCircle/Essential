@@ -7,11 +7,11 @@ import com.imyvm.essential.systems.BaseSystem;
 import com.imyvm.essential.util.TimeUtil;
 import io.github.ladysnake.pal.Pal;
 import io.github.ladysnake.pal.VanillaAbilities;
-import net.fabricmc.fabric.api.entity.event.v1.ServerEntityWorldChangeEvents;
+import net.fabricmc.fabric.api.entity.event.v1.ServerEntityLevelChangeEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Map;
 import java.util.Set;
@@ -40,8 +40,8 @@ public class FlySystem extends BaseSystem implements LazyTicker.LazyTickable {
     }
 
     private void registerEvents() {
-        ServerEntityWorldChangeEvents.AFTER_PLAYER_CHANGE_WORLD.register((player, origin, destination) -> {
-            FlySession session = this.playerToSession.get(player.getUuid());
+        ServerEntityLevelChangeEvents.AFTER_PLAYER_CHANGE_LEVEL.register((player, origin, destination) -> {
+            FlySession session = this.playerToSession.get(player.getUUID());
             if (session != null)
                 session.onWorldChange();
         });
@@ -51,45 +51,45 @@ public class FlySystem extends BaseSystem implements LazyTicker.LazyTickable {
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> this.onPlayerJoin(handler.getPlayer()));
     }
 
-    public void onPlayerDisconnect(ServerPlayerEntity player) {
-        FlySession session = this.playerToSession.get(player.getUuid());
+    public void onPlayerDisconnect(ServerPlayer player) {
+        FlySession session = this.playerToSession.get(player.getUUID());
         if (session != null) {
-            PlayerData data = PLAYER_DATA_STORAGE.getOrCreate(player.getUuid());
+            PlayerData data = PLAYER_DATA_STORAGE.getOrCreate(player.getUUID());
             data.setSavedFlySession(session.toSaved());
 
             Pal.revokeAbility(player, VanillaAbilities.ALLOW_FLYING, AbilitySources.PAID_FLY);
-            this.playerToSession.remove(player.getUuid());
+            this.playerToSession.remove(player.getUUID());
         }
     }
 
-    public void onPlayerJoin(ServerPlayerEntity player) {
-        PlayerData data = PLAYER_DATA_STORAGE.getOrCreate(player.getUuid());
+    public void onPlayerJoin(ServerPlayer player) {
+        PlayerData data = PLAYER_DATA_STORAGE.getOrCreate(player.getUUID());
 
         SavedFlySession savedSession = data.resumeSavedFlySession();
         if (savedSession != null) {
             FlySession session = FlySession.fromSaved(player, savedSession);
             this.addSession(player, session);
-            player.sendMessage(tr("message.paid_fly.reminder.resumed." + session.getType().getId(),
+            player.sendSystemMessage(tr("message.paid_fly.reminder.resumed." + session.getType().getId(),
                 TimeUtil.formatDuration((int) (session.getTimeLeft() / 1000))));
         }
     }
 
-    public void addSession(ServerPlayerEntity player, FlySession session) {
-        this.playerToSession.put(player.getUuid(), session);
+    public void addSession(ServerPlayer player, FlySession session) {
+        this.playerToSession.put(player.getUUID(), session);
     }
 
-    public FlySession getSession(ServerPlayerEntity player) {
-        return this.playerToSession.get(player.getUuid());
+    public FlySession getSession(ServerPlayer player) {
+        return this.playerToSession.get(player.getUUID());
     }
 
-    public void addFallProtect(ServerPlayerEntity player) {
+    public void addFallProtect(ServerPlayer player) {
         long expireAt = System.currentTimeMillis() + CONFIG.FLY_FALL_PROTECT_DURATION.getValue();
-        this.fallProtectionEnd.put(player.getUuid(), expireAt);
+        this.fallProtectionEnd.put(player.getUUID(), expireAt);
     }
 
-    public boolean checkAndClearFallProtect(PlayerEntity player) {
-        boolean result = System.currentTimeMillis() < this.fallProtectionEnd.getOrDefault(player.getUuid(), 0L);
-        this.fallProtectionEnd.remove(player.getUuid());
+    public boolean checkAndClearFallProtect(Player player) {
+        boolean result = System.currentTimeMillis() < this.fallProtectionEnd.getOrDefault(player.getUUID(), 0L);
+        this.fallProtectionEnd.remove(player.getUUID());
         return result;
     }
 

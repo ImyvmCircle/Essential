@@ -4,12 +4,13 @@ import com.imyvm.essential.EssentialMod;
 import com.imyvm.essential.data.PlayerData;
 import com.imyvm.essential.interfaces.PlayerEntityMixinInterface;
 import com.imyvm.essential.systems.fly.FlySystem;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -23,25 +24,25 @@ import static com.imyvm.essential.EssentialMod.PLAYER_DATA_STORAGE;
 import static com.imyvm.essential.Translator.tr;
 
 @SuppressWarnings("DeclarationOrder")
-@Mixin(value = PlayerEntity.class, priority = 900)
+@Mixin(value = Player.class, priority = 900)
 public class PlayerEntityMixin implements PlayerEntityMixinInterface {
-    @Inject(method = "handleFallDamage", at = @At("HEAD"), cancellable = true)
-    private void fallDamageProtect(float fallDistance, float damageMultiplier, DamageSource damageSource, CallbackInfoReturnable<Boolean> ci) {
-        PlayerEntity player = (PlayerEntity) (Object) this;
+    @Inject(method = "causeFallDamage", at = @At("HEAD"), cancellable = true)
+    private void fallDamageProtect(double fallDistance, float damageMultiplier, DamageSource damageSource, CallbackInfoReturnable<Boolean> ci) {
+        Player player = (Player) (Object) this;
         if (FlySystem.getInstance().checkAndClearFallProtect(player))
             ci.setReturnValue(false);
     }
 
-    @Inject(method = "dropInventory", at = @At("HEAD"), cancellable = true)
-    private void checkDeathProtect(CallbackInfo ci) {
-        PlayerEntity player = (PlayerEntity) (Object) this;
+    @Inject(method = "dropEquipment", at = @At("HEAD"), cancellable = true)
+    private void checkDeathProtect(ServerLevel level, CallbackInfo ci) {
+        Player player = (Player) (Object) this;
 
-        PlayerData data = PLAYER_DATA_STORAGE.getOrCreate(player.getUuid());
-        int level = data.getDeathProtectLevel();
-        if (level > 0) {
-            data.setDeathProtectLevel(level - 1);
+        PlayerData data = PLAYER_DATA_STORAGE.getOrCreate(player.getUUID());
+        int deathProtectLevel = data.getDeathProtectLevel();
+        if (deathProtectLevel > 0) {
+            data.setDeathProtectLevel(deathProtectLevel - 1);
             data.setKeepInventoryAtRespawn(true);
-            player.sendMessage(tr("message.death_protect.consume", level - 1));
+            player.sendSystemMessage(tr("message.death_protect.consume", deathProtectLevel - 1));
             ci.cancel();
         }
     }
@@ -51,31 +52,31 @@ public class PlayerEntityMixin implements PlayerEntityMixinInterface {
     @Unique
     private long lastActivity = System.currentTimeMillis();
     @Unique
-    private Vec3d lastActiveCoordinate = Vec3d.ZERO;
+    private Vec3 lastActiveCoordinate = Vec3.ZERO;
 
     public void imyvm$updateAwayFromKeyboard(boolean awayFromKeyboard) {
         if (awayFromKeyboard == this.imyvm$isAwayFromKeyboard())
             return;
         this.setAwayFromKeyboard(awayFromKeyboard);
 
-        ServerPlayerEntity player = this.asServerPlayerEntity();
-        PlayerListS2CPacket packet = new PlayerListS2CPacket(PlayerListS2CPacket.Action.UPDATE_DISPLAY_NAME, player);
-        Objects.requireNonNull(player.getServer()).getPlayerManager().sendToAll(packet);
+        ServerPlayer player = this.asServerPlayerEntity();
+        ClientboundPlayerInfoUpdatePacket packet = new ClientboundPlayerInfoUpdatePacket(ClientboundPlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME, player);
+        Objects.requireNonNull(player.level().getServer()).getPlayerList().broadcastAll(packet);
 
         String baseKey = this.imyvm$isAwayFromKeyboard() ? "commands.afk.away" : "commands.afk.back";
-        player.sendMessage(tr(baseKey));
-        Text broadcastMessage = tr(baseKey + ".broadcast", player.getName());
-        player.getServer().getPlayerManager().getPlayerList().stream()
+        player.sendSystemMessage(tr(baseKey));
+        Component broadcastMessage = tr(baseKey + ".broadcast", player.getName());
+        player.level().getServer().getPlayerList().getPlayers().stream()
                 .filter(u -> u != player)
-                .forEach(u -> u.sendMessage(broadcastMessage));
+                .forEach(u -> u.sendSystemMessage(broadcastMessage));
 
-        player.getServerWorld().updateSleepingPlayers();
+        player.level().updateSleepingPlayerList();
     }
 
     public void imyvm$updateActivity() {
         this.imyvm$updateAwayFromKeyboard(false);
         this.lastActivity = System.currentTimeMillis();
-        this.lastActiveCoordinate = this.asServerPlayerEntity().getPos();
+        this.lastActiveCoordinate = this.asServerPlayerEntity().position();
     }
 
     @Override
@@ -92,12 +93,12 @@ public class PlayerEntityMixin implements PlayerEntityMixinInterface {
 
     @Unique
     private double movedSquaredDistance() {
-        return this.asServerPlayerEntity().getPos().squaredDistanceTo(this.lastActiveCoordinate);
+        return this.asServerPlayerEntity().position().distanceToSqr(this.lastActiveCoordinate);
     }
 
     @Unique
-    private ServerPlayerEntity asServerPlayerEntity() {
-        return (ServerPlayerEntity) (Object) this;
+    private ServerPlayer asServerPlayerEntity() {
+        return (ServerPlayer) (Object) this;
     }
 
     public boolean imyvm$isAwayFromKeyboard() {

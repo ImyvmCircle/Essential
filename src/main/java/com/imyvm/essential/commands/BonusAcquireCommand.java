@@ -5,17 +5,17 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.server.level.ServerPlayer;
 
 public class BonusAcquireCommand extends BaseCommand {
     @Override
-    public int run(CommandContext<ServerCommandSource> context) {
+    public int run(CommandContext<CommandSourceStack> context) {
         return 0;
     }
 
-    public int runAcquire(CommandContext<ServerCommandSource> context, String typeId) throws CommandSyntaxException {
-        ServerPlayerEntity player = context.getSource().getPlayer();
+    public int runAcquire(CommandContext<CommandSourceStack> context, String typeId) throws CommandSyntaxException {
+        ServerPlayer player = context.getSource().getPlayer();
         String token = StringArgumentType.getString(context, "token");
 
         try {

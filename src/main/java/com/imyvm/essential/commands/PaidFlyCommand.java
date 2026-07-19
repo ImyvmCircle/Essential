@@ -14,10 +14,10 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
 
 import java.util.function.Supplier;
 
@@ -34,43 +34,43 @@ public class PaidFlyCommand extends BaseCommand {
     private static final long MILLISECONDS_OF_HOUR = 1000 * 3600;
 
     @Override
-    public int run(CommandContext<ServerCommandSource> context) {
+    public int run(CommandContext<CommandSourceStack> context) {
         return 0;
     }
 
-    public int runOpenGui(CommandContext<ServerCommandSource> context) {
+    public int runOpenGui(CommandContext<CommandSourceStack> context) {
         new PaidFlyGui(context.getSource().getPlayer()).open();
         return Command.SINGLE_SUCCESS;
     }
 
-    public int runBuyOneHour(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+    public int runBuyOneHour(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         return this.executeBuyHourly(context.getSource().getPlayer(), 1);
     }
 
-    public int runBuyHours(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+    public int runBuyHours(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         int hours = IntegerArgumentType.getInteger(context, "hours");
         return this.executeBuyHourly(context.getSource().getPlayer(), hours);
     }
 
-    public int runBuyIntraWorld(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+    public int runBuyIntraWorld(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         return this.universalBuy(context.getSource().getPlayer(), PurchaseType.INTRA_WORLD);
     }
 
-    public int runBuyInterWorld(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+    public int runBuyInterWorld(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         return this.universalBuy(context.getSource().getPlayer(), PurchaseType.INTER_WORLD);
     }
 
-    public int runBuyLifetime(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+    public int runBuyLifetime(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         return this.universalBuy(context.getSource().getPlayer(), PurchaseType.LIFETIME);
     }
 
-    public int runCancel(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        ServerPlayerEntity player = context.getSource().getPlayer();
+    public int runCancel(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ServerPlayer player = context.getSource().getPlayer();
         return this.executeCancel(player);
     }
 
-    public int runList(CommandContext<ServerCommandSource> context) {
-        MutableText text = Text.empty();
+    public int runList(CommandContext<CommandSourceStack> context) {
+        MutableComponent text = Component.empty();
         boolean isFirst = true;
         for (PurchaseType type : PurchaseType.values()) {
             if (!isFirst)
@@ -80,28 +80,28 @@ public class PaidFlyCommand extends BaseCommand {
             text.append(tr("commands.buyfly.list.item", type.getName(), MoneyUtil.format(type.getPrice())));
         }
 
-        Supplier<Text> textSupplier = () -> text;
-        context.getSource().sendFeedback(textSupplier, false);
+        Supplier<Component> textSupplier = () -> text;
+        context.getSource().sendSuccess(textSupplier, false);
 
         return Command.SINGLE_SUCCESS;
     }
 
-    public int runStatus(CommandContext<ServerCommandSource> context) {
-        ServerPlayerEntity player = context.getSource().getPlayer();
+    public int runStatus(CommandContext<CommandSourceStack> context) {
+        ServerPlayer player = context.getSource().getPlayer();
         FlySession session = FlySystem.getInstance().getSession(player);
 
         if (session == null)
-            player.sendMessage(tr("commands.buyfly.status.not_flying"));
+            player.sendSystemMessage(tr("commands.buyfly.status.not_flying"));
         else if (session.getType() == PurchaseType.HOURLY) {
             int duration = (int) (session.getTimeLeft() / 1000);
-            player.sendMessage(tr("commands.buyfly.status.hourly", TimeUtil.formatDuration(duration)));
+            player.sendSystemMessage(tr("commands.buyfly.status.hourly", TimeUtil.formatDuration(duration)));
         } else
-            player.sendMessage(tr("commands.buyfly.status.one_time", session.getType().getName()));
+            player.sendSystemMessage(tr("commands.buyfly.status.one_time", session.getType().getName()));
 
         return Command.SINGLE_SUCCESS;
     }
 
-    public int executeBuyHourly(ServerPlayerEntity player, int hours) throws CommandSyntaxException {
+    public int executeBuyHourly(ServerPlayer player, int hours) throws CommandSyntaxException {
         long price = (long) CONFIG.FLY_HOURLY_PRICE.getValue() * hours;
         PlayerWallet wallet = DatabaseApi.getInstance().getPlayer(player);
 
@@ -112,31 +112,31 @@ public class PaidFlyCommand extends BaseCommand {
         FlySession currentSession = FlySystem.getInstance().getSession(player);
         if (currentSession != null && !currentSession.isEnded() && currentSession.getType() == PurchaseType.HOURLY) {
             currentSession.addTime(duration);
-            Text nowTimeLeft = TimeUtil.formatDuration((int) (currentSession.getTimeLeft() / 1000));
-            player.sendMessage(tr("commands.buyfly.buy.success.hourly.extend", hours, nowTimeLeft));
+            Component nowTimeLeft = TimeUtil.formatDuration((int) (currentSession.getTimeLeft() / 1000));
+            player.sendSystemMessage(tr("commands.buyfly.buy.success.hourly.extend", hours, nowTimeLeft));
         } else {
             FlySession session = new FlySession(player, PurchaseType.HOURLY);
             session.start(duration);
             FlySystem.getInstance().addSession(player, session);
-            player.sendMessage(tr("commands.buyfly.buy.success.hourly", hours));
+            player.sendSystemMessage(tr("commands.buyfly.buy.success.hourly", hours));
         }
 
         return Command.SINGLE_SUCCESS;
     }
 
-    public int executeCancel(ServerPlayerEntity player) throws CommandSyntaxException {
+    public int executeCancel(ServerPlayer player) throws CommandSyntaxException {
         FlySession session = FlySystem.getInstance().getSession(player);
 
         if (session == null)
             throw NOT_ENABLED_FLYING_EXCEPTION.create();
 
-        player.sendMessage(tr("commands.buyfly.cancel.success"));
+        player.sendSystemMessage(tr("commands.buyfly.cancel.success"));
         session.endSession();
 
         return Command.SINGLE_SUCCESS;
     }
 
-    public int universalBuy(ServerPlayerEntity player, PurchaseType type) throws CommandSyntaxException {
+    public int universalBuy(ServerPlayer player, PurchaseType type) throws CommandSyntaxException {
         PlayerWallet wallet = DatabaseApi.getInstance().getPlayer(player);
 
         this.checkPurchasable(player, type);
@@ -146,11 +146,11 @@ public class PaidFlyCommand extends BaseCommand {
         session.start(Long.MAX_VALUE);
         FlySystem.getInstance().addSession(player, session);
 
-        player.sendMessage(tr("commands.buyfly.buy.success." + type.getId()));
+        player.sendSystemMessage(tr("commands.buyfly.buy.success." + type.getId()));
         return Command.SINGLE_SUCCESS;
     }
 
-    public void checkPurchasable(ServerPlayerEntity player, PurchaseType type) throws CommandSyntaxException {
+    public void checkPurchasable(ServerPlayer player, PurchaseType type) throws CommandSyntaxException {
         FlySession currentSession = FlySystem.getInstance().getSession(player);
         if (currentSession == null)
             return;

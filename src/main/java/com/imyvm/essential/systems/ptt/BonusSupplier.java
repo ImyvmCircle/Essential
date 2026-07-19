@@ -8,8 +8,8 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.chat.Component;
 
 import java.util.Optional;
 import java.util.Set;
@@ -43,13 +43,13 @@ public class BonusSupplier implements LazyTicker.LazyTickable {
 
     public void addTicket(Ticket ticket) {
         this.tickets.add(ticket);
-        Text name = tr("name.bonus." + ticket.typeId);
-        Text command = CommandUtil.getSuggestCommandText(
+        Component name = tr("name.bonus." + ticket.typeId);
+        Component command = CommandUtil.getSuggestCommandText(
             String.format(BONUS_ACQUIRE_COMMAND_FMT, ticket.typeId, ticket.token));
-        ticket.player.sendMessage(tr("message.ptt.bonus.to_receive", name, command));
+        ticket.player.sendSystemMessage(tr("message.ptt.bonus.to_receive", name, command));
     }
 
-    public void onTicketAcquire(ServerPlayerEntity player, String typeId, String token) throws CommandSyntaxException {
+    public void onTicketAcquire(ServerPlayer player, String typeId, String token) throws CommandSyntaxException {
         Optional<Ticket> optional = this.tickets.stream()
             .filter((ticket) -> ticket.player == player && ticket.typeId.equals(typeId))
             .findFirst();
@@ -64,17 +64,17 @@ public class BonusSupplier implements LazyTicker.LazyTickable {
         ticket.data.setStatus(TrackData.Status.OBTAINED);
         this.tickets.remove(ticket);
 
-        Text name = tr("name.bonus." + typeId);
-        player.sendMessage(tr("commands.bonus.success", MoneyUtil.format(ticket.bonus), name));
+        Component name = tr("name.bonus." + typeId);
+        player.sendSystemMessage(tr("commands.bonus.success", MoneyUtil.format(ticket.bonus), name));
     }
 
-    public void quickTransfer(ServerPlayerEntity player, int bonus, String typeId) {
+    public void quickTransfer(ServerPlayer player, int bonus, String typeId) {
         DatabaseApi.getInstance().getPlayer(player).addMoney(bonus);
-        Text name = tr("name.bonus." + typeId);
-        player.sendMessage(tr("commands.bonus.success", MoneyUtil.format(bonus), name));
+        Component name = tr("name.bonus." + typeId);
+        player.sendSystemMessage(tr("commands.bonus.success", MoneyUtil.format(bonus), name));
     }
 
-    public void onPlayerDisconnected(ServerPlayerEntity player) {
+    public void onPlayerDisconnected(ServerPlayer player) {
         for (Ticket ticket : this.tickets) {
             if (ticket.player == player) {
                 ticket.data.setStatus(TrackData.Status.NOT_MEET);
@@ -90,13 +90,13 @@ public class BonusSupplier implements LazyTicker.LazyTickable {
             if (timestamp > ticket.expiredAt) {
                 ticket.data.setStatus(TrackData.Status.EXPIRED);
                 this.tickets.remove(ticket);
-                ticket.player.sendMessage(tr("message.ptt.bonus.expired", tr("name.bonus." + ticket.typeId)));
+                ticket.player.sendSystemMessage(tr("message.ptt.bonus.expired", tr("name.bonus." + ticket.typeId)));
             }
         }
     }
 
     public record Ticket(
-        ServerPlayerEntity player,
+        ServerPlayer player,
         TrackData data,
         String typeId,
         String token,
