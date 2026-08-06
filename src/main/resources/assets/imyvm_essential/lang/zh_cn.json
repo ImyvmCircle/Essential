@@ -6,6 +6,7 @@
     "commands.afk.back.broadcast": "{0} §7回来了",
     "commands.bonus.failed.no_such_ticket": "§6[§e在线奖励§6] §c你没有待领取的奖励",
     "commands.bonus.failed.token_not_matched": "§6[§e在线奖励§6] §4验证码错误",
+    "commands.bonus.failed.economy": "§6[§e在线奖励§6] §c奖励发放失败，请稍后重试",
     "commands.bonus.success": "§6[§e在线奖励§6] §6你获得了 {0} 通过 {1}",
     "commands.buyfly.failed.incompatible_plan": "§6[§e付费飞行§6] §4错误：§6你已经购买了 §e{0}§6, 请在购买前先行取消 §e{1}",
     "commands.buyfly.buy.success.hourly": "§6[§e付费飞行§6] §6你成功购买了 §a{0} §6小时的飞行. §aEnjoy !",
@@ -30,6 +31,7 @@
     "commands.ptt.header": "§6[§e在线系统§6] §f你的游玩时间是 ：",
     "commands.ptt.item": "{0}: {1} (奖励: {2})",
     "commands.ptt.item.total": "{0}: {1}",
+    "commands.ptt.pending_bonus": "  §e待领取的 {0}，剩余在线领取时间：{1}",
     "goods.death_protect.with_level": "死亡保护等级 {0}",
     "goods.paid_fly.hourly": "§a{0}-小时飞行",
     "goods.paid_fly.intra_world": "§3本世界飞行",
@@ -56,7 +58,14 @@
     "message.paid_fly.reminder.expired": "[§e付费飞行§6] §6你的飞行套餐只剩下 §e{0}, §6请注意时间",
     "message.paid_fly.reminder.resumed.hourly": "[§e付费飞行§6] §6你的飞行套餐已恢复，剩余时间：§e {0}",
     "message.paid_fly.reminder.resumed.lifetime": "[§e付费飞行§6] §6你的飞行套餐已恢复",
-    "message.ptt.bonus.to_receive": "§6[§e在线奖励§6] §g你获得了 {0}, 请输入 \"{1}\" 来获取",
+    "message.ptt.bonus.to_receive": "§6[§e在线奖励§6] §a你获得了 {0}，点击或输入 \"{1}\" 领取",
+    "message.ptt.bonus.bossbar": "{0} · {1} · 剩余 {2}",
+    "message.ptt.bonus.reminder.warning": "§6[§e在线奖励§6] §e你的 {0} 即将过期，点击或输入 \"{1}\" 领取",
+    "message.ptt.bonus.reminder.critical": "§6[§e在线奖励§6] §c你的 {0} 马上过期，点击或输入 \"{1}\" 立即领取",
+    "message.ptt.bonus.reminder.countdown": "§6[§e在线奖励§6] §c你的 {0} 将在 {1} 秒后过期，点击或输入 \"{2}\" 领取",
+    "message.ptt.bonus.replaced": "§6[§e在线奖励§6] §e旧的 {0} 已被新的同类奖励替换",
+    "message.ptt.bonus.resume.header": "§6[§e在线奖励§6] §f你有以下待领取奖励：",
+    "message.ptt.bonus.resume.item": "§e{0} §f(剩余在线时间 {1})：\"{2}\"",
     "message.ptt.bonus.expired": "§6[§e在线奖励§6] §c你的 {0} 过期啦",
     "gui.paid_fly.title": "§e§l飞行套餐商店",
     "gui.paid_fly.cancel.name": "§4§l取消飞行",
@@ -65,4 +74,3 @@
     "gui.paid_fly.goods.purchased.hourly": "购买成功, 剩余时间: {0}",
     "gui.tab_list.player_away": "{0} §7| 离开"
 }
-  

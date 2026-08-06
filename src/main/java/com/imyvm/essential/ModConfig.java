@@ -5,6 +5,16 @@ import com.imyvm.hoki.config.HokiConfig;
 import com.imyvm.hoki.config.Option;
 import com.typesafe.config.Config;
 
+import java.util.List;
+
+import static com.imyvm.essential.systems.ptt.PttConfigDefaults.CRITICAL_RATIO;
+import static com.imyvm.essential.systems.ptt.PttConfigDefaults.DAY_ACQUIRE_TIME_LIMIT;
+import static com.imyvm.essential.systems.ptt.PttConfigDefaults.MONTH_ACQUIRE_TIME_LIMIT;
+import static com.imyvm.essential.systems.ptt.PttConfigDefaults.SOUND_COUNTDOWN_SECONDS;
+import static com.imyvm.essential.systems.ptt.PttConfigDefaults.WARNING_RATIO;
+import static com.imyvm.essential.systems.ptt.PttConfigDefaults.WEEK_ACQUIRE_TIME_LIMIT;
+import static com.imyvm.essential.systems.ptt.PttConfigDefaults.YEAR_ACQUIRE_TIME_LIMIT;
+
 @SuppressWarnings({"AbbreviationAsWordInName", "DeclarationOrder", "LineLength", "MemberName"})
 public class ModConfig extends HokiConfig {
     public static final String CONFIG_FILENAME = "imyvm_essential.conf";
@@ -19,7 +29,18 @@ public class ModConfig extends HokiConfig {
 
     @ConfigOption public final Option<Integer> DEATH_PROTECT_BASE_PRICE = new Option<>("death_protect.base_price", 40 * 100, "The base price (in cents) of one death-protect level", Config::getInt);
 
-    @ConfigOption public final Option<Long> PTT_ACQUIRE_TIME_LIMIT = new Option<>("ptt.time_limit", 60 * 1000L /* 1 m */, "The time limit (in milliseconds) for player to acquire the bonus", Config::getLong);
+    @ConfigOption public final Option<Long> PTT_DAY_ACQUIRE_TIME_LIMIT = new Option<>("ptt.acquire_time_limit.day", DAY_ACQUIRE_TIME_LIMIT, "The time limit (in milliseconds) for player to acquire the daily bonus", Config::getLong);
+    @ConfigOption public final Option<Long> PTT_WEEK_ACQUIRE_TIME_LIMIT = new Option<>("ptt.acquire_time_limit.week", WEEK_ACQUIRE_TIME_LIMIT, "The time limit (in milliseconds) for player to acquire the weekly bonus", Config::getLong);
+    @ConfigOption public final Option<Long> PTT_MONTH_ACQUIRE_TIME_LIMIT = new Option<>("ptt.acquire_time_limit.month", MONTH_ACQUIRE_TIME_LIMIT, "The time limit (in milliseconds) for player to acquire the monthly bonus", Config::getLong);
+    @ConfigOption public final Option<Long> PTT_YEAR_ACQUIRE_TIME_LIMIT = new Option<>("ptt.acquire_time_limit.year", YEAR_ACQUIRE_TIME_LIMIT, "The time limit (in milliseconds) for player to acquire the yearly bonus", Config::getLong);
+    @ConfigOption public final Option<Double> PTT_REMINDER_WARNING_RATIO = new Option<>("ptt.reminder.warning_ratio", WARNING_RATIO, "The remaining-time ratio at which a pending bonus enters warning stage", Config::getDouble);
+    @ConfigOption public final Option<Double> PTT_REMINDER_CRITICAL_RATIO = new Option<>("ptt.reminder.critical_ratio", CRITICAL_RATIO, "The remaining-time ratio at which a pending bonus enters critical stage", Config::getDouble);
+    @ConfigOption public final Option<Boolean> PTT_REMINDER_SOUND_ENABLED = new Option<>("ptt.reminder.sound_enabled", true, "Whether sounds are played for pending bonus reminders", Config::getBoolean);
+    @ConfigOption public final Option<Integer> PTT_REMINDER_SOUND_COUNTDOWN_SECONDS = new Option<>("ptt.reminder.sound_countdown_seconds", SOUND_COUNTDOWN_SECONDS, "How many final seconds use a per-second countdown sound; zero disables it", Config::getInt);
+    @ConfigOption public final Option<List<Integer>> PTT_DAY_CHAT_COUNTDOWN = new Option<>("ptt.reminder.chat_countdown.day", List.of(3, 2, 1), "Remaining seconds at which chat reminders are sent for daily bonuses", Config::getIntList);
+    @ConfigOption public final Option<List<Integer>> PTT_WEEK_CHAT_COUNTDOWN = new Option<>("ptt.reminder.chat_countdown.week", List.of(5, 3, 2, 1), "Remaining seconds at which chat reminders are sent for weekly bonuses", Config::getIntList);
+    @ConfigOption public final Option<List<Integer>> PTT_MONTH_CHAT_COUNTDOWN = new Option<>("ptt.reminder.chat_countdown.month", List.of(10, 5, 3, 2, 1), "Remaining seconds at which chat reminders are sent for monthly bonuses", Config::getIntList);
+    @ConfigOption public final Option<List<Integer>> PTT_YEAR_CHAT_COUNTDOWN = new Option<>("ptt.reminder.chat_countdown.year", List.of(10, 5, 3, 2, 1), "Remaining seconds at which chat reminders are sent for yearly bonuses", Config::getIntList);
     @ConfigOption public final Option<Long> PTT_CONTINUOUS_REQUIRED = new Option<>("ptt.required.continuous", (10 * 60 - 30) * 1000L /* 9 m 30 s */, "How long (in milliseconds) player need to be online to acquire 10-minute (i.e. continuous) bonus", Config::getLong);
     @ConfigOption public final Option<Long> PTT_DAY_REQUIRED = new Option<>("ptt.required.day", 3600 * 1000L /* 1 h */, "How long (in milliseconds) player need to be online to acquire daily bonus", Config::getLong);
     @ConfigOption public final Option<Long> PTT_WEEK_REQUIRED = new Option<>("ptt.required.week", (16 * 60 + 40) * 60 * 1000L /* 16 h 40 m */, "How long (in milliseconds) player need to be online to acquire weekly bonus", Config::getLong);

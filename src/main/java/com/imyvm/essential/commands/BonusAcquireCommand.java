@@ -18,12 +18,7 @@ public class BonusAcquireCommand extends BaseCommand {
         ServerPlayer player = context.getSource().getPlayer();
         String token = StringArgumentType.getString(context, "token");
 
-        try {
-            BonusSupplier.getInstance().onTicketAcquire(player, typeId, token);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
-        }
+        BonusSupplier.getInstance().onTicketAcquire(player, typeId, token);
 
         return Command.SINGLE_SUCCESS;
     }

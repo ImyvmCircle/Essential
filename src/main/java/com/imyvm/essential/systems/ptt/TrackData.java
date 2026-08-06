@@ -8,6 +8,7 @@ public class TrackData implements NbtPersistent {
     @NbtPersistentValue private long duration;
     @NbtPersistentValue private int periodId;
     @NbtPersistentValue private final NbtEnumValue<Status> status = new NbtEnumValue<>(Status.class);
+    @NbtPersistentValue private PendingBonus pendingBonus;
 
     public TrackData(int duration, int periodId, Status status) {
         this.duration = duration;
@@ -42,6 +43,44 @@ public class TrackData implements NbtPersistent {
 
     public void setStatus(Status status) {
         this.status.set(status);
+    }
+
+    public PendingBonus getPendingBonus() {
+        return this.pendingBonus;
+    }
+
+    public PendingBonus replacePendingBonus(PendingBonus newPendingBonus) {
+        PendingBonus previous = this.pendingBonus;
+        this.pendingBonus = newPendingBonus;
+        this.setStatus(Status.PENDING);
+        return previous;
+    }
+
+    public PendingBonus finishPendingBonus(Status terminalStatus) {
+        if (terminalStatus != Status.EXPIRED && terminalStatus != Status.OBTAINED)
+            throw new IllegalArgumentException("Pending bonus must finish as expired or obtained");
+
+        PendingBonus finished = this.pendingBonus;
+        this.pendingBonus = null;
+        if (finished != null && finished.getPeriodId() == this.periodId)
+            this.setStatus(terminalStatus);
+        return finished;
+    }
+
+    public boolean repairLegacyPendingStatus() {
+        if (this.getStatus() != Status.PENDING || this.pendingBonus != null)
+            return false;
+
+        this.setStatus(Status.NOT_MEET);
+        return true;
+    }
+
+    public PendingBonus clearInvalidPendingBonus() {
+        PendingBonus invalid = this.pendingBonus;
+        this.pendingBonus = null;
+        if (invalid != null && invalid.getPeriodId() == this.periodId && this.getStatus() == Status.PENDING)
+            this.setStatus(Status.NOT_MEET);
+        return invalid;
     }
 
     public enum Status {

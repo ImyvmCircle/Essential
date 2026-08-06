@@ -25,13 +25,13 @@
   ],
 
   "depends": {
-    "fabricloader": ">=0.16.9",
-    "fabric": "*",
-    "minecraft": "~1.21",
-    "java": ">=21",
+    "fabricloader": ">=0.19.3",
+    "fabric-api": "*",
+    "minecraft": "~26.2",
+    "java": ">=25",
     "playerabilitylib": ">=1.10.0",
-    "sgui": ">=1.6.0",
-    "hoki": ">=1.1.4",
-    "imyvm_economy": "~1.2.7"
+    "sgui": ">=2.1.0",
+    "hoki": ">=1.1.6",
+    "imyvm_economy": ">=26.2-1.2.7"
   }
 }

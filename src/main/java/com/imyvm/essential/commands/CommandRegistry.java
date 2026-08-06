@@ -95,7 +95,7 @@ public class CommandRegistry {
         LiteralArgumentBuilder<CommandSourceStack> builder = literal("bonus")
             .requires(CommandSourceStack::isPlayer);
 
-        for (TimeCounter value : TimeCounter.values())
+        for (TimeCounter value : TimeCounter.getAcquirableValues())
             builder.then(literal(value.getTypeId())
                 .then(argument("token", StringArgumentType.word())
                     .executes(context -> BONUS_ACQUIRE_COMMAND.runAcquire(context, value.getTypeId()))));
