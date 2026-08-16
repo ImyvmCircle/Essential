@@ -18,6 +18,7 @@ public class FlySession implements LazyTicker.LazyTickable {
     private final PurchaseType type;
     private boolean ended = false;
     private boolean notified = false;
+    private boolean firstTick = true;
     private long timeLeft;
 
     public FlySession(ServerPlayer player, PurchaseType type) {
@@ -61,7 +62,8 @@ public class FlySession implements LazyTicker.LazyTickable {
 
     @Override
     public void lazyTick(MinecraftServer server, long tickCounts, long msSinceLastTick) {
-        this.timeLeft -= msSinceLastTick;
+        this.timeLeft = elapsedTimeLeft(this.timeLeft, msSinceLastTick, this.firstTick);
+        this.firstTick = false;
 
         if (!this.notified && this.timeLeft < CONFIG.FLY_HOURLY_NOTICE_AT.getValue()) {
             this.notified = true;
@@ -73,6 +75,10 @@ public class FlySession implements LazyTicker.LazyTickable {
             this.player.sendSystemMessage(tr("message.paid_fly.end.expired"));
             this.endSession();
         }
+    }
+
+    static long elapsedTimeLeft(long timeLeft, long elapsedMillis, boolean firstTick) {
+        return firstTick ? timeLeft : timeLeft - elapsedMillis;
     }
 
     public boolean allowWorldChange() {
